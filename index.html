@@ -14,22 +14,16 @@
   --green:#1a7a3c;--green-bg:#eef9f2;
 }
 body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-/* ── NAV ── */
-.header{background:linear-gradient(135deg,#f9a26c,#f4845a);padding:0 20px;display:flex;align-items:center;gap:0;height:52px;box-shadow:0 2px 8px rgba(0,0,0,.12);position:sticky;top:0;z-index:100}
+.header{background:linear-gradient(135deg,#f9a26c,#f4845a);padding:0 20px;display:flex;align-items:center;height:52px;box-shadow:0 2px 8px rgba(0,0,0,.12);position:sticky;top:0;z-index:100}
 .logo{font-size:16px;font-weight:700;color:#fff;letter-spacing:1px;margin-right:20px;white-space:nowrap}
 .nav-tabs{display:flex;gap:2px;flex:1}
 .nav-tab{background:none;border:none;color:rgba(255,255,255,.65);padding:0 14px;height:52px;cursor:pointer;font-size:13px;font-family:inherit;border-bottom:2.5px solid transparent;transition:all .15s}
-.nav-tab.active{color:#fff;border-bottom-color:#fff}
-.nav-tab:hover{color:#fff}
+.nav-tab.active{color:#fff;border-bottom-color:#fff}.nav-tab:hover{color:#fff}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#f5c6a0;margin-left:auto;flex-shrink:0}
 .sync-dot.ok{background:#2ecc71}.sync-dot.err{background:#e74c3c}
+.page{display:none;padding:16px 20px;max-width:1400px;margin:0 auto}.page.active{display:block}
 
-/* ── PAGES ── */
-.page{display:none;padding:16px 20px;max-width:1400px;margin:0 auto}
-.page.active{display:block}
-
-/* ── SCHEDULE PAGE ── */
+/* schedule */
 .sch-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0 12px;border-bottom:1px solid var(--border);margin-bottom:14px}
 .tab-bar{display:flex;gap:5px}
 .tab{padding:5px 14px;border-radius:20px;font-size:13px;cursor:pointer;border:1.5px solid #e8d5c4;background:var(--bg);color:var(--text2);font-weight:500;transition:all .15s}
@@ -38,79 +32,66 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
 .spacer{flex:1}
 .btn{font-size:12px;padding:5px 13px;border:1.5px solid #e8d5c4;border-radius:8px;background:#fff;color:var(--text2);cursor:pointer;font-weight:500;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
 .btn:hover{border-color:var(--orange);color:var(--orange)}
-.btn.primary{background:var(--orange);border-color:var(--orange);color:#fff}
-.btn.primary:hover{background:var(--orange-d);border-color:var(--orange-d)}
-.btn.danger{background:var(--red-bg);border-color:#f5c6c2;color:var(--red)}
-.btn.danger:hover{background:#fde0dc}
-
-/* ── SCHEDULE TABLE ── */
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#fff}.btn.primary:hover{background:var(--orange-d)}
+.btn.danger{background:var(--red-bg);border-color:#f5c6c2;color:var(--red)}.btn.danger:hover{background:#fde0dc}
 .table-wrap{overflow-x:auto;padding-bottom:24px}
 .schedule-table{border-collapse:collapse;font-size:11px;min-width:800px;width:100%}
 .schedule-table th{padding:6px 4px;text-align:center;border:1px solid #e8d9cc;font-weight:600;color:#5a4a3a;font-size:11.5px;background:#f8f0e3}
-.schedule-table th.sat-head{background:#fde8d0;color:#a05020}
-.schedule-table th.sun-head{background:#fddfd0;color:#a03020}
+.schedule-table th.sat-head{background:#fde8d0;color:#a05020}.schedule-table th.sun-head{background:#fddfd0;color:#a03020}
 .schedule-table td{border:1px solid #e8d9cc;vertical-align:top;padding:2px}
 .section-label{background:#f0e8d8;text-align:center;font-size:12px;color:#5a4a3a;font-weight:700;writing-mode:vertical-rl;width:22px;padding:6px 2px}
 .time-label{background:#f8f0e3;text-align:center;font-size:9px;color:#5a4a3a;font-weight:500;width:48px;padding:4px 2px;line-height:1.4;white-space:pre-line}
 .cell-inner{min-height:48px;display:flex;flex-direction:column;gap:2px;padding:2px}
 .cell-sat{background:#fffbf5}.cell-sun{background:#fff8f5}
-
-/* ── COURSE CARD ── */
 .course-card{border-radius:5px;padding:3px 5px;cursor:pointer;font-size:10px;line-height:1.35;border:1.5px solid transparent;transition:box-shadow .15s,transform .1s;position:relative}
 .course-card:hover{box-shadow:0 0 0 2px var(--orange);transform:scale(1.01);z-index:2}
-.course-card.has-alert{border-color:#e74c3c!important}
-.course-card.has-observe{border-color:#EF9F27!important}
-.course-card .cn{font-weight:600;font-size:10.5px}
-.course-card .ct{color:rgba(0,0,0,.55);font-size:9px}
+.course-card.has-alert{border-color:#e74c3c!important}.course-card.has-observe{border-color:#EF9F27!important}
+.course-card .cn{font-weight:600;font-size:10.5px}.course-card .ct{color:rgba(0,0,0,.55);font-size:9px;margin-top:1px}
 .course-card .ci{font-size:13px;float:right;margin-left:2px;line-height:1}
+.course-card .room-tag{display:inline-block;font-size:8px;font-weight:700;padding:0 4px;border-radius:3px;background:rgba(0,0,0,.08);color:rgba(0,0,0,.5);margin-top:2px;letter-spacing:.02em}
 .course-card .seat-bar{height:3px;border-radius:2px;margin-top:3px;background:#e8d9cc;overflow:hidden}
-.course-card .seat-fill{height:100%;border-radius:2px;background:var(--green);transition:width .3s}
-.course-card .seat-fill.near{background:var(--orange)}
-.course-card .seat-fill.full{background:var(--red)}
+.course-card .seat-fill{height:100%;border-radius:2px;background:var(--green)}
+.course-card .seat-fill.near{background:var(--orange)}.course-card .seat-fill.full{background:var(--red)}
 .course-card .seat-count{font-size:8px;color:rgba(0,0,0,.45);margin-top:1px}
 .badge-new{float:right;font-size:7.5px;background:var(--orange);color:#fff;padding:0 3px;border-radius:3px;margin-left:2px;font-weight:700}
 .add-btn{width:100%;min-height:22px;border:1.5px dashed #d8c8b8;border-radius:5px;cursor:pointer;background:transparent;color:#c0a898;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .add-btn:hover{border-color:var(--orange);color:var(--orange);background:#fff8f2}
 
-/* ── SEAT PANEL (right side) ── */
+/* seat panel */
 .main-layout{display:flex;gap:16px;align-items:flex-start}
 .schedule-col{flex:1;min-width:0}
 .seat-panel{width:340px;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow-y:auto;display:none}
 .seat-panel.open{display:block}
-.seat-panel-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.seat-panel-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
 .seat-panel-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);margin-left:auto;padding:0;line-height:1}
 .seat-panel-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.3}
 .seat-panel-meta{font-size:11px;color:var(--text2);margin-top:3px}
 .seat-cap-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 10px;background:var(--bg);border-radius:8px}
 .seat-cap-bar{flex:1;height:6px;background:#e8d9cc;border-radius:3px;overflow:hidden}
-.seat-cap-fill{height:100%;border-radius:3px;background:var(--green);transition:width .3s}
+.seat-cap-fill{height:100%;border-radius:3px;background:var(--green)}
 .seat-cap-fill.near{background:var(--orange)}.seat-cap-fill.full{background:var(--red)}
-.seat-section-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px}
-.student-chip{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:7px;background:var(--bg);border:1px solid var(--border);margin-bottom:5px;cursor:default;transition:background .1s}
-.student-chip:hover{background:#f5ede4}
+.section-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px}
+.student-chip{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:7px;background:var(--bg);border:1px solid var(--border);margin-bottom:5px}
 .student-chip.alert-red{background:var(--red-bg);border-color:#f5c6c2}
 .student-chip.alert-amber{background:var(--amber-bg);border-color:#f5dfa0}
 .student-chip.paused{opacity:.6}
 .student-chip .sc-name{flex:1;font-size:12px;font-weight:500}
-.student-chip .sc-badge{font-size:10px;padding:1px 6px;border-radius:99px;background:rgba(0,0,0,.06);color:var(--text2)}
+.student-chip .sc-badge{font-size:10px;padding:1px 5px;border-radius:99px;background:rgba(0,0,0,.07);color:var(--text2)}
 .student-chip .sc-note{font-size:10px;color:var(--text3)}
-.student-chip .sc-rm{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0;display:none}
+.student-chip .sc-rm{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0;display:none;line-height:1}
 .student-chip:hover .sc-rm{display:block}
 .waitlist-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;background:var(--bg);border:1px solid var(--border);margin-bottom:5px}
 .wl-num{width:20px;height:20px;border-radius:50%;background:var(--text2);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.wl-info{flex:1}
-.wl-name{font-size:12px;font-weight:500}
-.wl-meta{font-size:10px;color:var(--text3)}
+.wl-info{flex:1}.wl-name{font-size:12px;font-weight:500}.wl-meta{font-size:10px;color:var(--text3)}
 .add-student-row{display:flex;gap:6px;margin-top:8px}
 .add-student-row input{flex:1;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;outline:none}
 .add-student-row input:focus{border-color:var(--orange)}
 .seat-actions{display:flex;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap}
 
-/* ── ALERT PAGE ── */
+/* alert/common */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
-.stat-val{font-size:24px;font-weight:700;color:var(--text)}
-.stat-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.stat-val{font-size:24px;font-weight:700}.stat-lbl{font-size:11px;color:var(--text3);margin-top:2px}
 .stat.red .stat-val{color:var(--red)}.stat.amber .stat-val{color:var(--amber)}.stat.green .stat-val{color:var(--green)}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:14px}
 .card-title{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
@@ -118,8 +99,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{text-align:left;padding:7px 10px;background:#f8f0e3;color:var(--text2);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap}
 td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#fdf8f3}
+tr:last-child td{border-bottom:none}tr:hover td{background:#fdf8f3}
 .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:600}
 .badge.red{background:var(--red-bg);color:var(--red)}.badge.amber{background:var(--amber-bg);color:var(--amber)}
 .badge.green{background:var(--green-bg);color:var(--green)}.badge.gray{background:#f0e8df;color:var(--text2)}
@@ -130,15 +110,15 @@ tr:hover td{background:#fdf8f3}
 .toolbar input,.toolbar select{padding:5px 9px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;background:var(--surface);color:var(--text);outline:none}
 .toolbar input:focus,.toolbar select:focus{border-color:var(--orange)}
 
-/* ── MODALS ── */
+/* modals */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(58,47,40,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:14px;padding:22px;width:100%;max-width:400px;box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.modal{background:#fff;border-radius:14px;padding:22px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(0,0,0,.18);max-height:90vh;overflow-y:auto}
 .modal h3{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--text)}
 .form-row{margin-bottom:11px}
 .form-row label{display:block;font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:600}
 .form-row input,.form-row select,.form-row textarea{width:100%;font-size:12px;padding:6px 9px;border:1.5px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-family:inherit;outline:none;transition:border-color .15s}
-.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--orange);background:#fff}
+.form-row input:focus,.form-row select:focus{border-color:var(--orange);background:#fff}
 .icon-picker{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
 .icon-opt{width:32px;height:32px;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--bg);transition:all .15s}
 .icon-opt:hover,.icon-opt.sel{border-color:var(--orange);background:#fff0e4}
@@ -148,31 +128,50 @@ tr:hover td{background:#fdf8f3}
 .modal-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
 .suggest-box{border:1px solid var(--border);border-radius:6px;margin-top:3px;max-height:140px;overflow-y:auto;display:none;background:#fff}
 .suggest-item{padding:6px 9px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--border)}
-.suggest-item:last-child{border-bottom:none}
-.suggest-item:hover{background:var(--bg)}
-
-/* ── HISTORY ── */
+.suggest-item:last-child{border-bottom:none}.suggest-item:hover{background:var(--bg)}
+.room-btn-group{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.room-btn{padding:4px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--bg);color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s;font-family:inherit}
+.room-btn:hover{border-color:var(--orange);color:var(--orange)}
+.room-btn.sel{background:var(--orange);color:#fff;border-color:var(--orange)}
 .history-item{padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
 .history-item:last-child{border-bottom:none}
 .h-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
-.h-content{flex:1}
-.h-meta{font-size:10px;color:var(--text3);margin-top:2px}
-
-/* ── IMPORT ── */
+.h-content{flex:1}.h-meta{font-size:10px;color:var(--text3);margin-top:2px}
 .drop-zone{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .15s}
 .drop-zone:hover,.drop-zone.drag{border-color:var(--orange);background:#fff8f2}
 .drop-zone p{color:var(--text2);font-size:12px;margin-top:6px}
-
-/* ── TOAST ── */
 #toast{position:fixed;bottom:22px;right:22px;background:#3a2f28;color:#fff;padding:9px 16px;border-radius:8px;font-size:12px;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none}
 #toast.show{opacity:1}
-
+/* student inline edit */
+.student-chip{cursor:pointer;flex-direction:column;align-items:stretch;gap:0}
+.student-chip-top{display:flex;align-items:center;gap:6px}
+.student-chip-edit{display:none;padding:8px 0 4px;border-top:1px solid var(--border);margin-top:6px}
+.student-chip.expanded .student-chip-edit{display:block}
+.student-chip.expanded{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.edit-field{width:100%;font-size:11px;padding:4px 7px;border:1px solid var(--border);border-radius:5px;font-family:inherit;outline:none;background:var(--bg);margin-bottom:5px}
+.edit-field:focus{border-color:var(--orange);background:#fff}
+.edit-row{display:flex;gap:5px;align-items:center;margin-bottom:5px}
+.edit-row label{font-size:10px;color:var(--text2);white-space:nowrap;font-weight:600;width:52px;flex-shrink:0}
+.edit-row input,.edit-row select{flex:1;font-size:11px;padding:4px 7px;border:1px solid var(--border);border-radius:5px;font-family:inherit;outline:none;background:var(--bg)}
+.edit-row input:focus,.edit-row select:focus{border-color:var(--orange)}
+.edit-actions{display:flex;gap:5px;justify-content:flex-end;margin-top:4px}
+/* attendance stats in panel */
+.attend-box{background:var(--bg);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:11px}
+.attend-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0}
+.attend-name{color:var(--text);font-weight:500;flex:1}
+.attend-stat{color:var(--text2);font-size:10px;text-align:right}
+.attend-stat.good{color:var(--green);font-weight:600}
+.attend-stat.bad{color:var(--red);font-weight:600}
+.attend-stat.mid{color:var(--amber);font-weight:600}
+/* frequent visitors */
+.freq-item{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--border);margin-bottom:4px;font-size:11px}
+.freq-bar-wrap{width:50px;height:4px;background:#e8d9cc;border-radius:2px;overflow:hidden}
+.freq-bar{height:100%;background:var(--orange);border-radius:2px}
 @media(max-width:900px){.seat-panel{display:none!important}.main-layout{display:block}}
-@media(max-width:600px){.nav-tab{padding:0 9px;font-size:11px}.page{padding:10px 12px}}
+@media(max-width:600px){.nav-tab{padding:0 8px;font-size:11px}.page{padding:10px 12px}}
 </style>
 </head>
 <body>
-
 <div class="header">
   <span class="logo">🎨 玩劇寶貝</span>
   <div class="nav-tabs">
@@ -182,12 +181,11 @@ tr:hover td{background:#fdf8f3}
     <button class="nav-tab" onclick="showPage('changes',this)">異動紀錄</button>
     <button class="nav-tab" onclick="showPage('import',this)">匯入資料</button>
   </div>
-  <div class="sync-dot" id="syncDot" title="Firebase 連線中"></div>
+  <div class="sync-dot" id="syncDot"></div>
 </div>
-
 <div id="toast"></div>
 
-<!-- ═══ PAGE: 課表 ═══ -->
+<!-- 課表 -->
 <div class="page active" id="page-schedule">
   <div class="sch-toolbar">
     <div class="tab-bar">
@@ -200,13 +198,11 @@ tr:hover td{background:#fdf8f3}
     <button class="btn" onclick="openAddCourseModal(null,null)">＋ 新增課程</button>
   </div>
   <div class="main-layout">
-    <div class="schedule-col">
-      <div class="table-wrap"><div id="tableContainer"></div></div>
-    </div>
+    <div class="schedule-col"><div class="table-wrap"><div id="tableContainer"></div></div></div>
     <div class="seat-panel" id="seatPanel">
       <div class="seat-panel-header">
         <div>
-          <div class="seat-panel-title" id="spTitle">班級名稱</div>
+          <div class="seat-panel-title" id="spTitle"></div>
           <div class="seat-panel-meta" id="spMeta"></div>
         </div>
         <button class="seat-panel-close" onclick="closeSeatPanel()">✕</button>
@@ -215,27 +211,48 @@ tr:hover td{background:#fdf8f3}
         <span style="font-size:11px;color:var(--text2)">學位</span>
         <div class="seat-cap-bar"><div class="seat-cap-fill" id="spCapFill" style="width:0%"></div></div>
         <span style="font-size:12px;font-weight:600" id="spCapText">0/8</span>
-        <button class="btn" style="padding:2px 8px;font-size:11px" onclick="editCapacity()">上限</button>
+        <button class="btn" style="padding:2px 8px;font-size:11px" onclick="editCapacity()">調整上限</button>
       </div>
-      <div class="seat-section-title">固定學位</div>
+      <div class="section-title">固定學位</div>
       <div id="spStudents"></div>
       <div class="add-student-row">
-        <input type="text" id="newStudentInput" placeholder="輸入學生姓名…" oninput="filterStudentSugg()" onkeydown="if(event.key==='Enter')addStudentFromInput()">
-        <button class="btn primary" onclick="addStudentFromInput()">新增</button>
+        <input type="text" id="newStudentInput" placeholder="學員/家長姓名…" oninput="filterStudentSugg()" onkeydown="if(event.key==='Enter')openAddStudentExpanded()">
+        <button class="btn primary" onclick="openAddStudentExpanded()">新增</button>
       </div>
       <div class="suggest-box" id="studentSuggBox"></div>
-      <div class="seat-section-title">候補名單</div>
+      <!-- 展開式新增表單 -->
+      <div id="addStudentForm" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-top:6px">
+        <div class="edit-row"><label>學員姓名</label><input type="text" id="ns-name" class="edit-field" style="margin:0"></div>
+        <div class="edit-row"><label>家長姓名</label><input type="text" id="ns-parent" class="edit-field" style="margin:0" placeholder="CSV 比對用"></div>
+        <div class="edit-row"><label>狀態</label>
+          <select id="ns-status" style="flex:1;font-size:11px;padding:4px 7px;border:1px solid var(--border);border-radius:5px;font-family:inherit;background:var(--bg)">
+            <option value="正常">正常</option><option value="暫停">暫停</option><option value="固定到特定日">固定到特定日</option>
+          </select>
+        </div>
+        <div class="edit-row"><label>備註</label><input type="text" id="ns-note" class="edit-field" style="margin:0" placeholder="例：固定到7月、暫停中…"></div>
+        <div class="edit-actions">
+          <button class="btn" style="font-size:11px;padding:3px 8px" onclick="document.getElementById('addStudentForm').style.display='none'">取消</button>
+          <button class="btn primary" style="font-size:11px;padding:3px 8px" onclick="confirmAddStudent()">確認新增</button>
+        </div>
+      </div>
+      <!-- 出席統計 -->
+      <div class="section-title" style="margin-top:14px">📊 固定學員出席統計</div>
+      <div id="spAttendStats"><p style="font-size:11px;color:var(--text3)">匯入CSV後自動顯示</p></div>
+      <!-- 非固定常客 -->
+      <div class="section-title" style="margin-top:14px">👀 常出現的非固定學員</div>
+      <div id="spFreqVisitors"><p style="font-size:11px;color:var(--text3)">匯入CSV後自動顯示</p></div>
+      <div class="section-title">候補名單</div>
       <div id="spWaitlist"></div>
-      <button class="btn" style="width:100%;margin-top:6px;justify-content:center" onclick="openAddWlModal()">＋ 新增候補</button>
+      <button class="btn" style="width:100%;margin-top:6px;justify-content:center" onclick="openAddWlModal('panel')">＋ 新增候補</button>
       <div class="seat-actions">
         <button class="btn danger" style="font-size:11px" onclick="deleteCourseFromPanel()">刪除課程</button>
-        <button class="btn" style="font-size:11px;margin-left:auto" onclick="openEditCourseModal()">編輯課程資訊</button>
+        <button class="btn" style="font-size:11px;margin-left:auto" onclick="openEditCourseModal()">編輯課程</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE: 缺席警示 ═══ -->
+<!-- 缺席警示 -->
 <div class="page" id="page-alert">
   <div class="stat-row">
     <div class="stat"><div class="stat-val" id="s-total">—</div><div class="stat-lbl">分析學員數</div></div>
@@ -243,54 +260,48 @@ tr:hover td{background:#fdf8f3}
     <div class="stat amber"><div class="stat-val" id="s-amber">—</div><div class="stat-lbl">🟡 持續觀察</div></div>
     <div class="stat green"><div class="stat-val" id="s-coverage">—</div><div class="stat-lbl">資料月份</div></div>
   </div>
-  <div class="filter-tabs" id="alertFilterTabs">
+  <div class="filter-tabs">
     <button class="filter-tab active" onclick="setAlertFilter('all',this)">全部</button>
     <button class="filter-tab" onclick="setAlertFilter('應釋出學位',this)">🔴 應釋出學位</button>
     <button class="filter-tab" onclick="setAlertFilter('持續觀察',this)">🟡 持續觀察</button>
     <button class="filter-tab" onclick="setAlertFilter('正常追蹤',this)">🟢 正常追蹤</button>
   </div>
   <div class="toolbar">
-    <input type="text" id="alertSearch" placeholder="搜尋學員…" oninput="renderAlertTable()" style="width:180px">
+    <input type="text" id="alertSearch" placeholder="搜尋學員…" oninput="renderAlertTable()" style="width:160px">
     <select id="alertAge" onchange="renderAlertTable()">
-      <option value="">所有年齡</option>
-      <option>2-3歲</option><option>4-5歲</option><option>6-8歲</option><option>9-12歲</option>
+      <option value="">所有年齡</option><option>2-3歲</option><option>4-5歲</option><option>6-8歲</option><option>9-12歲</option>
     </select>
     <button class="btn" onclick="exportAlertCSV()">匯出名單</button>
   </div>
   <div class="card" style="padding:0;overflow:hidden">
-    <div class="tbl-wrap">
-      <table><thead><tr>
-        <th>風險</th><th>學員</th><th>課程</th><th>教室</th><th>老師</th>
-        <th>總堂</th><th>缺席</th><th>缺席率</th><th>連續</th><th>月份</th><th>操作</th>
-      </tr></thead>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>風險</th><th>學員</th><th>課程</th><th>教室</th><th>老師</th><th>總堂</th><th>缺席</th><th>缺席率</th><th>連續</th><th>月份</th><th>操作</th></tr></thead>
       <tbody id="alertBody"><tr><td colspan="11" style="text-align:center;color:var(--text3);padding:28px">尚未匯入資料</td></tr></tbody>
-      </table>
-    </div>
+    </table></div>
   </div>
 </div>
 
-<!-- ═══ PAGE: 候補名單 ═══ -->
+<!-- 候補 -->
 <div class="page" id="page-waitlist">
   <div class="toolbar">
     <select id="wlClassFilter" onchange="renderWaitlistPage()"><option value="">所有班級</option></select>
-    <button class="btn primary" onclick="openAddWlModalPage()">＋ 新增候補</button>
+    <button class="btn primary" onclick="openAddWlModal('global')">＋ 新增候補</button>
   </div>
   <div id="waitlistPageContent"><p style="color:var(--text3);padding:28px;text-align:center">尚無候補紀錄</p></div>
 </div>
 
-<!-- ═══ PAGE: 異動紀錄 ═══ -->
+<!-- 異動 -->
 <div class="page" id="page-changes">
   <div class="toolbar">
     <button class="btn primary" onclick="openChangeModal()">＋ 新增異動</button>
     <select id="changeTypeFilter" onchange="renderChanges()">
-      <option value="">所有類型</option>
-      <option>暫停</option><option>退出</option><option>轉班</option><option>釋出學位</option><option>候補升正</option>
+      <option value="">所有類型</option><option>暫停</option><option>退出</option><option>轉班</option><option>釋出學位</option><option>候補升正</option>
     </select>
   </div>
   <div id="changeList"><p style="color:var(--text3);padding:28px;text-align:center">尚無異動紀錄</p></div>
 </div>
 
-<!-- ═══ PAGE: 匯入資料 ═══ -->
+<!-- 匯入 -->
 <div class="page" id="page-import">
   <div class="card">
     <div class="card-title">匯入出席 CSV</div>
@@ -306,10 +317,10 @@ tr:hover td{background:#fdf8f3}
   <div class="card">
     <div class="card-title">警示門檻設定</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="form-row"><label>🔴 缺席率 ≥</label><input type="number" id="threshRed" value="50" style="width:70px"> %</div>
-      <div class="form-row"><label>🔴 連續缺席 ≥</label><input type="number" id="threshStreak" value="3" style="width:70px"> 堂</div>
-      <div class="form-row"><label>🟡 缺席率 ≥</label><input type="number" id="threshAmber" value="30" style="width:70px"> %</div>
-      <div class="form-row"><label>最少堂數</label><input type="number" id="threshMin" value="2" style="width:70px"> 堂</div>
+      <div class="form-row"><label>🔴 缺席率 ≥</label><div style="display:flex;align-items:center;gap:6px"><input type="number" id="threshRed" value="50" style="width:60px"> %</div></div>
+      <div class="form-row"><label>🔴 連續缺席 ≥</label><div style="display:flex;align-items:center;gap:6px"><input type="number" id="threshStreak" value="3" style="width:60px"> 堂</div></div>
+      <div class="form-row"><label>🟡 缺席率 ≥</label><div style="display:flex;align-items:center;gap:6px"><input type="number" id="threshAmber" value="30" style="width:60px"> %</div></div>
+      <div class="form-row"><label>最少堂數</label><div style="display:flex;align-items:center;gap:6px"><input type="number" id="threshMin" value="2" style="width:60px"> 堂</div></div>
     </div>
   </div>
   <div class="card" style="border-color:#fcc;background:#fff8f8">
@@ -319,41 +330,59 @@ tr:hover td{background:#fdf8f3}
   </div>
 </div>
 
-<!-- ── MODAL: 課程編輯 ── -->
+<!-- Modal 課程 -->
 <div class="modal-overlay" id="courseModal">
   <div class="modal">
     <h3 id="courseModalTitle">新增課程</h3>
     <div class="form-row"><label>課程名稱</label><input type="text" id="cm-name" placeholder="例：黏土 2-3"></div>
     <div class="form-row"><label>上課時間</label><input type="text" id="cm-time" placeholder="例：10:00-10:50"></div>
+    <div class="form-row">
+      <label>年齡層</label>
+      <select id="cm-age">
+        <option value="2-3">2-3歲</option><option value="4-5">4-5歲</option>
+        <option value="6-8">6-8歲</option><option value="9-12">9-12歲</option><option value="other">其他（音律等）</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>教室</label>
+      <div class="room-btn-group" id="roomBtnGroup">
+        <button class="room-btn sel" onclick="selectRoom('A',this)">A</button>
+        <button class="room-btn" onclick="selectRoom('B',this)">B</button>
+        <button class="room-btn" onclick="selectRoom('C',this)">C</button>
+        <button class="room-btn" onclick="selectRoom('E',this)">E</button>
+        <button class="room-btn" onclick="selectRoom('3F',this)">3F</button>
+        <button class="room-btn" onclick="selectRoom('4F',this)">4F</button>
+      </div>
+    </div>
     <div class="form-row"><label>老師圖標</label><div class="icon-picker" id="iconPicker"></div></div>
     <div class="form-row"><label>卡片顏色</label><div class="color-picker" id="colorPicker"></div></div>
     <div class="form-row"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="cm-new" style="width:14px;height:14px;accent-color:var(--orange)"> 標記為「New」新班</label></div>
     <div class="form-row"><label>學位上限</label><input type="number" id="cm-cap" value="8" min="1" max="20"></div>
     <div class="modal-actions">
-      <button class="btn danger" id="cmDeleteBtn" onclick="deleteCourseModal()" style="display:none">刪除</button>
+      <button class="btn danger" id="cmDeleteBtn" onclick="deleteCourseModal()" style="display:none">刪除課程</button>
       <button class="btn" onclick="closeModal('courseModal')">取消</button>
       <button class="btn primary" onclick="saveCourseModal()">儲存</button>
     </div>
   </div>
 </div>
 
-<!-- ── MODAL: 新增候補 ── -->
+<!-- Modal 候補 -->
 <div class="modal-overlay" id="wlModal">
   <div class="modal">
     <h3>新增候補</h3>
-    <div class="form-row"><label>學員姓名</label><input type="text" id="wl-name" placeholder="林小明"></div>
+    <div class="form-row"><label>學員姓名</label><input type="text" id="wl-name"></div>
     <div class="form-row"><label>聯絡電話</label><input type="text" id="wl-phone"></div>
     <div class="form-row"><label>希望時段</label><input type="text" id="wl-time" placeholder="例：週六上午"></div>
     <div class="form-row"><label>登記日期</label><input type="date" id="wl-date"></div>
     <div class="form-row"><label>備註</label><input type="text" id="wl-note"></div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('wlModal')">取消</button>
-      <button class="btn primary" onclick="saveWaitlistModal()">儲存</button>
+      <button class="btn primary" onclick="saveWlModal()">儲存</button>
     </div>
   </div>
 </div>
 
-<!-- ── MODAL: 異動 ── -->
+<!-- Modal 異動 -->
 <div class="modal-overlay" id="changeModal">
   <div class="modal">
     <h3>新增異動紀錄</h3>
@@ -372,126 +401,151 @@ tr:hover td{background:#fdf8f3}
   </div>
 </div>
 
-<!-- ─── Firebase ─── -->
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getDatabase,ref,set,get,push,onValue,remove}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 const cfg={apiKey:"AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",authDomain:"otto2-2026.firebaseapp.com",databaseURL:"https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"otto2-2026",storageBucket:"otto2-2026.appspot.com",appId:"1:108328085665:web:071a45a7d7c5af6b6468e0"};
-const app=initializeApp(cfg,"seat2");
+const app=initializeApp(cfg,"seat3");
 const db=getDatabase(app);
 window._db=db;window._ref=ref;window._set=set;window._get=get;window._push=push;window._remove=remove;
 onValue(ref(db,'.info/connected'),s=>{
   const d=document.getElementById('syncDot');
   d.className=s.val()?'sync-dot ok':'sync-dot err';
+  d.title=s.val()?'Firebase 已連線':'連線中斷';
 });
-window.fbSet=async(path,data)=>{await set(ref(db,'seat2/'+path),data)};
-window.fbPush=async(path,data)=>{return await push(ref(db,'seat2/'+path),data)};
-window.fbRemove=async(path)=>{await remove(ref(db,'seat2/'+path))};
-window.fbGet=async(path)=>{return await get(ref(db,'seat2/'+path))};
-async function loadAll(){
-  const snap=await get(ref(db,'seat2'));
+window.fbSet=async(path,data)=>set(ref(db,'seat3/'+path),data);
+window.fbPush=async(path,data)=>push(ref(db,'seat3/'+path),data);
+window.fbRemove=async(path)=>remove(ref(db,'seat3/'+path));
+window.fbGet=async(path)=>get(ref(db,'seat3/'+path));
+window.loadAll=async function(){
+  const snap=await get(ref(db,'seat3'));
   const d=snap.val()||{};
-  window.SCHEDULE=d.schedule||JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+  window.COURSES=d.courses||JSON.parse(JSON.stringify(DEFAULT_COURSES));
   window.SEATS=d.seats||{};
   window.WAITLIST=d.waitlist?Object.entries(d.waitlist).map(([k,v])=>({...v,_key:k})):[];
   window.CHANGES=d.changes?Object.entries(d.changes).map(([k,v])=>({...v,_key:k})):[];
   window.ALERT_DATA=d.alertData||[];
   renderTable();renderAlertTable();renderWaitlistPage();renderChanges();
-}
-window.loadAll=loadAll;
-loadAll();
+};
+window.loadAll();
 </script>
 
 <script>
-// ══════════════════════════════════════════
-// DATA
-// ══════════════════════════════════════════
-const ICONS=['🍎','🌸','❄️','🐧','⭐','🎨','🐳','🧩','🌈','🍊','🐻','🐼','⚽','🦋','🎶','🫧','🎵','🌺'];
+// ══ CONSTANTS ══
+const ICONS=['🍎','🌸','❄️','🐧','⭐','🎨','🐳','🧩','🌈','🍊','🐻','🐼','⚽','🦋','🎶','🎵','🌺','🫧'];
 const COLORS=[
   {bg:'#fef3c7',bd:'#f59e0b'},{bg:'#d1fae5',bd:'#10b981'},{bg:'#dbeafe',bd:'#3b82f6'},
   {bg:'#fce7f3',bd:'#ec4899'},{bg:'#ede9fe',bd:'#8b5cf6'},{bg:'#ffedd5',bd:'#f97316'},
   {bg:'#fff1f2',bd:'#f43f5e'},{bg:'#f0fdf4',bd:'#22c55e'},
 ];
-const AGE_CAP={'2-3':7,'4-5':8,'6-8':10,'9-12':12};
+const ROOMS=['A','B','C','E','3F','4F'];
+const ROOM_COLOR={'A':'#e0f0ff','B':'#e0ffe8','C':'#fff5e0','E':'#f0e0ff','3F':'#ffe0e0','4F':'#e8e8e8'};
 
-const DEFAULT_SCHEDULE={
-  all:{sections:[
-    {name:'上午',rows:[
-      {label:'09:30\n-11:00',cells:{'六A':[{name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false}],'日A':[{name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false}]}},
-      {label:'09:50\n-10:50',cells:{'六A':[{name:'繪畫 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false}],'六B':[{name:'黏土 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false}],'日A':[{name:'繪畫 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false}],'日B':[{name:'黏土 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false}]}},
-      {label:'10:00\n-10:50',cells:{'三':[{name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false},{name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false}],'四':[{name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false},{name:'智高積木 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false}],'六A':[{name:'繪畫 2-3',time:'10:00-10:50',icon:'⭐',color:0,isNew:false},{name:'黏土 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false}],'日A':[{name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:true}]}},
-      {label:'11:10\n-12:10',cells:{'三':[{name:'智高積木 2-3',time:'11:10-12:00',icon:'🍎',color:0,isNew:false},{name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false},{name:'音律 1.5-3',time:'11:10-12:00',icon:'🎵',color:2,isNew:false}],'四':[{name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false}],'六A':[{name:'繪畫 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:false},{name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false},{name:'黏土 2-3',time:'11:20-12:10',icon:'🐧',color:0,isNew:false}],'六B':[{name:'黏土 4-5',time:'11:10-12:10',icon:'⭐',color:1,isNew:false}],'日A':[{name:'繪畫 4-5',time:'11:10-12:10',icon:'❄️',color:1,isNew:false},{name:'繪畫 2-3',time:'11:20-12:10',icon:'🌸',color:0,isNew:false},{name:'智高積木 2-3',time:'11:10-12:00',icon:'🎨',color:0,isNew:false}],'日B':[{name:'繪畫 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:true},{name:'繪畫 2-3',time:'11:10-12:10',icon:'⭐',color:0,isNew:false}]}},
-    ]},
-    {name:'下午',rows:[
-      {label:'13:30\n-15:30',cells:{'六A':[{name:'黏土 4-5',time:'13:30-14:30',icon:'🐧',color:1,isNew:false},{name:'繪畫 9-12',time:'13:30-15:00',icon:'🌸',color:3,isNew:false}],'六B':[{name:'繪畫 6-8',time:'13:30-15:00',icon:'🐧',color:5,isNew:false}],'日A':[{name:'繪畫 4-5',time:'13:30-14:30',icon:'❄️',color:1,isNew:false}],'日B':[{name:'繪畫 6-8',time:'13:30-15:00',icon:'🎨',color:5,isNew:false}]}},
-      {label:'14:00\n-16:00',cells:{'六A':[{name:'繪畫 2-3',time:'14:00-14:50',icon:'⭐',color:0,isNew:true},{name:'繪畫 2-3',time:'14:50-15:40',icon:'🎨',color:0,isNew:false},{name:'黏土 4-5',time:'14:50-15:50',icon:'🍎',color:1,isNew:false}],'六B':[{name:'黏土 2-3',time:'14:00-14:50',icon:'🎵',color:0,isNew:false},{name:'黏土 2-3',time:'15:10-16:00',icon:'⭐',color:0,isNew:false}],'日A':[{name:'繪畫 2-3',time:'14:00-14:50',icon:'🍎',color:0,isNew:false},{name:'黏土 2-3',time:'14:00-14:50',icon:'🌸',color:0,isNew:false}],'日B':[{name:'繪畫 2-3',time:'15:10-16:00',icon:'🌸',color:0,isNew:false}]}},
-      {label:'15:10\n-16:30',cells:{'六A':[{name:'主題黏土 6-8',time:'15:10-16:30',icon:'🎨',color:5,isNew:false},{name:'繪畫 4-5',time:'15:10-16:10',icon:'🐧',color:1,isNew:false}],'六B':[{name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false}],'日A':[{name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false}],'日B':[{name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false},{name:'黏土 2-3',time:'15:10-16:00',icon:'🍎',color:0,isNew:true}]}},
-      {label:'16:00\n-17:50',cells:{'六A':[{name:'主題黏土 6-8',time:'16:00-17:30',icon:'🎨',color:5,isNew:false},{name:'繪畫 6-8',time:'16:20-17:50',icon:'🍎',color:5,isNew:false}],'六B':[{name:'繪畫 4-5',time:'16:00-17:00',icon:'❄️',color:1,isNew:false},{name:'黏土 2-3',time:'16:10-17:00',icon:'🎨',color:0,isNew:false},{name:'主題黏土 4-5',time:'16:30-17:30',icon:'🐧',color:1,isNew:false}],'日A':[{name:'繪畫 2-3',time:'16:20-17:10',icon:'🌸',color:0,isNew:false}],'日B':[{name:'黏土 2-3',time:'16:20-17:10',icon:'🌸',color:0,isNew:false}]}},
-      {label:'17:00\n-18:00',cells:{'三':[{name:'繪畫 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:false},{name:'繪畫 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false}],'四':[{name:'黏土 4-5',time:'17:00-17:50',icon:'🍎',color:1,isNew:false},{name:'黏土 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:true},{name:'黏土 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false},{name:'繪畫 4-5',time:'17:00-18:00',icon:'🌸',color:1,isNew:false}],'五':[{name:'繪畫 4-5',time:'17:00-17:50',icon:'❄️',color:1,isNew:false},{name:'黏土 2-3',time:'17:00-17:50',icon:'🍎',color:0,isNew:false},{name:'黏土 4-5',time:'17:00-18:00',icon:'⭐',color:1,isNew:false}]}},
-    ]},
-    {name:'晚上',rows:[
-      {label:'19:00\n-21:00',cells:{'五':[{name:'繪畫 4-5',time:'19:00-20:00',icon:'🌸',color:1,isNew:false},{name:'主題黏土 4-5',time:'19:00-20:00',icon:'🍎',color:1,isNew:false},{name:'繪畫 6-8',time:'19:00-20:30',icon:'🎵',color:5,isNew:false},{name:'繪畫 9-12',time:'19:00-21:00',icon:'🎨',color:3,isNew:false}]}},
-    ]},
-  ]},
-  '2-3':{sections:[
-    {name:'上午',rows:[
-      {label:'10:00\n-10:50',cells:{'三':[{name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false},{name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false}],'四':[{name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false},{name:'智高積木 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false}],'六A':[{name:'繪畫 2-3',time:'10:00-10:50',icon:'⭐',color:0,isNew:false},{name:'黏土 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false}],'日A':[{name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:true}]}},
-      {label:'11:10\n-12:10',cells:{'三':[{name:'智高積木 2-3',time:'11:10-12:00',icon:'🍎',color:0,isNew:false},{name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false},{name:'音律 1.5-3',time:'11:10-12:00',icon:'🎵',color:2,isNew:false}],'四':[{name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false}],'六A':[{name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false},{name:'黏土 2-3',time:'11:20-12:10',icon:'🐧',color:0,isNew:false}],'日A':[{name:'智高積木 2-3',time:'11:10-12:00',icon:'🎨',color:0,isNew:false},{name:'繪畫 2-3',time:'11:20-12:10',icon:'🌸',color:0,isNew:false}]}},
-    ]},
-    {name:'下午',rows:[
-      {label:'14:00\n-17:10',cells:{'六A':[{name:'繪畫 2-3',time:'14:00-14:50',icon:'⭐',color:0,isNew:false},{name:'繪畫 2-3',time:'14:50-15:40',icon:'🎨',color:0,isNew:false},{name:'黏土 2-3',time:'15:10-16:00',icon:'⭐',color:0,isNew:false},{name:'黏土 2-3',time:'16:10-17:00',icon:'🎨',color:0,isNew:false}],'六B':[{name:'黏土 2-3',time:'14:00-14:50',icon:'🎵',color:0,isNew:false},{name:'繪畫 2-3',time:'16:10-17:00',icon:'⭐',color:0,isNew:false}],'日A':[{name:'繪畫 2-3',time:'14:00-14:50',icon:'🍎',color:0,isNew:false},{name:'黏土 2-3',time:'14:00-14:50',icon:'🌸',color:0,isNew:false},{name:'繪畫 2-3',time:'15:10-16:00',icon:'🌸',color:0,isNew:false}],'日B':[{name:'繪畫 2-3',time:'15:10-16:00',icon:'🌸',color:0,isNew:false},{name:'黏土 2-3',time:'15:10-16:00',icon:'🍎',color:0,isNew:true},{name:'黏土 2-3',time:'16:20-17:10',icon:'🌸',color:0,isNew:false}]}},
-      {label:'17:00\n-17:50',cells:{'三':[{name:'繪畫 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:false}],'四':[{name:'黏土 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:true}],'五':[{name:'黏土 2-3',time:'17:00-17:50',icon:'🍎',color:0,isNew:false}]}},
-    ]},
-  ]},
-  '4-5':{sections:[
-    {name:'上午',rows:[
-      {label:'09:50\n-10:50',cells:{'六A':[{name:'繪畫 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false}],'六B':[{name:'黏土 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false}],'日A':[{name:'繪畫 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false}],'日B':[{name:'黏土 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false}]}},
-      {label:'11:10\n-12:10',cells:{'六A':[{name:'繪畫 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:false}],'六B':[{name:'黏土 4-5',time:'11:10-12:10',icon:'⭐',color:1,isNew:false}],'日A':[{name:'繪畫 4-5',time:'11:10-12:10',icon:'❄️',color:1,isNew:false}],'日B':[{name:'黏土 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:true}]}},
-    ]},
-    {name:'下午',rows:[
-      {label:'13:30\n-14:30',cells:{'六A':[{name:'黏土 4-5',time:'13:30-14:30',icon:'🐧',color:1,isNew:false}],'日A':[{name:'繪畫 4-5',time:'13:30-14:30',icon:'❄️',color:1,isNew:false}]}},
-      {label:'14:50\n-17:30',cells:{'六A':[{name:'黏土 4-5',time:'14:50-15:50',icon:'🍎',color:1,isNew:false},{name:'繪畫 4-5',time:'15:10-16:10',icon:'🐧',color:1,isNew:false}],'六B':[{name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false},{name:'繪畫 4-5',time:'16:00-17:00',icon:'❄️',color:1,isNew:false},{name:'主題黏土 4-5',time:'16:30-17:30',icon:'🐧',color:1,isNew:false}],'日A':[{name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false}],'日B':[{name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false}]}},
-      {label:'17:00\n-20:00',cells:{'三':[{name:'繪畫 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false}],'四':[{name:'黏土 4-5',time:'17:00-17:50',icon:'🍎',color:1,isNew:false},{name:'黏土 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false},{name:'繪畫 4-5',time:'17:00-18:00',icon:'🌸',color:1,isNew:false}],'五':[{name:'黏土 4-5',time:'17:00-18:00',icon:'❄️',color:1,isNew:false},{name:'繪畫 4-5',time:'17:00-17:50',icon:'🌸',color:1,isNew:false},{name:'繪畫 4-5',time:'19:00-20:00',icon:'🌸',color:1,isNew:false},{name:'主題黏土 4-5',time:'19:00-20:00',icon:'🍎',color:1,isNew:false}]}},
-    ]},
-  ]},
-  '6+':{sections:[
-    {name:'上午',rows:[
-      {label:'09:30\n-11:00',cells:{'六A':[{name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false}],'日A':[{name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false}]}},
-    ]},
-    {name:'下午',rows:[
-      {label:'13:30\n-15:00',cells:{'六A':[{name:'繪畫 9-12',time:'13:30-15:00',icon:'🌸',color:3,isNew:false},{name:'繪畫 6-8',time:'13:30-15:00',icon:'❄️',color:5,isNew:false}],'日A':[{name:'繪畫 6-8',time:'13:30-15:00',icon:'🎨',color:5,isNew:false}],'日B':[{name:'主題黏土 6-8',time:'15:00-16:30',icon:'🎨',color:5,isNew:false}]}},
-      {label:'15:10\n-16:30',cells:{'六A':[{name:'主題黏土 6-8',time:'15:10-16:30',icon:'🎨',color:5,isNew:false}]}},
-      {label:'16:00\n-17:50',cells:{'六A':[{name:'繪畫 6-8',time:'16:20-17:50',icon:'🍎',color:5,isNew:false}],'六B':[{name:'主題黏土 6-8',time:'16:00-17:30',icon:'🎨',color:5,isNew:false}]}},
-      {label:'19:00\n-21:00',cells:{'五':[{name:'繪畫 6-8',time:'19:00-20:30',icon:'❄️',color:5,isNew:false},{name:'繪畫 9-12',time:'19:00-21:00',icon:'🎨',color:3,isNew:false}]}},
-    ]},
-  ]},
-};
+// ══ 單一課程資料 ══
+// 每堂課：{id, col(週三/四/五/六A/六B/日A/日B), section(上午/下午/晚上), rowLabel, name, time, icon, color, isNew, ageGroup, room, capacity}
+const DEFAULT_COURSES = [
+  // 週三 上午
+  {id:'c001',col:'三',section:'上午',rowLabel:'10:00\n-10:50',name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c002',col:'三',section:'上午',rowLabel:'10:00\n-10:50',name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c003',col:'三',section:'上午',rowLabel:'11:10\n-12:10',name:'智高積木 2-3',time:'11:10-12:00',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c004',col:'三',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  {id:'c005',col:'三',section:'上午',rowLabel:'11:10\n-12:10',name:'音律 1.5-3',time:'11:10-12:00',icon:'🎵',color:2,isNew:false,ageGroup:'other',room:'A'},
+  // 週三 下午
+  {id:'c006',col:'三',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c007',col:'三',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  // 週四 上午
+  {id:'c008',col:'四',section:'上午',rowLabel:'10:00\n-10:50',name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c009',col:'四',section:'上午',rowLabel:'10:00\n-10:50',name:'智高積木 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c010',col:'四',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  // 週四 下午
+  {id:'c011',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:true,ageGroup:'2-3',room:'B'},
+  {id:'c012',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 4-5',time:'17:00-17:50',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c013',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c014',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 4-5',time:'17:00-18:00',icon:'🌸',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  // 週五 下午
+  {id:'c015',col:'五',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 4-5',time:'17:00-17:50',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c016',col:'五',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 2-3',time:'17:00-17:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c017',col:'五',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 4-5',time:'17:00-18:00',icon:'⭐',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  // 週五 晚上
+  {id:'c018',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'繪畫 4-5',time:'19:00-20:00',icon:'🌸',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c019',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'主題黏土 4-5',time:'19:00-20:00',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'3F'},
+  {id:'c020',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'繪畫 6-8',time:'19:00-20:30',icon:'🎵',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c021',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'繪畫 9-12',time:'19:00-21:00',icon:'🎨',color:3,isNew:false,ageGroup:'9-12',room:'3F'},
+  // 週六A 上午
+  {id:'c022',col:'六A',section:'上午',rowLabel:'09:30\n-11:00',name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c023',col:'六A',section:'上午',rowLabel:'09:50\n-10:50',name:'繪畫 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c024',col:'六A',section:'上午',rowLabel:'10:00\n-10:50',name:'繪畫 2-3',time:'10:00-10:50',icon:'⭐',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c025',col:'六A',section:'上午',rowLabel:'10:00\n-10:50',name:'黏土 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  {id:'c026',col:'六A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c027',col:'六A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c028',col:'六A',section:'上午',rowLabel:'11:10\n-12:10',name:'黏土 2-3',time:'11:20-12:10',icon:'🐧',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  // 週六A 下午
+  {id:'c029',col:'六A',section:'下午',rowLabel:'13:30\n-15:30',name:'繪畫 9-12',time:'13:30-15:00',icon:'🌸',color:3,isNew:false,ageGroup:'9-12',room:'4F'},
+  {id:'c030',col:'六A',section:'下午',rowLabel:'13:30\n-15:30',name:'黏土 4-5',time:'13:30-14:30',icon:'🐧',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c031',col:'六A',section:'下午',rowLabel:'14:00\n-16:10',name:'繪畫 2-3',time:'14:00-14:50',icon:'⭐',color:0,isNew:true,ageGroup:'2-3',room:'B'},
+  {id:'c032',col:'六A',section:'下午',rowLabel:'14:00\n-16:10',name:'繪畫 2-3',time:'14:50-15:40',icon:'🎨',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c033',col:'六A',section:'下午',rowLabel:'14:00\n-16:10',name:'黏土 4-5',time:'14:50-15:50',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  {id:'c034',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'主題黏土 6-8',time:'15:10-16:30',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  {id:'c035',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'繪畫 4-5',time:'15:10-16:10',icon:'🐧',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c036',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'主題黏土 6-8',time:'16:00-17:30',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c037',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'繪畫 6-8',time:'16:20-17:50',icon:'🍎',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  // 週六B 上午
+  {id:'c038',col:'六B',section:'上午',rowLabel:'09:50\n-10:50',name:'黏土 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c039',col:'六B',section:'上午',rowLabel:'11:10\n-12:10',name:'黏土 4-5',time:'11:10-12:10',icon:'⭐',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  // 週六B 下午
+  {id:'c040',col:'六B',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 6-8',time:'13:30-15:00',icon:'🐧',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  {id:'c041',col:'六B',section:'下午',rowLabel:'14:00\n-16:00',name:'黏土 2-3',time:'14:00-14:50',icon:'🎵',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c042',col:'六B',section:'下午',rowLabel:'14:00\n-16:00',name:'黏土 2-3',time:'15:10-16:00',icon:'⭐',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c043',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c044',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'繪畫 4-5',time:'16:00-17:00',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  {id:'c045',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'黏土 2-3',time:'16:10-17:00',icon:'🎨',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c046',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'主題黏土 4-5',time:'16:30-17:30',icon:'🐧',color:1,isNew:false,ageGroup:'4-5',room:'3F'},
+  // 週日A 上午
+  {id:'c047',col:'日A',section:'上午',rowLabel:'09:30\n-11:00',name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c048',col:'日A',section:'上午',rowLabel:'09:50\n-10:50',name:'繪畫 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c049',col:'日A',section:'上午',rowLabel:'10:00\n-10:50',name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:true,ageGroup:'2-3',room:'B'},
+  {id:'c050',col:'日A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 4-5',time:'11:10-12:10',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c051',col:'日A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:20-12:10',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  {id:'c052',col:'日A',section:'上午',rowLabel:'11:10\n-12:10',name:'智高積木 2-3',time:'11:10-12:00',icon:'🎨',color:0,isNew:false,ageGroup:'2-3',room:'A'},
+  // 週日A 下午
+  {id:'c053',col:'日A',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 6-8',time:'13:30-15:00',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c054',col:'日A',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 4-5',time:'13:30-14:30',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c055',col:'日A',section:'下午',rowLabel:'14:00\n-16:30',name:'繪畫 2-3',time:'14:00-14:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c056',col:'日A',section:'下午',rowLabel:'14:00\n-16:30',name:'黏土 2-3',time:'14:00-14:50',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c057',col:'日A',section:'下午',rowLabel:'14:00\n-16:30',name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'3F'},
+  {id:'c058',col:'日A',section:'下午',rowLabel:'16:20\n-17:10',name:'繪畫 2-3',time:'16:20-17:10',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  // 週日B 上午
+  {id:'c059',col:'日B',section:'上午',rowLabel:'09:50\n-10:50',name:'黏土 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c060',col:'日B',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:true,ageGroup:'4-5',room:'A'},
+  {id:'c061',col:'日B',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:10',icon:'⭐',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  // 週日B 下午
+  {id:'c062',col:'日B',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 6-8',time:'13:30-15:00',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  {id:'c063',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'主題黏土 6-8',time:'15:00-16:30',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c064',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'繪畫 2-3',time:'15:10-16:00',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c065',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'黏土 2-3',time:'15:10-16:00',icon:'🍎',color:0,isNew:true,ageGroup:'2-3',room:'E'},
+  {id:'c066',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c067',col:'日B',section:'下午',rowLabel:'16:20\n-17:10',name:'黏土 2-3',time:'16:20-17:10',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+];
 
-// ══════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════
-window.SCHEDULE=JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+// ══ STATE ══
+window.COURSES=JSON.parse(JSON.stringify(DEFAULT_COURSES));
 window.SEATS={};window.WAITLIST=[];window.CHANGES=[];window.ALERT_DATA=[];
-let _currentTab='all';
+let _tab='all';
 let _alertFilter='all';
-let _activeCourse=null; // {sIdx,rIdx,cIdx,col} for seat panel
-let _editCourseTarget=null;
-let _selectedIcon=ICONS[0];
-let _selectedColor=0;
+let _activeId=null;
+let _editTarget=null;
+let _selIcon=ICONS[0];
+let _selColor=0;
+let _selRoom='A';
+let _wlMode='global';
 
-// ══════════════════════════════════════════
-// NAV
-// ══════════════════════════════════════════
+// ══ HELPERS ══
 function showPage(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   if(btn)btn.classList.add('active');
 }
-
-// ══════════════════════════════════════════
-// TOAST
-// ══════════════════════════════════════════
 function toast(msg,err){
   const t=document.getElementById('toast');
   t.textContent=msg;t.style.background=err?'#c0392b':'#3a2f28';
@@ -501,94 +555,110 @@ function closeModal(id){document.getElementById(id).classList.remove('open')}
 document.querySelectorAll('.modal-overlay').forEach(el=>{
   el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open')});
 });
-
-// ══════════════════════════════════════════
-// SEAT KEY — unique ID for a course card
-// ══════════════════════════════════════════
-function seatKey(tab,sIdx,rIdx,col,cIdx){
-  return `${tab}|${sIdx}|${rIdx}|${col}|${cIdx}`;
+function defaultCap(name){
+  if(!name)return 8;
+  if(name.includes('9-12'))return 12;if(name.includes('6-8'))return 10;
+  if(name.includes('4-5'))return 8;if(name.includes('2-3'))return 7;
+  return 8;
+}
+function alertLevel(name){
+  if(!name||!name.trim())return'';
+  const clean=name.replace(/[（）()].*/,'').trim();
+  const a=(window.ALERT_DATA||[]).find(r=>r.會員&&r.會員.replace(/[（）()].*/,'').trim()===clean);
+  if(!a)return'';
+  if(a.風險等級==='應釋出學位')return'red';
+  if(a.風險等級==='持續觀察')return'amber';
+  return'';
+}
+function alertLevelForStudent(s){
+  return alertLevel(s.name)||alertLevel(s.parent||'');
+}
+function ageFilter(c){
+  if(_tab==='all')return true;
+  if(_tab==='2-3')return c.ageGroup==='2-3'||c.ageGroup==='other';
+  if(_tab==='4-5')return c.ageGroup==='4-5';
+  if(_tab==='6+')return c.ageGroup==='6-8'||c.ageGroup==='9-12';
+  return true;
 }
 
-// ══════════════════════════════════════════
-// SCHEDULE TABLE
-// ══════════════════════════════════════════
+// ══ SCHEDULE TABLE ══
 function switchTab(tab,el){
-  _currentTab=tab;
+  _tab=tab;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
-  closeSeatPanel();
-  renderTable();
+  closeSeatPanel();renderTable();
 }
 
-function getCols(tab){
-  return tab==='6+'?['二','三','四','五','六A','六B','日A','日B']:['三','四','五','六A','六B','日A','日B'];
-}
+const ALL_COLS=['三','四','五','六A','六B','日A','日B'];
+const SIX_PLUS_COLS=['二','三','四','五','六A','六B','日A','日B'];
+function getCols(){return _tab==='6+'?SIX_PLUS_COLS:ALL_COLS;}
 function colLabel(c){
   if(c==='六A')return{main:'六',sub:'①'};if(c==='六B')return{main:'六',sub:'②'};
   if(c==='日A')return{main:'日',sub:'①'};if(c==='日B')return{main:'日',sub:'②'};
   return{main:c,sub:''};
 }
 
-function getAlertForStudent(name){
-  const a=(window.ALERT_DATA||[]).find(r=>r.會員&&r.會員.replace(/[（）()].*/,'').trim()===name.trim());
-  if(!a)return'';
-  if(a.風險等級==='應釋出學位')return'red';
-  if(a.風險等級==='持續觀察')return'amber';
-  return'';
-}
-
 function renderTable(){
-  const tab=_currentTab;
-  const schData=window.SCHEDULE[tab];
-  if(!schData){document.getElementById('tableContainer').innerHTML='';return;}
-  const cols=getCols(tab);
+  const courses=window.COURSES.filter(ageFilter);
+  const cols=getCols();
+
+  // Build section > rowLabel > col structure
+  const sections={};
+  const sectionOrder=[];
+  courses.forEach(c=>{
+    if(!sections[c.section]){sections[c.section]={};sectionOrder.push(c.section);}
+    if(!sections[c.section][c.rowLabel])sections[c.section][c.rowLabel]=[];
+    sections[c.section][c.rowLabel].push(c);
+  });
+
+  // Deduplicate section order
+  const seenSec=new Set();const orderedSecs=sectionOrder.filter(s=>{if(seenSec.has(s))return false;seenSec.add(s);return true;});
+  const secOrder=['上午','下午','晚上'];
+  orderedSecs.sort((a,b)=>secOrder.indexOf(a)-secOrder.indexOf(b));
 
   let html='<table class="schedule-table"><thead><tr>';
-  html+='<th style="width:22px"></th><th class="time-label" style="width:48px">時段</th>';
+  html+='<th style="width:22px"></th><th style="width:48px;background:#f8f0e3;font-size:10px">時段</th>';
   cols.forEach(c=>{
     const lb=colLabel(c);
     const cls=c.startsWith('六')?'sat-head':c.startsWith('日')?'sun-head':'';
-    html+=`<th class="${cls}">${lb.main}${lb.sub?`<br><span class="col-sub">${lb.sub}</span>`:''}`;
-    if(c==='六A')html+=`<br><span class="col-sub" style="font-size:8px;color:#c08050">①②共欄</span>`;
+    html+=`<th class="${cls}">${lb.main}${lb.sub?`<br><span style="font-size:9px;font-weight:400">${lb.sub}</span>`:''}`;
+    if(c==='六A')html+=`<br><span style="font-size:8px;font-weight:400;color:#b08060">①②分欄</span>`;
     html+='</th>';
   });
   html+='</tr></thead><tbody>';
 
-  schData.sections.forEach((sec,sIdx)=>{
-    let firstRow=true;
-    sec.rows.forEach((row,rIdx)=>{
+  orderedSecs.forEach(sec=>{
+    const rows=sections[sec];
+    const rowLabels=Object.keys(rows).sort();
+    rowLabels.forEach((rl,ri)=>{
       html+='<tr>';
-      if(firstRow){
-        html+=`<td class="section-label" rowspan="${sec.rows.length}">${sec.name}</td>`;
-        firstRow=false;
-      }
-      html+=`<td class="time-label">${row.label}</td>`;
+      if(ri===0)html+=`<td class="section-label" rowspan="${rowLabels.length}">${sec}</td>`;
+      html+=`<td class="time-label">${rl}</td>`;
       cols.forEach(col=>{
-        const cards=row.cells[col]||[];
-        const cellClass=col.startsWith('六')?'cell-sat':col.startsWith('日')?'cell-sun':'';
-        html+=`<td class="${cellClass}"><div class="cell-inner">`;
-        cards.forEach((c,cIdx)=>{
-          const key=seatKey(tab,sIdx,rIdx,col,cIdx);
-          const seat=window.SEATS[key]||{students:[],capacity:defaultCap(c.name),waitlist:[]};
-          const count=seat.students.length;const cap=seat.capacity||defaultCap(c.name);
+        const cards=(rows[rl]||[]).filter(c=>c.col===col);
+        const cellCls=col.startsWith('六')?'cell-sat':col.startsWith('日')?'cell-sun':'';
+        html+=`<td class="${cellCls}"><div class="cell-inner">`;
+        cards.forEach(c=>{
+          const seat=window.SEATS[c.id]||{students:[],capacity:defaultCap(c.name),waitlist:[]};
+          const count=seat.students.length,cap=seat.capacity||defaultCap(c.name);
           const pct=Math.min(count/cap*100,100);
           const fillCls=pct>=100?'full':pct>=85?'near':'';
-          const hasAlert=seat.students.some(s=>getAlertForStudent(s.name)==='red');
-          const hasObs=!hasAlert&&seat.students.some(s=>getAlertForStudent(s.name)==='amber');
+          const hasAlert=seat.students.some(s=>alertLevelForStudent(s)==='red');
+          const hasObs=!hasAlert&&seat.students.some(s=>alertLevelForStudent(s)==='amber');
           const alertCls=hasAlert?'has-alert':hasObs?'has-observe':'';
-          const bg=COLORS[c.color]?.bg||COLORS[0].bg;
-          const bd=COLORS[c.color]?.bd||COLORS[0].bd;
-          html+=`<div class="course-card ${alertCls}" style="background:${bg};border-color:${bd}"
-            onclick="openSeatPanel('${tab}',${sIdx},${rIdx},'${col}',${cIdx})">
+          const bg=COLORS[c.color]?.bg||COLORS[0].bg,bd=COLORS[c.color]?.bd||COLORS[0].bd;
+          const roomColor=ROOM_COLOR[c.room]||'rgba(0,0,0,.05)';
+          html+=`<div class="course-card ${alertCls}" style="background:${bg};border-color:${bd}" onclick="openSeatPanel('${c.id}')">
             ${c.isNew?'<span class="badge-new">NEW</span>':''}
             <span class="ci">${c.icon||'🎨'}</span>
             <div class="cn">${c.name}</div>
             <div class="ct">${c.time}</div>
+            ${c.room?`<span class="room-tag" style="background:${roomColor}">${c.room}</span>`:''}
             <div class="seat-bar"><div class="seat-fill ${fillCls}" style="width:${pct}%"></div></div>
-            <div class="seat-count">${count}/${cap}人${seat.waitlist&&seat.waitlist.length?` ・候補${seat.waitlist.length}`:''}${hasAlert?' 🔴':hasObs?' 🟡':''}</div>
+            <div class="seat-count">${count}/${cap}人${seat.waitlist?.length?` ・候補${seat.waitlist.length}`:''}${hasAlert?' 🔴':hasObs?' 🟡':''}</div>
           </div>`;
         });
-        html+=`<button class="add-btn" onclick="openAddCourseModal('${tab}',{sIdx:${sIdx},rIdx:${rIdx},col:'${col}'})">＋</button>`;
+        html+=`<button class="add-btn" onclick="openAddCourseModal('${col}','${sec}')">＋</button>`;
         html+='</div></td>';
       });
       html+='</tr>';
@@ -598,57 +668,69 @@ function renderTable(){
   document.getElementById('tableContainer').innerHTML=html;
 }
 
-function defaultCap(name){
-  if(!name)return 8;
-  if(name.includes('9-12'))return 12;
-  if(name.includes('6-8'))return 10;
-  if(name.includes('4-5'))return 8;
-  if(name.includes('2-3'))return 7;
-  return 8;
-}
-
-// ══════════════════════════════════════════
-// SEAT PANEL
-// ══════════════════════════════════════════
-function openSeatPanel(tab,sIdx,rIdx,col,cIdx){
-  const c=window.SCHEDULE[tab].sections[sIdx].rows[rIdx].cells[col][cIdx];
-  const key=seatKey(tab,sIdx,rIdx,col,cIdx);
-  if(!window.SEATS[key])window.SEATS[key]={students:[],capacity:defaultCap(c.name),waitlist:[]};
-  _activeCourse={tab,sIdx,rIdx,col,cIdx,key};
+// ══ SEAT PANEL ══
+function openSeatPanel(id){
+  _activeId=id;
+  const c=window.COURSES.find(x=>x.id===id);if(!c)return;
+  if(!window.SEATS[id])window.SEATS[id]={students:[],capacity:defaultCap(c.name),waitlist:[]};
   document.getElementById('seatPanel').classList.add('open');
   refreshSeatPanel();
 }
+function closeSeatPanel(){document.getElementById('seatPanel').classList.remove('open');_activeId=null;}
 
 function refreshSeatPanel(){
-  if(!_activeCourse)return;
-  const{tab,sIdx,rIdx,col,cIdx,key}=_activeCourse;
-  const c=window.SCHEDULE[tab].sections[sIdx].rows[rIdx].cells[col][cIdx];
-  const seat=window.SEATS[key]||{students:[],capacity:defaultCap(c.name),waitlist:[]};
-  const students=seat.students||[];
-  const cap=seat.capacity||defaultCap(c.name);
-  const wl=seat.waitlist||[];
+  if(!_activeId)return;
+  const c=window.COURSES.find(x=>x.id===_activeId);if(!c)return;
+  const seat=window.SEATS[_activeId]||{students:[],capacity:defaultCap(c.name),waitlist:[]};
+  const students=seat.students||[],cap=seat.capacity||defaultCap(c.name),wl=seat.waitlist||[];
   const pct=Math.min(students.length/cap*100,100);
   const fillCls=pct>=100?'full':pct>=85?'near':'';
+  const roomColor=ROOM_COLOR[c.room]||'#eee';
 
   document.getElementById('spTitle').textContent=`${c.icon} ${c.name}`;
-  document.getElementById('spMeta').textContent=`週${col.replace('A','').replace('B','')}  ${c.time}`;
-  document.getElementById('spCapFill').className='seat-cap-fill '+fillCls;
-  document.getElementById('spCapFill').style.width=pct+'%';
+  document.getElementById('spMeta').innerHTML=
+    `週${c.col.replace('A','').replace('B','')} ${c.time}`+
+    (c.room?` &nbsp;<span style="background:${roomColor};padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700">${c.room}</span>`:'');
+  const fill=document.getElementById('spCapFill');
+  fill.className='seat-cap-fill '+fillCls;fill.style.width=pct+'%';
   document.getElementById('spCapText').textContent=`${students.length}/${cap}`;
 
-  // Students
+  // Students with inline expand-edit
   document.getElementById('spStudents').innerHTML=students.length?students.map((s,i)=>{
-    const al=getAlertForStudent(s.name);
+    const al=alertLevel(s.name)||alertLevel(s.parent||'');
     const alCls=al==='red'?'alert-red':al==='amber'?'alert-amber':'';
     const pauseCls=s.status==='暫停'?'paused':'';
-    return`<div class="student-chip ${alCls} ${pauseCls}">
-      <span class="sc-name">${s.name}</span>
-      ${s.status&&s.status!=='正常'?`<span class="sc-badge">${s.status}</span>`:''}
-      ${s.note?`<span class="sc-note">${s.note}</span>`:''}
-      ${al==='red'?'<span style="font-size:10px">🔴</span>':al==='amber'?'<span style="font-size:10px">🟡</span>':''}
-      <button class="sc-rm" onclick="removeStudent(${i})" title="移除">×</button>
+    return`<div class="student-chip ${alCls} ${pauseCls}" id="sc${i}" onclick="toggleStudentEdit(${i})">
+      <div class="student-chip-top">
+        <span class="sc-name"><strong>${s.name}</strong>${s.parent?` <span style="font-size:10px;color:var(--text3)">（${s.parent}）</span>`:''}${s.note?` <span style="font-size:10px;color:var(--text3)">・${s.note}</span>`:''}</span>
+        ${s.status&&s.status!=='正常'?`<span class="sc-badge">${s.status}</span>`:''}
+        ${al==='red'?'<span>🔴</span>':al==='amber'?'<span>🟡</span>':''}
+      </div>
+      <div class="student-chip-edit" onclick="event.stopPropagation()">
+        <div class="edit-row"><label>學員姓名</label><input class="edit-field" style="margin:0" value="${s.name}" id="se-name-${i}"></div>
+        <div class="edit-row"><label>家長姓名</label><input class="edit-field" style="margin:0" value="${s.parent||''}" placeholder="CSV比對用" id="se-parent-${i}"></div>
+        <div class="edit-row"><label>狀態</label>
+          <select id="se-status-${i}" style="flex:1;font-size:11px;padding:4px 7px;border:1px solid var(--border);border-radius:5px;font-family:inherit;background:var(--bg)">
+            <option ${s.status==='正常'?'selected':''}>正常</option>
+            <option ${s.status==='暫停'?'selected':''}>暫停</option>
+            <option ${s.status==='固定到特定日'?'selected':''}>固定到特定日</option>
+          </select>
+        </div>
+        <div class="edit-row"><label>備註</label><input class="edit-field" style="margin:0" value="${s.note||''}" placeholder="固定到7月、暫停中…" id="se-note-${i}"></div>
+        <div class="edit-actions">
+          <button class="btn danger" style="font-size:11px;padding:3px 8px" onclick="removeStudent(${i})">移除</button>
+          <button class="btn" style="font-size:11px;padding:3px 8px" onclick="toggleStudentEdit(${i})">取消</button>
+          <button class="btn primary" style="font-size:11px;padding:3px 8px" onclick="saveStudentEdit(${i})">儲存</button>
+        </div>
+      </div>
     </div>`;
   }).join(''):'<p style="font-size:11px;color:var(--text3);padding:4px 0">尚無固定學位學生</p>';
+
+  // Attendance stats for fixed students
+  renderAttendStats(students, c);
+
+  // Frequent non-fixed visitors
+  renderFreqVisitors(students, c);
 
   // Waitlist
   document.getElementById('spWaitlist').innerHTML=wl.length?wl.map((w,i)=>`
@@ -660,54 +742,151 @@ function refreshSeatPanel(){
     </div>`).join(''):'<p style="font-size:11px;color:var(--text3);padding:4px 0">尚無候補</p>';
 }
 
-function closeSeatPanel(){
-  document.getElementById('seatPanel').classList.remove('open');
-  _activeCourse=null;
+function toggleStudentEdit(i){
+  const chip=document.getElementById('sc'+i);
+  if(!chip)return;
+  const isExpanded=chip.classList.contains('expanded');
+  // Collapse all
+  document.querySelectorAll('.student-chip').forEach(c=>c.classList.remove('expanded'));
+  if(!isExpanded)chip.classList.add('expanded');
+}
+
+async function saveStudentEdit(i){
+  const seat=window.SEATS[_activeId];
+  if(!seat||!seat.students[i])return;
+  seat.students[i].name=document.getElementById(`se-name-${i}`).value.trim()||seat.students[i].name;
+  seat.students[i].parent=document.getElementById(`se-parent-${i}`).value.trim();
+  seat.students[i].status=document.getElementById(`se-status-${i}`).value;
+  seat.students[i].note=document.getElementById(`se-note-${i}`).value.trim();
+  await saveSeat();toast('已儲存');
+}
+
+function renderAttendStats(students, c){
+  const box=document.getElementById('spAttendStats');
+  const csvData=window.ALERT_DATA||[];
+  if(!csvData.length||!students.length){box.innerHTML='<p style="font-size:11px;color:var(--text3)">匯入CSV後自動顯示</p>';return;}
+
+  // Match each student (by name or parent name) to CSV records for this course
+  const rows=students.map(s=>{
+    // Try matching by student name or parent name
+    const names=[s.name, s.parent].filter(Boolean).map(n=>n.replace(/[（）()].*/,'').trim());
+    const match=csvData.find(r=>names.some(n=>r.會員&&r.會員.replace(/[（）()].*/,'').trim()===n)&&r.課程&&r.課程.includes(c.name.split(' ')[0]));
+    return {student:s, match};
+  });
+
+  const found=rows.filter(r=>r.match);
+  if(!found.length){box.innerHTML='<p style="font-size:11px;color:var(--text3)">找不到對應的CSV出席紀錄（請確認姓名或補填家長姓名）</p>';return;}
+
+  box.innerHTML='<div class="attend-box">'+found.map(({student:s,match:m})=>{
+    const attend=m.總堂數-m.缺席堂數;const total=m.總堂數;const rate=Math.round(attend/total*100);
+    const statCls=rate>=80?'good':rate>=50?'mid':'bad';
+    const alIcon=m.風險等級==='應釋出學位'?' 🔴':m.風險等級==='持續觀察'?' 🟡':'';
+    return`<div class="attend-row">
+      <span class="attend-name">${s.name}${alIcon}</span>
+      <span class="attend-stat ${statCls}">${attend}/${total} 堂 (${rate}%)</span>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+function renderFreqVisitors(fixedStudents, c){
+  const box=document.getElementById('spFreqVisitors');
+  const rawCSV=window.RAW_CSV_ROWS||[];
+  if(!rawCSV.length){box.innerHTML='<p style="font-size:11px;color:var(--text3)">匯入CSV後自動顯示</p>';return;}
+
+  // Get fixed names (student + parent)
+  const fixedNames=new Set(fixedStudents.flatMap(s=>[s.name,s.parent].filter(Boolean).map(n=>n.replace(/[（）()].*/,'').trim())));
+  // Also check waitlist
+  const seat=window.SEATS[_activeId]||{};
+  (seat.waitlist||[]).forEach(w=>fixedNames.add(w.name.replace(/[（）()].*/,'').trim()));
+
+  // Find rows matching this course name (partial match)
+  const courseKeyword=c.name.split(' ')[0];
+  const courseRows=rawCSV.filter(r=>{
+    if(!r['課程']||!r['課程'].includes(courseKeyword))return false;
+    const memberName=(r['會員']||'').replace(/[（）()].*/,'').trim();
+    return !fixedNames.has(memberName);
+  });
+
+  if(!courseRows.length){box.innerHTML='<p style="font-size:11px;color:var(--text3)">此班無非固定學員出席紀錄</p>';return;}
+
+  // Count appearances per person
+  const counts={};
+  courseRows.forEach(r=>{
+    const n=(r['會員']||'').trim();
+    if(!counts[n])counts[n]={total:0,attend:0};
+    counts[n].total++;
+    if(r['缺席']==='否'||r['出席狀態']==='是')counts[n].attend++;
+  });
+
+  const sorted=Object.entries(counts).sort((a,b)=>b[1].total-a[1].total).slice(0,6);
+  const maxTotal=sorted[0]?.[1].total||1;
+
+  box.innerHTML=sorted.map(([name,stat])=>`
+    <div class="freq-item">
+      <span style="flex:1;font-weight:500">${name}</span>
+      <div class="freq-bar-wrap"><div class="freq-bar" style="width:${Math.round(stat.total/maxTotal*100)}%"></div></div>
+      <span style="font-size:10px;color:var(--text2);white-space:nowrap;margin-left:4px">${stat.total}堂</span>
+      <button class="btn primary" style="font-size:10px;padding:2px 6px;flex-shrink:0" onclick="quickAddToSeat('${name.replace(/'/g,"\\'")}')">加入</button>
+    </div>`).join('');
+}
+
+async function quickAddToSeat(name){
+  if(!_activeId)return;
+  const seat=window.SEATS[_activeId];
+  if(!seat){window.SEATS[_activeId]={students:[],capacity:8,waitlist:[]};};
+  if(seat.students.some(s=>s.name===name)){toast('已在名單中',true);return;}
+  seat.students.push({name,parent:'',status:'正常',note:'',addedAt:Date.now()});
+  await saveSeat();toast(`${name} 已加入固定學位`);
 }
 
 async function saveSeat(){
-  if(!_activeCourse)return;
-  const{key}=_activeCourse;
-  await window.fbSet('seats/'+key.replace(/\|/g,'_'),window.SEATS[key]);
-  renderTable();
-  refreshSeatPanel();
+  if(!_activeId)return;
+  await window.fbSet('seats/'+_activeId,window.SEATS[_activeId]);
+  renderTable();refreshSeatPanel();
 }
 
-async function addStudentFromInput(){
+function openAddStudentExpanded(){
   const inp=document.getElementById('newStudentInput');
   const name=inp.value.trim();
-  if(!name){toast('請輸入姓名',true);return;}
-  const{key}=_activeCourse;
-  if(!window.SEATS[key])window.SEATS[key]={students:[],capacity:8,waitlist:[]};
-  if(window.SEATS[key].students.some(s=>s.name===name)){toast('已在名單中',true);return;}
-  window.SEATS[key].students.push({name,status:'正常',note:'',addedAt:Date.now()});
+  const form=document.getElementById('addStudentForm');
+  document.getElementById('ns-name').value=name;
+  document.getElementById('ns-parent').value='';
+  document.getElementById('ns-status').value='正常';
+  document.getElementById('ns-note').value='';
+  form.style.display='block';
   inp.value='';
   document.getElementById('studentSuggBox').style.display='none';
-  await saveSeat();
-  toast(`${name} 已加入`);
+  setTimeout(()=>document.getElementById('ns-name').focus(),50);
 }
 
+async function confirmAddStudent(){
+  const name=document.getElementById('ns-name').value.trim();
+  if(!name){toast('請填寫學員姓名',true);return;}
+  if(!window.SEATS[_activeId])window.SEATS[_activeId]={students:[],capacity:8,waitlist:[]};
+  if(window.SEATS[_activeId].students.some(s=>s.name===name)){toast('已在名單中',true);return;}
+  window.SEATS[_activeId].students.push({
+    name,
+    parent:document.getElementById('ns-parent').value.trim(),
+    status:document.getElementById('ns-status').value,
+    note:document.getElementById('ns-note').value.trim(),
+    addedAt:Date.now()
+  });
+  document.getElementById('addStudentForm').style.display='none';
+  await saveSeat();toast(`${name} 已加入`);
+}
 async function removeStudent(i){
-  const{key}=_activeCourse;
-  const name=window.SEATS[key].students[i]?.name;
+  const name=window.SEATS[_activeId].students[i]?.name;
   if(!confirm(`移除「${name}」？`))return;
-  window.SEATS[key].students.splice(i,1);
-  await saveSeat();
-  toast(`${name} 已移除`);
+  window.SEATS[_activeId].students.splice(i,1);
+  await saveSeat();toast(`${name} 已移除`);
 }
-
 async function editCapacity(){
-  const{key}=_activeCourse;
-  const cur=window.SEATS[key]?.capacity||8;
-  const val=prompt('學位上限（目前：'+cur+'）：');
-  if(!val)return;
-  const n=parseInt(val);
-  if(isNaN(n)||n<1){toast('請輸入有效數字',true);return;}
-  if(!window.SEATS[key])window.SEATS[key]={students:[],capacity:n,waitlist:[]};
-  window.SEATS[key].capacity=n;
-  await saveSeat();
+  const cur=window.SEATS[_activeId]?.capacity||8;
+  const val=prompt(`學位上限（目前：${cur}）：`);if(!val)return;
+  const n=parseInt(val);if(isNaN(n)||n<1){toast('請輸入有效數字',true);return;}
+  if(!window.SEATS[_activeId])window.SEATS[_activeId]={students:[],capacity:n,waitlist:[]};
+  window.SEATS[_activeId].capacity=n;await saveSeat();
 }
-
 function filterStudentSugg(){
   const val=document.getElementById('newStudentInput').value.trim().toLowerCase();
   const box=document.getElementById('studentSuggBox');
@@ -718,105 +897,62 @@ function filterStudentSugg(){
   const matches=[...names].filter(n=>n.toLowerCase().includes(val)).slice(0,8);
   if(!matches.length){box.style.display='none';return;}
   box.style.display='block';
-  box.innerHTML=matches.map(n=>`<div class="suggest-item" onmousedown="document.getElementById('newStudentInput').value='${n}';document.getElementById('studentSuggBox').style.display='none'">${n}</div>`).join('');
+  box.innerHTML=matches.map(n=>`<div class="suggest-item" onmousedown="document.getElementById('newStudentInput').value='${n.replace(/'/g,"\\'")}';document.getElementById('studentSuggBox').style.display='none'">${n}</div>`).join('');
 }
-
-function openAddWlModal(){
-  document.getElementById('wl-date').value=new Date().toISOString().slice(0,10);
-  document.getElementById('wlModal').classList.add('open');
-  document.getElementById('wlModal').dataset.mode='panel';
-}
-
-async function saveWaitlistModal(){
-  const name=document.getElementById('wl-name').value.trim();
-  if(!name){toast('請填寫姓名',true);return;}
-  const mode=document.getElementById('wlModal').dataset.mode;
-  if(mode==='panel'&&_activeCourse){
-    const{key}=_activeCourse;
-    if(!window.SEATS[key])window.SEATS[key]={students:[],capacity:8,waitlist:[]};
-    window.SEATS[key].waitlist=window.SEATS[key].waitlist||[];
-    window.SEATS[key].waitlist.push({name,phone:document.getElementById('wl-phone').value.trim(),note:document.getElementById('wl-note').value.trim(),date:document.getElementById('wl-date').value});
-    await saveSeat();
-  } else {
-    await window.fbPush('waitlist',{name,phone:document.getElementById('wl-phone').value.trim(),time:document.getElementById('wl-time').value.trim(),note:document.getElementById('wl-note').value.trim(),date:document.getElementById('wl-date').value,createdAt:Date.now()});
-    await window.loadAll();
-  }
-  closeModal('wlModal');
-  ['wl-name','wl-phone','wl-time','wl-note'].forEach(id=>document.getElementById(id).value='');
-  toast('候補已新增');
-}
-
 async function promoteWl(i){
-  const{key}=_activeCourse;
-  const w=window.SEATS[key].waitlist[i];
+  const seat=window.SEATS[_activeId];const w=seat.waitlist[i];
   if(!confirm(`將「${w.name}」升為正式學位？`))return;
-  window.SEATS[key].students.push({name:w.name,status:'正常',note:'',addedAt:Date.now()});
-  window.SEATS[key].waitlist.splice(i,1);
+  seat.students.push({name:w.name,status:'正常',note:'',addedAt:Date.now()});
+  seat.waitlist.splice(i,1);
   await saveSeat();
-  await window.fbPush('changes',{類型:'候補升正',學員:w.name,課程:_activeCourse?window.SCHEDULE[_activeCourse.tab].sections[_activeCourse.sIdx].rows[_activeCourse.rIdx].cells[_activeCourse.col][_activeCourse.cIdx].name:'',日期:new Date().toISOString().slice(0,10),建立時間:Date.now()});
-  await window.loadAll();
-  toast(`${w.name} 已升為正式學位`);
+  const c=window.COURSES.find(x=>x.id===_activeId);
+  await window.fbPush('changes',{類型:'候補升正',學員:w.name,課程:c?.name||'',日期:new Date().toISOString().slice(0,10),建立時間:Date.now()});
+  await window.loadAll();toast(`${w.name} 已升為正式學位`);
 }
-
 async function removeWl(i){
-  const{key}=_activeCourse;
-  const name=window.SEATS[key].waitlist[i]?.name;
+  const name=window.SEATS[_activeId].waitlist[i]?.name;
   if(!confirm(`移除候補「${name}」？`))return;
-  window.SEATS[key].waitlist.splice(i,1);
+  window.SEATS[_activeId].waitlist.splice(i,1);
   await saveSeat();
 }
 
-// ══════════════════════════════════════════
-// COURSE MODAL (新增/編輯課程)
-// ══════════════════════════════════════════
-function buildIconPicker(){
+// ══ COURSE MODAL ══
+function selectRoom(r,el){
+  _selRoom=r;
+  document.querySelectorAll('.room-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function buildPickers(c){
+  _selIcon=c?c.icon:ICONS[0];_selColor=c?c.color:0;_selRoom=c?c.room:'A';
   document.getElementById('iconPicker').innerHTML=ICONS.map((ic,i)=>
-    `<div class="icon-opt${i===0?' sel':''}" onclick="selectIcon('${ic}',this)">${ic}</div>`).join('');
-  _selectedIcon=ICONS[0];
-}
-function buildColorPicker(){
-  document.getElementById('colorPicker').innerHTML=COLORS.map((c,i)=>
-    `<div class="color-opt${i===0?' sel':''}" style="background:${c.bg};border-color:${c.bd}" onclick="selectColor(${i},this)"></div>`).join('');
-  _selectedColor=0;
-}
-function selectIcon(ic,el){
-  _selectedIcon=ic;
-  document.querySelectorAll('.icon-opt').forEach(e=>e.classList.remove('sel'));
-  el.classList.add('sel');
-}
-function selectColor(i,el){
-  _selectedColor=i;
-  document.querySelectorAll('.color-opt').forEach(e=>e.classList.remove('sel'));
-  el.classList.add('sel');
+    `<div class="icon-opt${ic===_selIcon?' sel':''}" onclick="(_selIcon=this.textContent,document.querySelectorAll('.icon-opt').forEach(e=>e.classList.remove('sel')),this.classList.add('sel'))">${ic}</div>`).join('');
+  document.getElementById('colorPicker').innerHTML=COLORS.map((cl,i)=>
+    `<div class="color-opt${i===_selColor?' sel':''}" style="background:${cl.bg};border-color:${cl.bd}" onclick="(_selColor=${i},document.querySelectorAll('.color-opt').forEach(e=>e.classList.remove('sel')),this.classList.add('sel'))"></div>`).join('');
+  document.querySelectorAll('.room-btn').forEach(b=>b.classList.toggle('sel',b.textContent===_selRoom));
 }
 
-function openAddCourseModal(tab,pos){
-  _editCourseTarget={mode:'add',tab:tab||_currentTab,pos};
-  buildIconPicker();buildColorPicker();
+function openAddCourseModal(col,sec){
+  _editTarget={mode:'add',col:col||'三',sec:sec||'上午'};
+  buildPickers(null);
   document.getElementById('courseModalTitle').textContent='新增課程';
-  document.getElementById('cm-name').value='';
-  document.getElementById('cm-time').value='';
+  ['cm-name','cm-time'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('cm-new').checked=false;
   document.getElementById('cm-cap').value=8;
+  document.getElementById('cm-age').value='2-3';
   document.getElementById('cmDeleteBtn').style.display='none';
   document.getElementById('courseModal').classList.add('open');
 }
-
 function openEditCourseModal(){
-  if(!_activeCourse)return;
-  const{tab,sIdx,rIdx,col,cIdx}=_activeCourse;
-  const c=window.SCHEDULE[tab].sections[sIdx].rows[rIdx].cells[col][cIdx];
-  _editCourseTarget={mode:'edit',tab,sIdx,rIdx,col,cIdx};
-  buildIconPicker();buildColorPicker();
-  _selectedIcon=c.icon||ICONS[0];
-  _selectedColor=c.color||0;
-  document.querySelectorAll('.icon-opt').forEach((el,i)=>el.classList.toggle('sel',ICONS[i]===c.icon));
-  document.querySelectorAll('.color-opt').forEach((el,i)=>el.classList.toggle('sel',i===c.color));
+  if(!_activeId)return;
+  const c=window.COURSES.find(x=>x.id===_activeId);if(!c)return;
+  _editTarget={mode:'edit',id:_activeId};
+  buildPickers(c);
   document.getElementById('courseModalTitle').textContent='編輯課程';
   document.getElementById('cm-name').value=c.name;
   document.getElementById('cm-time').value=c.time;
   document.getElementById('cm-new').checked=c.isNew||false;
-  document.getElementById('cm-cap').value=window.SEATS[_activeCourse.key]?.capacity||defaultCap(c.name);
+  document.getElementById('cm-cap').value=window.SEATS[_activeId]?.capacity||defaultCap(c.name);
+  document.getElementById('cm-age').value=c.ageGroup||'2-3';
   document.getElementById('cmDeleteBtn').style.display='inline-flex';
   document.getElementById('courseModal').classList.add('open');
 }
@@ -825,61 +961,68 @@ async function saveCourseModal(){
   const name=document.getElementById('cm-name').value.trim();
   const time=document.getElementById('cm-time').value.trim();
   if(!name||!time){toast('請填寫課程名稱和時間',true);return;}
+  const icon=document.querySelector('.icon-opt.sel')?.textContent||ICONS[0];
+  const colorIdx=[...document.querySelectorAll('.color-opt')].findIndex(e=>e.classList.contains('sel'));
+  const room=document.querySelector('.room-btn.sel')?.textContent||'A';
   const cap=parseInt(document.getElementById('cm-cap').value)||8;
-  const t=_editCourseTarget;
+  const ageGroup=document.getElementById('cm-age').value;
+  const isNew=document.getElementById('cm-new').checked;
 
-  if(t.mode==='add'){
-    const tab=t.tab||_currentTab;
-    const sch=window.SCHEDULE[tab];
-    if(t.pos){
-      const{sIdx,rIdx,col}=t.pos;
-      sch.sections[sIdx].rows[rIdx].cells[col]=sch.sections[sIdx].rows[rIdx].cells[col]||[];
-      sch.sections[sIdx].rows[rIdx].cells[col].push({name,time,icon:_selectedIcon,color:_selectedColor,isNew:document.getElementById('cm-new').checked});
-    } else {
-      // Add new row to first section
-      if(!sch.sections[0])sch.sections[0]={name:'新時段',rows:[]};
-      sch.sections[0].rows.push({label:time,cells:{[document.getElementById('cm-name').value.split(' ')[0]]:[{name,time,icon:_selectedIcon,color:_selectedColor,isNew:false}]}});
-    }
+  if(_editTarget.mode==='add'){
+    const newId='c'+Date.now();
+    window.COURSES.push({id:newId,col:_editTarget.col,section:_editTarget.sec,rowLabel:time,name,time,icon,color:colorIdx>=0?colorIdx:0,isNew,ageGroup,room,capacity:cap});
+    window.SEATS[newId]={students:[],capacity:cap,waitlist:[]};
   } else {
-    const{tab,sIdx,rIdx,col,cIdx,key}=_activeCourse;
-    window.SCHEDULE[tab].sections[sIdx].rows[rIdx].cells[col][cIdx]={name,time,icon:_selectedIcon,color:_selectedColor,isNew:document.getElementById('cm-new').checked};
-    if(!window.SEATS[key])window.SEATS[key]={students:[],capacity:cap,waitlist:[]};
-    window.SEATS[key].capacity=cap;
-    await window.fbSet('seats/'+key.replace(/\|/g,'_'),window.SEATS[key]);
+    const idx=window.COURSES.findIndex(x=>x.id===_editTarget.id);
+    if(idx>=0){
+      window.COURSES[idx]={...window.COURSES[idx],name,time,icon,color:colorIdx>=0?colorIdx:0,isNew,ageGroup,room};
+    }
+    if(!window.SEATS[_editTarget.id])window.SEATS[_editTarget.id]={students:[],capacity:cap,waitlist:[]};
+    window.SEATS[_editTarget.id].capacity=cap;
+    await window.fbSet('seats/'+_editTarget.id,window.SEATS[_editTarget.id]);
   }
-
-  await window.fbSet('schedule',window.SCHEDULE);
-  closeModal('courseModal');
-  renderTable();
+  await window.fbSet('courses',window.COURSES);
+  closeModal('courseModal');renderTable();
+  if(_activeId)refreshSeatPanel();
   toast('已儲存');
-  if(_activeCourse)refreshSeatPanel();
 }
 
 async function deleteCourseModal(){
-  if(!_editCourseTarget||_editCourseTarget.mode!=='edit')return;
-  const{tab,sIdx,rIdx,col,cIdx}=_activeCourse;
-  const name=window.SCHEDULE[tab].sections[sIdx].rows[rIdx].cells[col][cIdx].name;
-  if(!confirm(`確定刪除「${name}」？`))return;
-  window.SCHEDULE[tab].sections[sIdx].rows[rIdx].cells[col].splice(cIdx,1);
-  await window.fbSet('schedule',window.SCHEDULE);
+  if(!_editTarget||_editTarget.mode!=='edit')return;
+  const c=window.COURSES.find(x=>x.id===_editTarget.id);
+  if(!confirm(`確定刪除「${c?.name}」？`))return;
+  window.COURSES=window.COURSES.filter(x=>x.id!==_editTarget.id);
+  await window.fbSet('courses',window.COURSES);
   closeModal('courseModal');closeSeatPanel();renderTable();toast('課程已刪除');
 }
-
 async function deleteCourseFromPanel(){
-  if(!_activeCourse)return;
-  openEditCourseModal();
+  if(!_activeId)return;
+  _editTarget={mode:'edit',id:_activeId};
   await deleteCourseModal();
 }
 
-// ══════════════════════════════════════════
-// WAITLIST PAGE
-// ══════════════════════════════════════════
-function openAddWlModalPage(){
+// ══ WAITLIST ══
+function openAddWlModal(mode){
+  _wlMode=mode;
   document.getElementById('wl-date').value=new Date().toISOString().slice(0,10);
+  ['wl-name','wl-phone','wl-time','wl-note'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('wlModal').classList.add('open');
-  document.getElementById('wlModal').dataset.mode='global';
 }
-
+async function saveWlModal(){
+  const name=document.getElementById('wl-name').value.trim();
+  if(!name){toast('請填寫姓名',true);return;}
+  const data={name,phone:document.getElementById('wl-phone').value.trim(),time:document.getElementById('wl-time').value.trim(),note:document.getElementById('wl-note').value.trim(),date:document.getElementById('wl-date').value};
+  if(_wlMode==='panel'&&_activeId){
+    if(!window.SEATS[_activeId])window.SEATS[_activeId]={students:[],capacity:8,waitlist:[]};
+    window.SEATS[_activeId].waitlist=window.SEATS[_activeId].waitlist||[];
+    window.SEATS[_activeId].waitlist.push(data);
+    await saveSeat();
+  } else {
+    await window.fbPush('waitlist',{...data,createdAt:Date.now()});
+    await window.loadAll();
+  }
+  closeModal('wlModal');toast('候補已新增');
+}
 function renderWaitlistPage(){
   const wl=window.WAITLIST||[];
   const filter=document.getElementById('wlClassFilter').value;
@@ -888,7 +1031,7 @@ function renderWaitlistPage(){
   if(!filtered.length){cont.innerHTML='<p style="color:var(--text3);padding:28px;text-align:center">尚無候補紀錄</p>';return;}
   cont.innerHTML=filtered.map((w,i)=>`
     <div class="card" style="display:flex;align-items:center;gap:12px;padding:10px 16px;margin-bottom:8px">
-      <div class="wl-num" style="width:26px;height:26px;border-radius:50%;background:var(--text2);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</div>
+      <div style="width:26px;height:26px;border-radius:50%;background:var(--text2);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</div>
       <div style="flex:1">
         <div style="font-weight:600;font-size:13px">${w.name}</div>
         <div style="font-size:11px;color:var(--text2)">${w.phone||''} ${w.time?'・'+w.time:''} ・${w.date||''}</div>
@@ -897,91 +1040,74 @@ function renderWaitlistPage(){
       <button class="btn danger" style="font-size:11px;padding:3px 8px" onclick="deleteWl('${w._key}')">移除</button>
     </div>`).join('');
 }
-
 async function deleteWl(key){
   if(!confirm('確定移除此候補？'))return;
-  await window.fbRemove('waitlist/'+key);
-  await window.loadAll();
-  toast('已移除');
+  await window.fbRemove('waitlist/'+key);await window.loadAll();toast('已移除');
 }
 
-// ══════════════════════════════════════════
-// CHANGES
-// ══════════════════════════════════════════
+// ══ CHANGES ══
 function openChangeModal(){
   document.getElementById('chg-date').value=new Date().toISOString().slice(0,10);
   document.getElementById('changeModal').classList.add('open');
 }
-
 async function saveChange(){
   const name=document.getElementById('chg-name').value.trim();
   if(!name){toast('請填寫學員姓名',true);return;}
   await window.fbPush('changes',{類型:document.getElementById('chg-type').value,學員:name,課程:document.getElementById('chg-class').value.trim(),日期:document.getElementById('chg-date').value,備註:document.getElementById('chg-note').value.trim(),經手人:document.getElementById('chg-handler').value.trim(),建立時間:Date.now()});
   closeModal('changeModal');
   ['chg-name','chg-class','chg-note','chg-handler'].forEach(id=>document.getElementById(id).value='');
-  await window.loadAll();
-  toast('異動已記錄');
+  await window.loadAll();toast('異動已記錄');
 }
-
 function renderChanges(){
   const data=window.CHANGES||[];
   const filter=document.getElementById('changeTypeFilter').value;
-  const cont=document.getElementById('changeList');
   const filtered=(filter?data.filter(c=>c.類型===filter):data).sort((a,b)=>(b.建立時間||0)-(a.建立時間||0));
+  const cont=document.getElementById('changeList');
   if(!filtered.length){cont.innerHTML='<p style="color:var(--text3);padding:28px;text-align:center">尚無異動紀錄</p>';return;}
-  const colors={暫停:'var(--amber)',退出:'var(--red)',轉班:'var(--blue,#185FA5)',釋出學位:'var(--red)',候補升正:'var(--green)'};
+  const typeColor={暫停:'var(--amber)',退出:'var(--red)',轉班:'#185FA5',釋出學位:'var(--red)',候補升正:'var(--green)'};
+  const badgeCls={暫停:'amber',退出:'red',轉班:'gray',釋出學位:'red',候補升正:'green'};
   cont.innerHTML='<div class="card">'+filtered.map(c=>`
     <div class="history-item">
-      <div class="h-dot" style="background:${colors[c.類型]||'#999'}"></div>
+      <div class="h-dot" style="background:${typeColor[c.類型]||'#999'}"></div>
       <div class="h-content">
-        <div><span class="badge ${c.類型==='候補升正'?'green':c.類型==='暫停'?'amber':'red'}" style="margin-right:6px">${c.類型}</span><strong>${c.學員||''}</strong>${c.課程?' ・'+c.課程:''}</div>
+        <div><span class="badge ${badgeCls[c.類型]||'gray'}" style="margin-right:6px">${c.類型}</span><strong>${c.學員||''}</strong>${c.課程?' ・'+c.課程:''}</div>
         <div class="h-meta">${c.日期||''} ${c.經手人?'・'+c.經手人:''}</div>
         ${c.備註?`<div style="font-size:11px;color:var(--text2);margin-top:2px">${c.備註}</div>`:''}
       </div>
       <button class="btn danger" style="font-size:10px;padding:2px 7px;flex-shrink:0" onclick="deleteChange('${c._key}')">刪除</button>
     </div>`).join('')+'</div>';
 }
-
 async function deleteChange(key){
   if(!confirm('確定刪除此異動紀錄？'))return;
-  await window.fbRemove('changes/'+key);
-  await window.loadAll();
+  await window.fbRemove('changes/'+key);await window.loadAll();
 }
 
-// ══════════════════════════════════════════
-// ALERT TABLE
-// ══════════════════════════════════════════
+// ══ ALERT ══
 function setAlertFilter(f,el){
   _alertFilter=f;
   document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  renderAlertTable();
+  if(el)el.classList.add('active');renderAlertTable();
 }
-
 function renderAlertTable(){
   const data=window.ALERT_DATA||[];
   const search=(document.getElementById('alertSearch')?.value||'').toLowerCase();
   const age=document.getElementById('alertAge')?.value||'';
   const tbody=document.getElementById('alertBody');
-  let filtered=data.filter(r=>{
-    const matchF=_alertFilter==='all'||r.風險等級===_alertFilter;
-    const matchS=!search||r.會員.toLowerCase().includes(search);
-    const matchA=!age||r.課程.startsWith(age);
-    return matchF&&matchS&&matchA&&r.風險等級;
+  const filtered=data.filter(r=>{
+    const mF=_alertFilter==='all'||r.風險等級===_alertFilter;
+    const mS=!search||r.會員.toLowerCase().includes(search);
+    const mA=!age||r.課程.startsWith(age);
+    return mF&&mS&&mA&&r.風險等級;
   }).sort((a,b)=>{const o={應釋出學位:0,持續觀察:1,正常追蹤:2};return(o[a.風險等級]||9)-(o[b.風險等級]||9)||b.缺席率-a.缺席率;});
-
-  // Stats
   document.getElementById('s-total').textContent=data.length;
   document.getElementById('s-red').textContent=data.filter(r=>r.風險等級==='應釋出學位').length;
   document.getElementById('s-amber').textContent=data.filter(r=>r.風險等級==='持續觀察').length;
-  const months=new Set(data.flatMap(r=>(r.出現月份||'').split('/').filter(Boolean)));
-  document.getElementById('s-coverage').textContent=[...months].sort().join('、')||'—';
-
-  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;color:var(--text3);padding:24px">${data.length?'無符合條件紀錄':'尚未匯入資料'}</td></tr>`;return;}
-  const riskBadge=r=>r==='應釋出學位'?'<span class="badge red">🔴 應釋出</span>':r==='持續觀察'?'<span class="badge amber">🟡 觀察</span>':'<span class="badge green">🟢 追蹤</span>';
+  const months=[...new Set(data.flatMap(r=>(r.出現月份||'').split('/').filter(Boolean)))].sort();
+  document.getElementById('s-coverage').textContent=months.join('、')||'—';
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;color:var(--text3);padding:24px">${data.length?'無符合紀錄':'尚未匯入資料'}</td></tr>`;return;}
+  const rb=r=>r==='應釋出學位'?'<span class="badge red">🔴</span>':r==='持續觀察'?'<span class="badge amber">🟡</span>':'<span class="badge green">🟢</span>';
   tbody.innerHTML=filtered.map(r=>`<tr>
-    <td>${riskBadge(r.風險等級)}</td>
-    <td><strong>${r.會員}</strong></td><td>${r.課程}</td><td>${r.教室}</td><td>${r.老師||'—'}</td>
+    <td>${rb(r.風險等級)}</td><td><strong>${r.會員}</strong></td><td>${r.課程}</td><td>${r.教室}</td><td>${r.老師||'—'}</td>
     <td>${r.總堂數}</td><td>${r.缺席堂數}</td>
     <td style="font-weight:600;color:${r.缺席率>=50?'var(--red)':r.缺席率>=30?'var(--amber)':'inherit'}">${r.缺席率}%</td>
     <td>${r.最長連續缺席>=3?`<span style="color:var(--red);font-weight:600">${r.最長連續缺席}堂</span>`:r.最長連續缺席}</td>
@@ -989,18 +1115,14 @@ function renderAlertTable(){
     <td><button class="btn" style="font-size:10px;padding:2px 7px" onclick="quickChange('${r.會員}','${r.課程}')">記錄異動</button></td>
   </tr>`).join('');
 }
-
 function quickChange(name,course){
   document.getElementById('chg-name').value=name;
   document.getElementById('chg-class').value=course;
   document.getElementById('chg-date').value=new Date().toISOString().slice(0,10);
   document.getElementById('changeModal').classList.add('open');
-  showPage('changes',document.querySelectorAll('.nav-tab')[3]);
 }
-
 function exportAlertCSV(){
-  const data=(window.ALERT_DATA||[]).filter(r=>r.風險等級);
-  if(!data.length){toast('沒有資料',true);return;}
+  const data=(window.ALERT_DATA||[]).filter(r=>r.風險等級);if(!data.length){toast('沒有資料',true);return;}
   const h=['風險等級','學員','課程','教室','老師','總堂數','缺席堂數','缺席率','連續缺席','月份'];
   const rows=data.map(r=>[r.風險等級,r.會員,r.課程,r.教室,r.老師||'',r.總堂數,r.缺席堂數,r.缺席率+'%',r.最長連續缺席,r.出現月份||'']);
   const csv=[h,...rows].map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
@@ -1008,30 +1130,24 @@ function exportAlertCSV(){
   a.download=`學位警示_${new Date().toISOString().slice(0,10)}.csv`;a.click();
 }
 
-// ══════════════════════════════════════════
-// CSV IMPORT
-// ══════════════════════════════════════════
+// ══ CSV IMPORT ══
 const dropZone=document.getElementById('dropZone');
 dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag')});
 dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag'));
 dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag');handleCSVFiles(e.dataTransfer.files)});
-
 function handleCSVFiles(files){
   if(!files.length)return;
-  const log=document.getElementById('importLog');
-  log.innerHTML='<p>讀取中…</p>';
+  const log=document.getElementById('importLog');log.innerHTML='<p>讀取中…</p>';
   Promise.all([...files].map(f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res({name:f.name,text:e.target.result});r.onerror=rej;r.readAsText(f,'UTF-8')}))).then(results=>{
     let all=[];let fl='';
     results.forEach(({name,text})=>{
       const bom=text.charCodeAt(0)===0xFEFF?text.slice(1):text;
-      const rows=parseCSV(bom);all=all.concat(rows);
-      fl+=`<p>✅ ${name}：${rows.length} 筆</p>`;
+      const rows=parseCSV(bom);all=all.concat(rows);fl+=`<p>✅ ${name}：${rows.length} 筆</p>`;
     });
     log.innerHTML=fl+`<p style="margin-top:8px">合計 ${all.length} 筆，分析中…</p>`;
     analyzeCSV(all,log);
   });
 }
-
 function parseCSV(text){
   const lines=text.split('\n').filter(l=>l.trim());if(!lines.length)return[];
   const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim());
@@ -1042,24 +1158,23 @@ function parseCSV(text){
     const obj={};headers.forEach((h,i)=>obj[h]=vals[i]||'');return obj;
   }).filter(r=>r['會員']&&r['課程']);
 }
-
 async function analyzeCSV(rows,log){
+  // Store raw rows for frequent visitor analysis
+  window.RAW_CSV_ROWS=rows;
+
   const thR=parseInt(document.getElementById('threshRed').value)||50;
   const thS=parseInt(document.getElementById('threshStreak').value)||3;
   const thA=parseInt(document.getElementById('threshAmber').value)||30;
   const thM=parseInt(document.getElementById('threshMin').value)||2;
-
   const groups={};
   rows.forEach(r=>{
     const k=`${r['會員']}|${r['課程']}|${r['教室']}`;
     if(!groups[k])groups[k]={會員:r['會員'],課程:r['課程'],教室:r['教室'],老師:r['老師']||'',rows:[]};
     groups[k].rows.push(r);
   });
-
   const alertData=Object.values(groups).map(g=>{
     const sorted=g.rows.sort((a,b)=>a['日期']<b['日期']?-1:1);
-    const 總堂數=sorted.length;
-    const 缺席堂數=sorted.filter(r=>r['缺席']==='是').length;
+    const 總堂數=sorted.length,缺席堂數=sorted.filter(r=>r['缺席']==='是').length;
     const 缺席率=Math.round(缺席堂數/總堂數*1000)/10;
     const months=[...new Set(sorted.map(r=>r['日期'].slice(5,7).replace(/^0/,'')+'月'))].sort();
     let mx=0,cur=0;sorted.forEach(r=>{cur=r['缺席']==='是'?cur+1:0;mx=Math.max(mx,cur)});
@@ -1072,21 +1187,18 @@ async function analyzeCSV(rows,log){
     else rec.風險等級='';
     return rec;
   }).filter(r=>r.缺席堂數>0||r.總堂數>=thM);
-
   window.ALERT_DATA=alertData;
   await window.fbSet('alertData',alertData);
   const red=alertData.filter(r=>r.風險等級==='應釋出學位').length;
   const amber=alertData.filter(r=>r.風險等級==='持續觀察').length;
-  log.innerHTML+='<br><strong style="color:var(--green)">✅ 分析完成！</strong> '+
-    `🔴 ${red} 位應釋出學位　🟡 ${amber} 位持續觀察`;
+  log.innerHTML+=`<br><strong style="color:var(--green)">✅ 分析完成！</strong> 🔴 ${red} 位應釋出　🟡 ${amber} 位觀察`;
   renderAlertTable();renderTable();
+  if(_activeId)refreshSeatPanel();
   toast('CSV 分析完成');
 }
-
 async function clearAttendance(){
   if(!confirm('確定清除所有出席資料？'))return;
-  window.ALERT_DATA=[];
-  await window.fbSet('alertData',[]);
+  window.ALERT_DATA=[];await window.fbSet('alertData',[]);
   renderAlertTable();renderTable();toast('已清除');
 }
 </script>
