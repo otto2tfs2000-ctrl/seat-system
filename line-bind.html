@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>玩劇寶貝｜LINE 通知綁定</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  :root{
+    --paper:#FBF8F2;
+    --paper-deep:#F2ECE0;
+    --ink:#26232E;
+    --ink-soft:#6B6674;
+    --green:#06C755; /* LINE brand green */
+    --blue:#2F6FED;
+    --pink:#FF5D7A;
+    --line:#E7E0D2;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  header{
+    padding:26px 20px 20px;
+    background:linear-gradient(135deg,#06C755 0%, #049E45 100%);
+    color:#fff;border-radius:0 0 26px 26px;
+    box-shadow:0 6px 18px rgba(6,199,85,0.25);
+  }
+  header .eyebrow{font-size:12px;letter-spacing:2px;opacity:.9;text-transform:uppercase;}
+  header h1{margin:4px 0 0;font-size:20px;font-weight:900;}
+  main{max-width:480px;margin:0 auto;padding:20px 16px 60px;}
+
+  .center-state{
+    text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:14px;
+  }
+  .spinner{
+    width:32px;height:32px;border-radius:50%;
+    border:3px solid var(--line);border-top-color:var(--green);
+    animation:spin .8s linear infinite;margin:0 auto 14px;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin-bottom:16px;box-shadow:0 2px 8px rgba(38,35,46,0.04);
+  }
+  .profile-row{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
+  .profile-row img{width:44px;height:44px;border-radius:50%;}
+  .profile-row .name{font-weight:700;font-size:15px;}
+  .profile-row .sub{font-size:12px;color:var(--ink-soft);}
+
+  label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin:14px 0 6px;}
+  input[type="text"],input[type="tel"]{
+    width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--paper);font-size:16px;font-family:inherit;color:var(--ink);
+  }
+  input:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green);}
+
+  .suggest-box{
+    position:relative;
+  }
+  .suggest-list{
+    position:absolute;left:0;right:0;top:100%;background:#fff;
+    border:1px solid var(--line);border-radius:10px;margin-top:4px;
+    max-height:160px;overflow-y:auto;z-index:10;display:none;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  }
+  .suggest-list div{padding:10px 12px;font-size:14px;cursor:pointer;}
+  .suggest-list div:hover{background:var(--paper-deep);}
+
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .chip{
+    display:flex;align-items:center;gap:6px;
+    background:var(--paper-deep);border:1px solid var(--line);
+    padding:7px 10px 7px 14px;border-radius:999px;font-size:13.5px;font-weight:600;
+  }
+  .chip .rm{
+    width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,0.12);
+    display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .add-btn{
+    margin-top:12px;width:100%;padding:12px;border-radius:12px;
+    border:1.5px dashed var(--line);background:none;color:var(--green);
+    font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;
+  }
+
+  button.primary{
+    width:100%;padding:15px;border:none;border-radius:14px;
+    background:var(--green);color:#fff;font-size:16px;font-weight:700;
+    font-family:'Noto Sans TC',sans-serif;cursor:pointer;margin-top:18px;
+    box-shadow:0 4px 14px rgba(6,199,85,0.3);
+  }
+  button.primary:disabled{background:#C9C4D3;box-shadow:none;cursor:not-allowed;}
+
+  .success-box{display:none;text-align:center;padding:30px 16px;}
+  .success-box .check{
+    width:60px;height:60px;border-radius:50%;background:var(--green);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px;
+  }
+  .success-box h2{margin:0 0 6px;font-size:18px;}
+  .success-box p{margin:0;color:var(--ink-soft);font-size:14px;line-height:1.6;}
+
+  .err-box{
+    display:none;background:#FDEDF0;color:var(--pink);border-radius:12px;
+    padding:12px;font-size:13px;margin-top:10px;
+  }
+  .note{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:16px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · LINE 通知綁定</div>
+  <h1>綁定小孩，接收即時通知</h1>
+</header>
+
+<main>
+  <div id="loadingState" class="center-state">
+    <div class="spinner"></div>
+    連接 LINE 中…
+  </div>
+
+  <div id="formState" style="display:none;">
+    <div class="card">
+      <div class="profile-row">
+        <img id="profileAvatar" src="" alt="">
+        <div>
+          <div class="name" id="profileName">—</div>
+          <div class="sub">已透過 LINE 登入</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label for="phoneInput">聯絡電話（選填，方便核對身分）</label>
+      <input type="tel" id="phoneInput" placeholder="0912345678">
+
+      <label>要接收通知的小孩</label>
+      <div class="suggest-box">
+        <input type="text" id="childInput" placeholder="輸入小孩姓名">
+        <div class="suggest-list" id="suggestList"></div>
+      </div>
+      <div class="chip-row" id="chipRow"></div>
+      <button class="add-btn" id="addChildBtn">＋ 新增另一位小孩</button>
+
+      <div class="err-box" id="errBox"></div>
+      <button class="primary" id="saveBtn">儲存綁定</button>
+    </div>
+
+    <div class="note">綁定後，候補登記、候補遞補成功等通知會直接發送到您的 LINE。<br>之後隨時可以重新開啟此頁面調整綁定的小孩。</div>
+  </div>
+
+  <div id="successState" class="card success-box">
+    <div class="check">✓</div>
+    <h2>綁定完成</h2>
+    <p id="successDetail"></p>
+  </div>
+
+  <div id="notInLineState" class="center-state" style="display:none;">
+    請在 LINE 官方帳號的選單或訊息連結中開啟此頁面，<br>才能完成身分驗證與綁定。
+  </div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+/* ====== 與其他系統共用的 Firebase 設定 ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",
+  authDomain: "otto2-2026.firebaseapp.com",
+  databaseURL: "https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otto2-2026",
+  storageBucket: "otto2-2026.appspot.com",
+  appId: "1:108328085665:web:071a45a7d7c5af6b6468e0"
+};
+/* ============================================ */
+
+/* ====== 請填入你在 LINE Developers Console 建立的 LIFF ID ====== */
+const LIFF_ID = "YOUR_LIFF_ID"; // 格式類似 "1234567890-AbCdEfGh"
+/* ================================================================ */
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const loadingState = document.getElementById('loadingState');
+const formState = document.getElementById('formState');
+const successState = document.getElementById('successState');
+const notInLineState = document.getElementById('notInLineState');
+const profileAvatar = document.getElementById('profileAvatar');
+const profileName = document.getElementById('profileName');
+const phoneInput = document.getElementById('phoneInput');
+const childInput = document.getElementById('childInput');
+const suggestList = document.getElementById('suggestList');
+const chipRow = document.getElementById('chipRow');
+const addChildBtn = document.getElementById('addChildBtn');
+const saveBtn = document.getElementById('saveBtn');
+const errBox = document.getElementById('errBox');
+
+let boundStudents = [];
+let allKnownNames = [];
+let lineUserId = null;
+
+function showState(el){
+  [loadingState, formState, successState, notInLineState].forEach(s => s.style.display = 'none');
+  el.style.display = 'block';
+}
+
+async function loadKnownStudentNames(){
+  try{
+    const snap = await get(ref(db, 'seat3/seats'));
+    const names = new Set();
+    if(snap.exists()){
+      Object.values(snap.val()).forEach(seat => {
+        (seat.students || []).forEach(s => { if(s.name) names.add(s.name); });
+      });
+    }
+    const alertSnap = await get(ref(db, 'seat3/alertData'));
+    if(alertSnap.exists()){
+      const arr = alertSnap.val();
+      (Array.isArray(arr) ? arr : Object.values(arr)).forEach(a => {
+        if(a && a['會員']) names.add(a['會員']);
+      });
+    }
+    allKnownNames = [...names];
+  }catch(e){
+    console.error('讀取學生名單失敗', e);
+  }
+}
+
+function renderChips(){
+  chipRow.innerHTML = '';
+  boundStudents.forEach((name, idx) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.innerHTML = `<span>${name}</span><span class="rm">✕</span>`;
+    chip.querySelector('.rm').addEventListener('click', () => {
+      boundStudents.splice(idx, 1);
+      renderChips();
+    });
+    chipRow.appendChild(chip);
+  });
+}
+
+function addChildFromInput(){
+  const val = childInput.value.trim();
+  if(!val) return;
+  if(boundStudents.includes(val)){
+    childInput.value = '';
+    suggestList.style.display = 'none';
+    return;
+  }
+  boundStudents.push(val);
+  childInput.value = '';
+  suggestList.style.display = 'none';
+  renderChips();
+}
+
+addChildBtn.addEventListener('click', addChildFromInput);
+childInput.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter'){ e.preventDefault(); addChildFromInput(); }
+});
+childInput.addEventListener('input', () => {
+  const val = childInput.value.trim().toLowerCase();
+  if(!val){ suggestList.style.display = 'none'; return; }
+  const matches = allKnownNames.filter(n => n.toLowerCase().includes(val) && !boundStudents.includes(n)).slice(0, 6);
+  if(!matches.length){ suggestList.style.display = 'none'; return; }
+  suggestList.innerHTML = matches.map(n => `<div>${n}</div>`).join('');
+  suggestList.style.display = 'block';
+  [...suggestList.children].forEach((el, i) => {
+    el.addEventListener('mousedown', () => {
+      boundStudents.push(matches[i]);
+      childInput.value = '';
+      suggestList.style.display = 'none';
+      renderChips();
+    });
+  });
+});
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('.suggest-box')) suggestList.style.display = 'none';
+});
+
+saveBtn.addEventListener('click', async () => {
+  errBox.style.display = 'none';
+  if(boundStudents.length === 0){
+    errBox.textContent = '請至少新增一位小孩';
+    errBox.style.display = 'block';
+    return;
+  }
+  saveBtn.disabled = true;
+  saveBtn.textContent = '儲存中…';
+  try{
+    await set(ref(db, `seat3/parentBindings/${lineUserId}`), {
+      memberName: profileName.textContent || '',
+      phone: phoneInput.value.trim(),
+      boundStudents: boundStudents,
+      updatedAt: Date.now()
+    });
+    document.getElementById('successDetail').textContent =
+      `已綁定：${boundStudents.join('、')}。之後相關通知會發送到這個 LINE 帳號。`;
+    showState(successState);
+  }catch(e){
+    console.error(e);
+    errBox.textContent = '儲存失敗，請檢查網路連線後再試一次';
+    errBox.style.display = 'block';
+    saveBtn.disabled = false;
+    saveBtn.textContent = '儲存綁定';
+  }
+});
+
+async function init(){
+  try{
+    await liff.init({ liffId: LIFF_ID });
+
+    if(!liff.isInClient() && !liff.isLoggedIn()){
+      // 允許在一般瀏覽器中也能透過 LINE Login 完成（非必要，但增加彈性）
+      liff.login();
+      return;
+    }
+    if(!liff.isLoggedIn()){
+      liff.login();
+      return;
+    }
+
+    const profile = await liff.getProfile();
+    lineUserId = profile.userId;
+    profileAvatar.src = profile.pictureUrl || '';
+    profileName.textContent = profile.displayName || '';
+
+    await loadKnownStudentNames();
+
+    // 檢查是否已有綁定資料，若有則帶入
+    const existing = await get(ref(db, `seat3/parentBindings/${lineUserId}`));
+    if(existing.exists()){
+      const v = existing.val();
+      boundStudents = [...(v.boundStudents || [])];
+      phoneInput.value = v.phone || '';
+      renderChips();
+    }
+
+    showState(formState);
+  }catch(e){
+    console.error('LIFF 初始化失敗', e);
+    showState(notInLineState);
+  }
+}
+
+init();
+</script>
+</body>
+</html>

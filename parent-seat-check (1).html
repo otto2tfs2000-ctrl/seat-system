@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>玩劇寶貝｜即時課程空位查詢</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  :root{
+    --paper:#FBF8F2;
+    --paper-deep:#F2ECE0;
+    --ink:#26232E;
+    --ink-soft:#6B6674;
+    --blue:#2F6FED;
+    --green:#2FA88F;
+    --pink:#FF5D7A;
+    --amber:#E0A400;
+    --line-c:#E7E0D2;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;
+    padding-bottom:40px;
+  }
+  header{
+    padding:24px 20px 18px;
+    background:linear-gradient(135deg,#2F6FED 0%, #2452B8 100%);
+    color:#fff;border-radius:0 0 24px 24px;
+    box-shadow:0 6px 18px rgba(47,111,237,0.25);
+    position:sticky;top:0;z-index:5;
+  }
+  header .eyebrow{font-size:12px;letter-spacing:2px;opacity:.9;text-transform:uppercase;}
+  header h1{margin:4px 0 12px;font-size:19px;font-weight:900;}
+
+  .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex-shrink:0;padding:8px 14px;border-radius:999px;border:none;
+    background:rgba(255,255,255,0.18);color:#fff;font-size:13px;font-weight:700;
+    font-family:inherit;cursor:pointer;white-space:nowrap;
+  }
+  .tab-btn.active{background:#fff;color:var(--blue);}
+
+  main{max-width:560px;margin:0 auto;padding:16px 16px 0;}
+
+  .filter-row{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;-webkit-overflow-scrolling:touch;}
+  .filter-row::-webkit-scrollbar{display:none;}
+  .filter-chip{
+    flex-shrink:0;padding:7px 13px;border-radius:999px;border:1.5px solid var(--line-c);
+    background:#fff;font-size:12.5px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .filter-chip.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+  .section-label{
+    font-size:13px;font-weight:900;color:var(--ink-soft);margin:18px 4px 8px;
+  }
+
+  .course-card{
+    background:#fff;border:1px solid var(--line-c);border-radius:var(--radius);
+    padding:14px;margin-bottom:10px;
+  }
+  .course-top{display:flex;align-items:flex-start;gap:10px;}
+  .course-icon{font-size:22px;flex-shrink:0;}
+  .course-info{flex:1;min-width:0;}
+  .course-name{font-weight:700;font-size:15px;}
+  .course-meta{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .age-badge{
+    display:inline-block;font-size:11px;font-weight:700;color:var(--blue);
+    background:#EAF0FE;padding:2px 8px;border-radius:6px;margin-left:6px;
+  }
+
+  .seat-bar-wrap{margin-top:10px;}
+  .seat-bar{height:8px;border-radius:999px;background:var(--paper-deep);overflow:hidden;}
+  .seat-bar .fill{height:100%;border-radius:999px;transition:width .3s;}
+  .seat-bar .fill.ok{background:var(--green);}
+  .seat-bar .fill.tight{background:var(--amber);}
+  .seat-bar .fill.full{background:var(--pink);}
+  .seat-text{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+  .seat-count{font-size:12.5px;color:var(--ink-soft);}
+  .status-badge{font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;}
+  .status-badge.ok{background:#E4F5F0;color:var(--green);}
+  .status-badge.tight{background:#FBF1DC;color:var(--amber);}
+  .status-badge.full{background:#FDEDF0;color:var(--pink);}
+
+  .wl-row{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-c);
+  }
+  .wl-info{font-size:12px;color:var(--ink-soft);}
+  .wl-btn{
+    padding:8px 14px;border-radius:10px;border:none;background:var(--blue);
+    color:#fff;font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;
+  }
+
+  .empty-note{text-align:center;color:var(--ink-soft);font-size:13px;padding:40px 10px;}
+  .loading{text-align:center;color:var(--ink-soft);font-size:13px;padding:40px 10px;}
+
+  /* Modal */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(38,35,46,0.45);
+    z-index:50;align-items:flex-end;justify-content:center;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:#fff;border-radius:20px 20px 0 0;padding:22px 20px 26px;
+    width:100%;max-width:560px;max-height:80vh;overflow-y:auto;
+  }
+  .modal h3{margin:0 0 4px;font-size:17px;}
+  .modal .sub{font-size:13px;color:var(--ink-soft);margin-bottom:16px;}
+  .modal label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin:12px 0 6px;}
+  .modal input{
+    width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line-c);
+    background:var(--paper);font-size:16px;font-family:inherit;
+  }
+  .modal-actions{display:flex;gap:10px;margin-top:20px;}
+  .modal-actions button{
+    flex:1;padding:13px;border-radius:12px;border:none;font-weight:700;
+    font-family:inherit;font-size:14px;cursor:pointer;
+  }
+  .modal-actions .cancel{background:var(--paper-deep);color:var(--ink);}
+  .modal-actions .confirm{background:var(--blue);color:#fff;}
+  .modal-err{color:var(--pink);font-size:12.5px;margin-top:8px;display:none;}
+  .modal-success{display:none;text-align:center;padding:10px 0;}
+  .modal-success .check{
+    width:50px;height:50px;border-radius:50%;background:var(--green);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · 即時空位查詢</div>
+  <h1>本週課程空位</h1>
+  <div class="tabs" id="dayTabs"></div>
+</header>
+
+<main>
+  <div class="filter-row" id="ageFilterRow"></div>
+  <div id="resultArea" class="loading">載入課程資料中…</div>
+</main>
+
+<div class="modal-overlay" id="wlModal">
+  <div class="modal">
+    <div id="modalForm">
+      <h3 id="modalCourseName">登記候補</h3>
+      <div class="sub" id="modalCourseMeta"></div>
+      <label for="wlName">小孩姓名</label>
+      <input type="text" id="wlName" placeholder="請輸入小孩姓名">
+      <label for="wlPhone">聯絡電話</label>
+      <input type="tel" id="wlPhone" placeholder="0912345678">
+      <div class="modal-err" id="wlErr"></div>
+      <div class="modal-actions">
+        <button class="cancel" id="wlCancelBtn">取消</button>
+        <button class="confirm" id="wlConfirmBtn">送出候補登記</button>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="check">✓</div>
+      <h3>候補登記完成</h3>
+      <div class="sub">有名額釋出時會盡快與您聯絡。<br>若已透過 LINE 開啟本頁面，也會直接發送 LINE 通知給您。</div>
+      <div class="modal-actions">
+        <button class="confirm" id="wlDoneBtn" style="flex:1;">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+/* ====== 與其他系統共用的 Firebase 設定 ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",
+  authDomain: "otto2-2026.firebaseapp.com",
+  databaseURL: "https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otto2-2026",
+  storageBucket: "otto2-2026.appspot.com",
+  appId: "1:108328085665:web:071a45a7d7c5af6b6468e0"
+};
+/* ============================================ */
+
+/* ====== 選填：填入 LIFF ID，可自動帶入 LINE 身分並在候補時同步通知 ====== */
+const LIFF_ID = "YOUR_LIFF_ID";
+/* ================================================================ */
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ---- 備援用固定班別（與 seat-system 的 DEFAULT_COURSES 完全一致）----
+const DEFAULT_COURSES = [
+  // 週三 上午
+  {id:'c001',col:'三',section:'上午',rowLabel:'10:00\n-10:50',name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c002',col:'三',section:'上午',rowLabel:'10:00\n-10:50',name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c003',col:'三',section:'上午',rowLabel:'11:10\n-12:10',name:'智高積木 2-3',time:'11:10-12:00',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c004',col:'三',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  {id:'c005',col:'三',section:'上午',rowLabel:'11:10\n-12:10',name:'音律 1.5-3',time:'11:10-12:00',icon:'🎵',color:2,isNew:false,ageGroup:'other',room:'A'},
+  // 週三 下午
+  {id:'c006',col:'三',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c007',col:'三',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  // 週四 上午
+  {id:'c008',col:'四',section:'上午',rowLabel:'10:00\n-10:50',name:'黏土 2-3',time:'10:00-10:50',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c009',col:'四',section:'上午',rowLabel:'10:00\n-10:50',name:'智高積木 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c010',col:'四',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  // 週四 下午
+  {id:'c011',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 2-3',time:'17:00-17:50',icon:'❄️',color:0,isNew:true,ageGroup:'2-3',room:'B'},
+  {id:'c012',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 4-5',time:'17:00-17:50',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c013',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 4-5',time:'17:00-18:00',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c014',col:'四',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 4-5',time:'17:00-18:00',icon:'🌸',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  // 週五 下午
+  {id:'c015',col:'五',section:'下午',rowLabel:'17:00\n-18:00',name:'繪畫 4-5',time:'17:00-17:50',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c016',col:'五',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 2-3',time:'17:00-17:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c017',col:'五',section:'下午',rowLabel:'17:00\n-18:00',name:'黏土 4-5',time:'17:00-18:00',icon:'⭐',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  // 週五 晚上
+  {id:'c018',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'繪畫 4-5',time:'19:00-20:00',icon:'🌸',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c019',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'主題黏土 4-5',time:'19:00-20:00',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'3F'},
+  {id:'c020',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'繪畫 6-8',time:'19:00-20:30',icon:'🎵',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c021',col:'五',section:'晚上',rowLabel:'19:00\n-21:00',name:'繪畫 9-12',time:'19:00-21:00',icon:'🎨',color:3,isNew:false,ageGroup:'9-12',room:'3F'},
+  // 週六A 上午
+  {id:'c022',col:'六A',section:'上午',rowLabel:'09:30\n-11:00',name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c023',col:'六A',section:'上午',rowLabel:'09:50\n-10:50',name:'繪畫 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c024',col:'六A',section:'上午',rowLabel:'10:00\n-10:50',name:'繪畫 2-3',time:'10:00-10:50',icon:'⭐',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c025',col:'六A',section:'上午',rowLabel:'10:00\n-10:50',name:'黏土 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  {id:'c026',col:'六A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c027',col:'六A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:00',icon:'❄️',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c028',col:'六A',section:'上午',rowLabel:'11:10\n-12:10',name:'黏土 2-3',time:'11:20-12:10',icon:'🐧',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  // 週六A 下午
+  {id:'c029',col:'六A',section:'下午',rowLabel:'13:30\n-15:30',name:'繪畫 9-12',time:'13:30-15:00',icon:'🌸',color:3,isNew:false,ageGroup:'9-12',room:'4F'},
+  {id:'c030',col:'六A',section:'下午',rowLabel:'13:30\n-15:30',name:'黏土 4-5',time:'13:30-14:30',icon:'🐧',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c031',col:'六A',section:'下午',rowLabel:'14:00\n-16:10',name:'繪畫 2-3',time:'14:00-14:50',icon:'⭐',color:0,isNew:true,ageGroup:'2-3',room:'B'},
+  {id:'c032',col:'六A',section:'下午',rowLabel:'14:00\n-16:10',name:'繪畫 2-3',time:'14:50-15:40',icon:'🎨',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c033',col:'六A',section:'下午',rowLabel:'14:00\n-16:10',name:'黏土 4-5',time:'14:50-15:50',icon:'🍎',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  {id:'c034',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'主題黏土 6-8',time:'15:10-16:30',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  {id:'c035',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'繪畫 4-5',time:'15:10-16:10',icon:'🐧',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c036',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'主題黏土 6-8',time:'16:00-17:30',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c037',col:'六A',section:'下午',rowLabel:'15:10\n-17:50',name:'繪畫 6-8',time:'16:20-17:50',icon:'🍎',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  // 週六B 上午
+  {id:'c038',col:'六B',section:'上午',rowLabel:'09:50\n-10:50',name:'黏土 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c039',col:'六B',section:'上午',rowLabel:'11:10\n-12:10',name:'黏土 4-5',time:'11:10-12:10',icon:'⭐',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  // 週六B 下午
+  {id:'c040',col:'六B',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 6-8',time:'13:30-15:00',icon:'🐧',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  {id:'c041',col:'六B',section:'下午',rowLabel:'14:00\n-16:00',name:'黏土 2-3',time:'14:00-14:50',icon:'🎵',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c042',col:'六B',section:'下午',rowLabel:'14:00\n-16:00',name:'黏土 2-3',time:'15:10-16:00',icon:'⭐',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c043',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c044',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'繪畫 4-5',time:'16:00-17:00',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'E'},
+  {id:'c045',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'黏土 2-3',time:'16:10-17:00',icon:'🎨',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c046',col:'六B',section:'下午',rowLabel:'15:30\n-17:30',name:'主題黏土 4-5',time:'16:30-17:30',icon:'🐧',color:1,isNew:false,ageGroup:'4-5',room:'3F'},
+  // 週日A 上午
+  {id:'c047',col:'日A',section:'上午',rowLabel:'09:30\n-11:00',name:'繪畫 6-8',time:'9:30-11:00',icon:'🌸',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c048',col:'日A',section:'上午',rowLabel:'09:50\n-10:50',name:'繪畫 4-5',time:'9:50-10:50',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c049',col:'日A',section:'上午',rowLabel:'10:00\n-10:50',name:'繪畫 2-3',time:'10:00-10:50',icon:'🍎',color:0,isNew:true,ageGroup:'2-3',room:'B'},
+  {id:'c050',col:'日A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 4-5',time:'11:10-12:10',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c051',col:'日A',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:20-12:10',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  {id:'c052',col:'日A',section:'上午',rowLabel:'11:10\n-12:10',name:'智高積木 2-3',time:'11:10-12:00',icon:'🎨',color:0,isNew:false,ageGroup:'2-3',room:'A'},
+  // 週日A 下午
+  {id:'c053',col:'日A',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 6-8',time:'13:30-15:00',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c054',col:'日A',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 4-5',time:'13:30-14:30',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c055',col:'日A',section:'下午',rowLabel:'14:00\n-16:30',name:'繪畫 2-3',time:'14:00-14:50',icon:'🍎',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  {id:'c056',col:'日A',section:'下午',rowLabel:'14:00\n-16:30',name:'黏土 2-3',time:'14:00-14:50',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c057',col:'日A',section:'下午',rowLabel:'14:00\n-16:30',name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'3F'},
+  {id:'c058',col:'日A',section:'下午',rowLabel:'16:20\n-17:10',name:'繪畫 2-3',time:'16:20-17:10',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'E'},
+  // 週日B 上午
+  {id:'c059',col:'日B',section:'上午',rowLabel:'09:50\n-10:50',name:'黏土 4-5',time:'9:50-10:50',icon:'❄️',color:1,isNew:false,ageGroup:'4-5',room:'C'},
+  {id:'c060',col:'日B',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 4-5',time:'11:10-12:10',icon:'🍎',color:1,isNew:true,ageGroup:'4-5',room:'A'},
+  {id:'c061',col:'日B',section:'上午',rowLabel:'11:10\n-12:10',name:'繪畫 2-3',time:'11:10-12:10',icon:'⭐',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+  // 週日B 下午
+  {id:'c062',col:'日B',section:'下午',rowLabel:'13:30\n-15:00',name:'繪畫 6-8',time:'13:30-15:00',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'3F'},
+  {id:'c063',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'主題黏土 6-8',time:'15:00-16:30',icon:'🎨',color:5,isNew:false,ageGroup:'6-8',room:'4F'},
+  {id:'c064',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'繪畫 2-3',time:'15:10-16:00',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'C'},
+  {id:'c065',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'黏土 2-3',time:'15:10-16:00',icon:'🍎',color:0,isNew:true,ageGroup:'2-3',room:'E'},
+  {id:'c066',col:'日B',section:'下午',rowLabel:'14:00\n-16:00',name:'主題黏土 4-5',time:'15:30-16:30',icon:'🎨',color:1,isNew:false,ageGroup:'4-5',room:'A'},
+  {id:'c067',col:'日B',section:'下午',rowLabel:'16:20\n-17:10',name:'黏土 2-3',time:'16:20-17:10',icon:'🌸',color:0,isNew:false,ageGroup:'2-3',room:'B'},
+];;
+
+// 去除 A/B 後綴，家長端顯示用（六A/六B → 六，日A/日B → 日）
+function baseDayLabel(col){
+  return (col || '').replace(/[AB]$/, '');
+}
+
+function defaultCap(name){
+  if(!name) return 8;
+  if(name.includes('9-12')) return 12;
+  if(name.includes('6-8')) return 10;
+  if(name.includes('4-5')) return 8;
+  if(name.includes('2-3')) return 7;
+  return 8;
+}
+
+// 六A/六B、日A/日B 只是後台排課畫面為了排版易讀分成兩欄顯示，
+// 實際上同一天的課程，家長端不需要區分，統一合併成「六」「日」顯示
+const DAY_ORDER = ['三','四','五','六','日'];
+const AGE_GROUPS = [
+  {key:'', label:'全部年齡'},
+  {key:'2-3', label:'2-3歲'},
+  {key:'4-5', label:'4-5歲'},
+  {key:'6-8', label:'6-8歲'},
+  {key:'9-12', label:'9-12歲'},
+];
+
+let COURSES = DEFAULT_COURSES;
+let SEATS = {};
+let currentDay = DAY_ORDER[0];
+let currentAgeFilter = '';
+let lineProfile = null; // { userId, displayName }
+
+const dayTabs = document.getElementById('dayTabs');
+const ageFilterRow = document.getElementById('ageFilterRow');
+const resultArea = document.getElementById('resultArea');
+
+DAY_ORDER.forEach(d => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn';
+  btn.textContent = `週${d}`;
+  btn.addEventListener('click', () => { currentDay = d; setActiveTab(); render(); });
+  btn.dataset.day = d;
+  dayTabs.appendChild(btn);
+});
+
+AGE_GROUPS.forEach(a => {
+  const chip = document.createElement('button');
+  chip.className = 'filter-chip';
+  chip.textContent = a.label;
+  chip.addEventListener('click', () => { currentAgeFilter = a.key; setActiveFilter(); render(); });
+  chip.dataset.age = a.key;
+  ageFilterRow.appendChild(chip);
+});
+
+function setActiveTab(){
+  [...dayTabs.children].forEach(b => b.classList.toggle('active', b.dataset.day === currentDay));
+}
+function setActiveFilter(){
+  [...ageFilterRow.children].forEach(b => b.classList.toggle('active', b.dataset.age === currentAgeFilter));
+}
+setActiveTab(); setActiveFilter();
+
+function render(){
+  // c.col 可能是 '六A'/'六B'/'日A'/'日B'，用 startsWith 把同一天的班別合併顯示
+  let entries = COURSES.filter(c => c.col && c.col.startsWith(currentDay));
+  if(currentAgeFilter) entries = entries.filter(c => c.ageGroup === currentAgeFilter);
+  entries.sort((a,b) => (a.time||'').localeCompare(b.time||''));
+
+  resultArea.innerHTML = '';
+  if(entries.length === 0){
+    resultArea.innerHTML = '<div class="empty-note">這個篩選條件下沒有課程</div>';
+    return;
+  }
+
+  let lastSection = null;
+  entries.forEach(c => {
+    if(c.section !== lastSection){
+      lastSection = c.section;
+      const label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = c.section || '';
+      resultArea.appendChild(label);
+    }
+
+    const seat = SEATS[c.id] || { students: [], capacity: c.capacity || defaultCap(c.name), waitlist: [] };
+    const cap = seat.capacity || c.capacity || defaultCap(c.name);
+    const count = (seat.students || []).length;
+    const wlCount = (seat.waitlist || []).length;
+    const remaining = cap - count;
+    const pct = Math.min(100, Math.round((count / cap) * 100));
+
+    let statusClass, statusLabel, barClass;
+    if(remaining <= 0){
+      statusClass = 'full'; statusLabel = '已額滿'; barClass = 'full';
+    } else if(remaining <= 2){
+      statusClass = 'tight'; statusLabel = `僅剩 ${remaining} 位`; barClass = 'tight';
+    } else {
+      statusClass = 'ok'; statusLabel = `尚有 ${remaining} 位`; barClass = 'ok';
+    }
+
+    const card = document.createElement('div');
+    card.className = 'course-card';
+    card.innerHTML = `
+      <div class="course-top">
+        <div class="course-icon">${c.icon || '🎨'}</div>
+        <div class="course-info">
+          <div class="course-name">${c.name}<span class="age-badge">${c.ageGroup || ''}</span></div>
+          <div class="course-meta">${c.time || ''}｜教室 ${c.room || ''}</div>
+        </div>
+        <span class="status-badge ${statusClass}">${statusLabel}</span>
+      </div>
+      <div class="seat-bar-wrap">
+        <div class="seat-bar"><div class="fill ${barClass}" style="width:${pct}%"></div></div>
+        <div class="seat-text"><span class="seat-count">已報名 ${count} / ${cap} 位</span></div>
+      </div>
+      ${remaining <= 0 ? `
+        <div class="wl-row">
+          <span class="wl-info">目前候補 ${wlCount} 位等候中</span>
+          <button class="wl-btn" data-course-id="${c.id}">登記候補</button>
+        </div>
+      ` : ''}
+    `;
+    resultArea.appendChild(card);
+
+    if(remaining <= 0){
+      card.querySelector('.wl-btn').addEventListener('click', () => openWlModal(c));
+    }
+  });
+}
+
+// ---- 候補登記 Modal ----
+const wlModal = document.getElementById('wlModal');
+const modalForm = document.getElementById('modalForm');
+const modalSuccess = document.getElementById('modalSuccess');
+const modalCourseName = document.getElementById('modalCourseName');
+const modalCourseMeta = document.getElementById('modalCourseMeta');
+const wlName = document.getElementById('wlName');
+const wlPhone = document.getElementById('wlPhone');
+const wlErr = document.getElementById('wlErr');
+const wlConfirmBtn = document.getElementById('wlConfirmBtn');
+let activeCourse = null;
+
+function openWlModal(course){
+  activeCourse = course;
+  modalForm.style.display = 'block';
+  modalSuccess.style.display = 'none';
+  modalCourseName.textContent = '登記候補';
+  modalCourseMeta.textContent = `${course.name}｜${course.time || ''}（週${baseDayLabel(course.col)}）`;
+  wlName.value = '';
+  wlPhone.value = '';
+  wlErr.style.display = 'none';
+  wlConfirmBtn.disabled = false;
+  wlConfirmBtn.textContent = '送出候補登記';
+  wlModal.classList.add('open');
+}
+document.getElementById('wlCancelBtn').addEventListener('click', () => wlModal.classList.remove('open'));
+document.getElementById('wlDoneBtn').addEventListener('click', () => wlModal.classList.remove('open'));
+wlModal.addEventListener('click', (e) => { if(e.target === wlModal) wlModal.classList.remove('open'); });
+
+wlConfirmBtn.addEventListener('click', async () => {
+  const name = wlName.value.trim();
+  const phone = wlPhone.value.trim();
+  wlErr.style.display = 'none';
+  if(!name){
+    wlErr.textContent = '請填寫小孩姓名';
+    wlErr.style.display = 'block';
+    return;
+  }
+  wlConfirmBtn.disabled = true;
+  wlConfirmBtn.textContent = '送出中…';
+  try{
+    await push(ref(db, 'seat3/waitlist'), {
+      name, phone,
+      time: activeCourse.time || '',
+      note: `${activeCourse.name}（週${baseDayLabel(activeCourse.col)} ${activeCourse.section || ''}）`,
+      date: new Date().toISOString().slice(0,10),
+      courseId: activeCourse.id,
+      lineUserId: lineProfile ? lineProfile.userId : null,
+      createdAt: Date.now()
+    });
+    modalForm.style.display = 'none';
+    modalSuccess.style.display = 'block';
+  }catch(e){
+    console.error(e);
+    wlErr.textContent = '送出失敗，請檢查網路連線後再試一次';
+    wlErr.style.display = 'block';
+    wlConfirmBtn.disabled = false;
+    wlConfirmBtn.textContent = '送出候補登記';
+  }
+});
+
+// ---- Firebase 即時監聽 ----
+onValue(ref(db, 'seat3/courses'), (snap) => {
+  if(snap.exists()){
+    const val = snap.val();
+    COURSES = Array.isArray(val) ? val.filter(Boolean) : Object.values(val);
+  } else {
+    COURSES = DEFAULT_COURSES;
+  }
+  render();
+});
+onValue(ref(db, 'seat3/seats'), (snap) => {
+  SEATS = snap.exists() ? snap.val() : {};
+  render();
+});
+
+// ---- LIFF（選填，用於候補時自動帶入LINE身分以利後續通知）----
+async function initLiff(){
+  try{
+    if(!LIFF_ID || LIFF_ID === 'YOUR_LIFF_ID') return;
+    await liff.init({ liffId: LIFF_ID });
+    if(liff.isLoggedIn()){
+      const profile = await liff.getProfile();
+      lineProfile = { userId: profile.userId, displayName: profile.displayName };
+    }
+  }catch(e){
+    console.log('LIFF 非必要功能，略過：', e);
+  }
+}
+initLiff();
+
+render();
+</script>
+</body>
+</html>
