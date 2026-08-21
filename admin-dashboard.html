@@ -199,9 +199,15 @@ async function loadCoursesAndTeachers(){
   if (window.gwpFilterCourses) {
     ALL_COURSES = window.gwpFilterCourses(ALL_COURSES);
   }
-  const metaSnap = await get(ref(db, 'seat3/posterMeta'));
-  if(metaSnap.exists() && metaSnap.val().teachers){
-    metaSnap.val().teachers.forEach(t => { TEACHER_ICON_MAP[t.icon] = t.name; });
+  const staffSnap = await get(ref(db, 'seat3/staff'));
+  if(staffSnap.exists()){
+    const staffVal = staffSnap.val();
+    Object.keys(staffVal).forEach(key => {
+      const s = staffVal[key];
+      if((s.role === '正職老師' || s.role === '兼職老師') && s.icon){
+        TEACHER_ICON_MAP[s.icon] = s.name;
+      }
+    });
   }
   const iconsInUse = [...new Set(ALL_COURSES.map(c => c.icon).filter(Boolean))];
   const teacherList = iconsInUse.map(icon => ({ icon, name: TEACHER_ICON_MAP[icon] || icon }));

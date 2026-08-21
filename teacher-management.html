@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>玩劇寶貝｜老師管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2;--paper-deep:#F2ECE0;--ink:#26232E;--ink-soft:#6B6674;
+    --blue:#2F6FED;--green:#2FA88F;--pink:#FF5D7A;--amber:#E0A400;--line:#E7E0D2;--radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  header{padding:22px 24px;background:linear-gradient(135deg,#2F6FED 0%, #2452B8 100%);color:#fff;}
+  header .eyebrow{font-size:12px;letter-spacing:2px;opacity:.85;text-transform:uppercase;}
+  header h1{margin:4px 0 0;font-size:22px;font-weight:900;}
+
+  main{max-width:960px;margin:0 auto;padding:20px 16px 60px;}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:18px;box-shadow:0 2px 8px rgba(38,35,46,0.04);}
+  .card h2{margin:0 0 4px;font-size:16px;}
+  .card .sub{font-size:12.5px;color:var(--ink-soft);margin-bottom:14px;}
+
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+  .stat-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;text-align:center;}
+  .stat-card .num{font-size:22px;font-weight:900;color:var(--blue);}
+  .stat-card .label{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+
+  .teacher-row{
+    display:flex;align-items:center;gap:12px;padding:13px 8px;border-bottom:1px solid var(--line);
+  }
+  .teacher-row:last-child{border-bottom:none;}
+  .teacher-icon-box{
+    width:40px;height:40px;border-radius:10px;background:var(--paper-deep);
+    display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;
+  }
+  .teacher-info{flex:1;min-width:0;}
+  .teacher-name{font-weight:700;font-size:14px;}
+  .teacher-meta{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+  .teacher-badges{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;}
+  .badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;}
+  .badge.role{background:#EAF0FE;color:var(--blue);}
+  .badge.inactive{background:#FDEDF0;color:var(--pink);}
+  .badge.count{background:#E4F5F0;color:var(--green);}
+  .badge.none{background:#F0EEF2;color:var(--ink-soft);}
+
+  .teacher-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .icon-input{
+    width:52px;padding:8px 6px;border-radius:9px;border:1.5px solid var(--line);
+    font-size:16px;text-align:center;font-family:inherit;
+  }
+  .save-icon-btn{
+    padding:8px 10px;border-radius:9px;border:none;background:var(--blue);color:#fff;
+    font-size:11.5px;font-weight:700;cursor:pointer;
+  }
+  .save-icon-btn:disabled{background:#C9C4D3;cursor:default;}
+  .detail-toggle{
+    padding:8px 10px;border-radius:9px;border:1.5px solid var(--line);background:#fff;
+    font-size:11.5px;font-weight:700;cursor:pointer;color:var(--ink-soft);
+  }
+
+  .detail-panel{
+    padding:10px 8px 14px 60px;font-size:12.5px;color:var(--ink-soft);
+    border-bottom:1px solid var(--line);
+  }
+  .detail-panel table{width:100%;border-collapse:collapse;margin-top:6px;}
+  .detail-panel th{text-align:left;font-size:11px;color:var(--ink-soft);padding:4px 6px;border-bottom:1px solid var(--line);}
+  .detail-panel td{padding:5px 6px;font-size:12px;border-bottom:1px solid var(--paper-deep);}
+
+  .empty-note,.loading{text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 10px;}
+  .denied{max-width:400px;margin:80px auto;text-align:center;color:var(--ink-soft);padding:0 20px;}
+  .link-out{font-size:12px;color:var(--blue);font-weight:700;text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · Teacher Management</div>
+  <h1>老師管理</h1>
+</header>
+
+<main id="mainArea">
+  <div class="loading">確認權限中…</div>
+</main>
+
+<script type="module" src="auth-guard.js"></script>
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",
+  authDomain: "otto2-2026.firebaseapp.com",
+  databaseURL: "https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otto2-2026",
+  storageBucket: "otto2-2026.appspot.com",
+  appId: "1:108328085665:web:071a45a7d7c5af6b6468e0"
+};
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const TEACHER_ROLES = ['正職老師', '兼職老師'];
+const WEEKDAY_ORDER = ['三','四','五','六','日'];
+
+let STAFF = {};      // emailKey -> record
+let ALL_COURSES = [];
+const mainArea = document.getElementById('mainArea');
+
+function baseDayLabel(col){ return (col || '').replace(/[AB]$/, ''); }
+
+async function loadData(){
+  const staffSnap = await get(ref(db, 'seat3/staff'));
+  STAFF = staffSnap.exists() ? staffSnap.val() : {};
+
+  const coursesSnap = await get(ref(db, 'seat3/courses'));
+  if (coursesSnap.exists()) {
+    const val = coursesSnap.val();
+    ALL_COURSES = Array.isArray(val) ? val.filter(Boolean) : Object.values(val);
+  }
+}
+
+function coursesForIcon(icon){
+  if (!icon) return [];
+  return ALL_COURSES
+    .filter(c => c.icon === icon)
+    .sort((a, b) => {
+      const da = WEEKDAY_ORDER.indexOf(baseDayLabel(a.col));
+      const db_ = WEEKDAY_ORDER.indexOf(baseDayLabel(b.col));
+      if (da !== db_) return da - db_;
+      return (a.time || '').localeCompare(b.time || '');
+    });
+}
+
+function renderDenied(){
+  mainArea.innerHTML = `<div class="denied">
+    <div style="font-size:34px;margin-bottom:10px;">🔒</div>
+    <h2 style="color:var(--ink);">沒有權限開啟此頁面</h2>
+    <p>只有「管理層」角色可以使用老師管理功能。</p>
+  </div>`;
+}
+
+function renderMain(){
+  const teacherKeys = Object.keys(STAFF).filter(k => TEACHER_ROLES.includes(STAFF[k].role));
+  teacherKeys.sort((a, b) => (STAFF[a].name || '').localeCompare(STAFF[b].name || ''));
+
+  const totalWeeklyClasses = teacherKeys.reduce((sum, k) => sum + coursesForIcon(STAFF[k].icon).length, 0);
+  const noIconCount = teacherKeys.filter(k => !STAFF[k].icon).length;
+
+  mainArea.innerHTML = `
+    <div class="stats-row">
+      <div class="stat-card"><div class="num">${teacherKeys.length}</div><div class="label">老師人數</div></div>
+      <div class="stat-card"><div class="num">${totalWeeklyClasses}</div><div class="label">每週總授課堂數</div></div>
+      <div class="stat-card"><div class="num">${noIconCount}</div><div class="label">尚未設定圖章</div></div>
+    </div>
+
+    <div class="card">
+      <h2>老師名單與任課統計</h2>
+      <div class="sub">圖章決定課表上顯示哪個老師；身分與帳號權限請到
+        <a class="link-out" href="permission-manage.html">權限管理</a> 頁面調整。</div>
+      <div id="teacherList"></div>
+    </div>
+  `;
+
+  const listEl = document.getElementById('teacherList');
+  if (teacherKeys.length === 0) {
+    listEl.innerHTML = '<div class="empty-note">目前還沒有「正職老師」或「兼職老師」身分的帳號，請先到權限管理頁面新增。</div>';
+    return;
+  }
+
+  teacherKeys.forEach(key => {
+    const rec = STAFF[key];
+    const matched = coursesForIcon(rec.icon);
+    const row = document.createElement('div');
+    row.className = 'teacher-row';
+    row.innerHTML = `
+      <div class="teacher-icon-box">${rec.icon || '❓'}</div>
+      <div class="teacher-info">
+        <div class="teacher-name">${rec.name}</div>
+        <div class="teacher-meta">${rec.email || ''}</div>
+        <div class="teacher-badges">
+          <span class="badge role">${rec.role}</span>
+          ${rec.active === false ? '<span class="badge inactive">已停用</span>' : ''}
+          ${matched.length > 0
+            ? `<span class="badge count">每週 ${matched.length} 堂</span>`
+            : `<span class="badge none">尚無對應課程</span>`}
+        </div>
+      </div>
+      <div class="teacher-actions">
+        <input type="text" class="icon-input" maxlength="4" value="${rec.icon || ''}" placeholder="🍎" data-key="${key}">
+        <button class="save-icon-btn" data-key="${key}" disabled>儲存</button>
+        <button class="detail-toggle" data-key="${key}">課表明細</button>
+      </div>
+    `;
+    listEl.appendChild(row);
+
+    const iconInput = row.querySelector('.icon-input');
+    const saveBtn = row.querySelector('.save-icon-btn');
+    iconInput.addEventListener('input', () => {
+      saveBtn.disabled = iconInput.value.trim() === (rec.icon || '');
+    });
+    saveBtn.addEventListener('click', async () => {
+      const newIcon = iconInput.value.trim();
+      saveBtn.disabled = true;
+      saveBtn.textContent = '…';
+      try {
+        await set(ref(db, `seat3/staff/${key}/icon`), newIcon);
+        STAFF[key].icon = newIcon;
+        renderMain();
+      } catch (e) {
+        console.error(e);
+        saveBtn.textContent = '失敗';
+      }
+    });
+
+    const detailBtn = row.querySelector('.detail-toggle');
+    let detailPanel = null;
+    detailBtn.addEventListener('click', () => {
+      if (detailPanel) {
+        detailPanel.remove();
+        detailPanel = null;
+        detailBtn.textContent = '課表明細';
+        return;
+      }
+      detailBtn.textContent = '收合明細';
+      detailPanel = document.createElement('div');
+      detailPanel.className = 'detail-panel';
+      if (matched.length === 0) {
+        detailPanel.innerHTML = '目前沒有課程使用這個圖章。';
+      } else {
+        detailPanel.innerHTML = `
+          <table>
+            <thead><tr><th>星期</th><th>時段</th><th>課程</th><th>教室</th></tr></thead>
+            <tbody>
+              ${matched.map(c => `
+                <tr>
+                  <td>週${baseDayLabel(c.col)}</td>
+                  <td>${c.time || ''}</td>
+                  <td>${c.name}（${c.ageGroup || ''}）</td>
+                  <td>${c.room || ''}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+      row.after(detailPanel);
+    });
+  });
+}
+
+(async () => {
+  const authInfo = await window.gwpAuthReady;
+  if (authInfo.role !== '管理層') {
+    renderDenied();
+    return;
+  }
+  await loadData();
+  renderMain();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

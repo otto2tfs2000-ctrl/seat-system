@@ -169,6 +169,9 @@ function renderMain(){
         <option value="管理層">管理層（自動擁有全部權限）</option>
       </select>
 
+      <label id="fIconLabel">圖章（用於課表與照片上傳對應這位老師，僅老師身分需要）</label>
+      <input type="text" id="fIcon" maxlength="4" placeholder="🍎" style="width:80px;text-align:center;font-size:18px;">
+
       <label>可使用的功能</label>
       <div class="feature-list" id="featureList"></div>
 
@@ -220,17 +223,25 @@ function renderMain(){
 
   document.getElementById('fRole').addEventListener('change', (e) => {
     const isMgmt = e.target.value === '管理層';
+    const isTeacher = e.target.value === '正職老師' || e.target.value === '兼職老師';
     document.querySelectorAll('.feature-chip input').forEach(i => { i.checked = isMgmt || i.checked; i.disabled = isMgmt; i.parentElement.classList.toggle('checked', i.checked); });
     if (isMgmt) {
       document.getElementById('fAllCourses').checked = true;
       document.getElementById('fAllCourses').dispatchEvent(new Event('change'));
     }
+    toggleIconFieldVisibility(isTeacher || isMgmt);
   });
 
   document.getElementById('saveBtn').addEventListener('click', saveStaff);
   document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
+  toggleIconFieldVisibility(true); // 預設角色是正職老師，一開始就顯示圖章欄位
 
   renderStaffList();
+}
+
+function toggleIconFieldVisibility(show){
+  document.getElementById('fIconLabel').style.display = show ? 'block' : 'none';
+  document.getElementById('fIcon').style.display = show ? 'block' : 'none';
 }
 
 function resetForm(){
@@ -240,6 +251,8 @@ function resetForm(){
   document.getElementById('fEmail').disabled = false;
   document.getElementById('fName').value = '';
   document.getElementById('fRole').value = '正職老師';
+  document.getElementById('fIcon').value = '';
+  toggleIconFieldVisibility(true);
   document.querySelectorAll('.feature-chip input').forEach(i => { i.checked = false; i.disabled = false; i.parentElement.classList.remove('checked'); });
   document.getElementById('fAllCourses').checked = false;
   document.getElementById('courseList').style.opacity = '1';
@@ -259,6 +272,8 @@ function loadIntoForm(key){
   document.getElementById('fEmail').disabled = true; // email 是 key，編輯時不給改，要換 email 用刪除重建
   document.getElementById('fName').value = rec.name || '';
   document.getElementById('fRole').value = rec.role || '正職老師';
+  document.getElementById('fIcon').value = rec.icon || '';
+  toggleIconFieldVisibility(rec.role === '正職老師' || rec.role === '兼職老師' || rec.role === '管理層');
   const perms = rec.permissions || {};
   document.querySelectorAll('.feature-chip input').forEach(i => {
     i.checked = !!perms[i.value];
@@ -298,8 +313,10 @@ async function saveStaff(){
     : Array.from(document.querySelectorAll('#courseList input:checked')).map(i => i.value);
 
   const key = editingKey || window.gwpEmailKey(email);
+  const icon = document.getElementById('fIcon').value.trim();
   const record = {
     name, email, role,
+    icon,
     active: (STAFF_LIST[key] && STAFF_LIST[key].active === false) ? false : true,
     permissions: Object.assign({}, features, { visibleCourses })
   };
@@ -354,7 +371,7 @@ function renderStaffList(){
     row.className = 'staff-row';
     row.innerHTML = `
       <div>
-        <div class="staff-name">${rec.name}</div>
+        <div class="staff-name">${rec.icon ? rec.icon + ' ' : ''}${rec.name}</div>
         <div class="staff-sub">${rec.email}</div>
         <div class="staff-badges">
           <span class="badge role">${rec.role}</span>

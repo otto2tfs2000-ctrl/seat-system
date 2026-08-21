@@ -17,7 +17,8 @@
     { href: 'schedule-poster.html',   label: '課表管理／家長版',   icon: '📅', permKey: 'canEditSchedule' },
     { href: 'parent-seat-check.html', label: '家長查空位',        icon: '🔍', permKey: null },
     { href: 'line-bind.html',         label: 'LINE 通知綁定',     icon: '💬', permKey: null },
-    { href: 'permission-manage.html', label: '權限管理',          icon: '🔑', permKey: null, managementOnly: true }
+    { href: 'permission-manage.html', label: '權限管理',          icon: '🔑', permKey: null, managementOnly: true },
+    { href: 'teacher-management.html', label: '老師管理',         icon: '🧑‍🏫', permKey: null, managementOnly: true }
   ];
 
   var currentFile = (location.pathname.split('/').pop() || '').toLowerCase();

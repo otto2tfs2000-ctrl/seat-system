@@ -354,9 +354,14 @@ async function loadCoursesAndTeachers(){
   if (window.gwpFilterCourses) {
     ALL_COURSES = window.gwpFilterCourses(ALL_COURSES);
   }
-  const metaSnap = await get(ref(db, 'seat3/posterMeta'));
-  if(metaSnap.exists() && metaSnap.val().teachers && metaSnap.val().teachers.length){
-    TEACHERS = metaSnap.val().teachers;
+  const staffSnap = await get(ref(db, 'seat3/staff'));
+  if(staffSnap.exists()){
+    const staffVal = staffSnap.val();
+    const teacherList = Object.keys(staffVal)
+      .map(key => staffVal[key])
+      .filter(s => (s.role === '正職老師' || s.role === '兼職老師') && s.icon && s.active !== false)
+      .map(s => ({ id: s.email || s.name, name: s.name, icon: s.icon }));
+    if(teacherList.length) TEACHERS = teacherList;
   }
   TEACHERS.forEach(t => {
     const opt = document.createElement('option');
