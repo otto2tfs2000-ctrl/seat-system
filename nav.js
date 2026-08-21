@@ -10,6 +10,7 @@
  */
 (function(){
   var PAGES = [
+    { href: 'home.html',              label: '首頁',              icon: '🏠', permKey: null },
     { href: 'teacher-upload.html',    label: '照片上傳（老師用）', icon: '📷', permKey: 'canUploadPhoto' },
     { href: 'admin-dashboard.html',   label: '照片管理後台',      icon: '🗂️', permKey: 'canViewAdminDashboard' },
     { href: 'attendance-checkin.html',label: '到課簽到',          icon: '✅', permKey: 'canCheckAttendance' },

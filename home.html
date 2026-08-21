@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>玩劇寶貝｜管理工具首頁</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2;--paper-deep:#F2ECE0;--ink:#26232E;--ink-soft:#6B6674;
+    --blue:#2F6FED;--green:#2FA88F;--pink:#FF5D7A;--line:#E7E0D2;--radius:18px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  header{padding:34px 24px 26px;background:linear-gradient(135deg,#2F6FED 0%, #2452B8 100%);color:#fff;}
+  header .eyebrow{font-size:12px;letter-spacing:2px;opacity:.85;text-transform:uppercase;}
+  header h1{margin:6px 0 4px;font-size:24px;font-weight:900;}
+  header p{margin:0;font-size:13.5px;opacity:.85;}
+
+  main{max-width:800px;margin:0 auto;padding:24px 16px 60px;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+  .tool-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;text-decoration:none;color:var(--ink);
+    box-shadow:0 2px 8px rgba(38,35,46,0.04);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .tool-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(38,35,46,0.08);}
+  .tool-card .icon{font-size:30px;margin-bottom:10px;display:block;}
+  .tool-card .title{font-size:15.5px;font-weight:700;margin-bottom:4px;}
+  .tool-card .desc{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+
+  .locked-card{
+    background:var(--paper-deep);border:1px dashed var(--line);border-radius:var(--radius);
+    padding:20px;color:var(--ink-soft);opacity:.6;
+  }
+  .locked-card .icon{font-size:30px;margin-bottom:10px;display:block;filter:grayscale(1);}
+  .locked-card .title{font-size:15.5px;font-weight:700;margin-bottom:4px;}
+  .locked-card .desc{font-size:12px;}
+
+  .section-label{font-size:13px;font-weight:900;color:var(--ink-soft);margin:24px 4px 12px;}
+  .empty-note{text-align:center;color:var(--ink-soft);font-size:13px;padding:40px 10px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · Home</div>
+  <h1 id="greeting">管理工具首頁</h1>
+  <p id="subGreeting">登入後依權限顯示你可以使用的工具</p>
+</header>
+
+<main>
+  <div class="section-label">我可以使用的工具</div>
+  <div class="grid" id="availableGrid"></div>
+
+  <div id="lockedSection" style="display:none;">
+    <div class="section-label">未開放（如需使用請聯繫管理層）</div>
+    <div class="grid" id="lockedGrid"></div>
+  </div>
+</main>
+
+<script type="module" src="auth-guard.js"></script>
+<script>
+const TOOLS = [
+  { href: 'teacher-upload.html', label: '照片上傳', icon: '📷', desc: '上課時上傳照片，自動對應班級', permKey: 'canUploadPhoto' },
+  { href: 'admin-dashboard.html', label: '照片管理後台', icon: '🗂️', desc: '查看各班照片上傳與簽到狀態總表', permKey: 'canViewAdminDashboard' },
+  { href: 'attendance-checkin.html', label: '到課簽到', icon: '✅', desc: '記錄每堂課實際出席、請假、缺席', permKey: 'canCheckAttendance' },
+  { href: 'schedule-poster.html', label: '課表管理／家長版', icon: '📅', desc: '編輯排課、匯出給家長看的美化課表', permKey: 'canEditSchedule' },
+  { href: 'permission-manage.html', label: '權限管理', icon: '🔑', desc: '設定每位員工能使用的工具與班級', managementOnly: true },
+];
+
+(async () => {
+  const authInfo = await window.gwpAuthReady;
+
+  document.getElementById('greeting').textContent = `你好，${authInfo.name}`;
+  document.getElementById('subGreeting').textContent = `身分：${authInfo.role || '未設定角色'}`;
+
+  const isManagement = authInfo.role === '管理層';
+  const availableGrid = document.getElementById('availableGrid');
+  const lockedGrid = document.getElementById('lockedGrid');
+  const lockedSection = document.getElementById('lockedSection');
+
+  let availableCount = 0, lockedCount = 0;
+
+  TOOLS.forEach(t => {
+    const hasAccess = isManagement || (t.managementOnly ? false : !!authInfo.permissions[t.permKey]);
+    if (hasAccess) {
+      availableCount++;
+      const a = document.createElement('a');
+      a.className = 'tool-card';
+      a.href = t.href;
+      a.innerHTML = `<span class="icon">${t.icon}</span><div class="title">${t.label}</div><div class="desc">${t.desc}</div>`;
+      availableGrid.appendChild(a);
+    } else {
+      lockedCount++;
+      const div = document.createElement('div');
+      div.className = 'locked-card';
+      div.innerHTML = `<span class="icon">🔒</span><div class="title">${t.label}</div><div class="desc">尚未開通</div>`;
+      lockedGrid.appendChild(div);
+    }
+  });
+
+  if (availableCount === 0) {
+    availableGrid.innerHTML = '<div class="empty-note">目前沒有任何開通的工具，請聯繫管理層開通權限。</div>';
+  }
+  if (lockedCount > 0) {
+    lockedSection.style.display = 'block';
+  }
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
