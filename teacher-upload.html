@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>玩劇寶貝｜上課照片上傳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Baloo+2:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2;
+    --paper-deep:#F2ECE0;
+    --ink:#26232E;
+    --ink-soft:#6B6674;
+    --blue:#2F6FED;
+    --yellow:#FFB627;
+    --green:#2FA88F;
+    --pink:#FF5D7A;
+    --line:#E7E0D2;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:64px;
+  }
+  header{
+    padding:28px 20px 22px;
+    background:linear-gradient(135deg,#2F6FED 0%, #2452B8 100%);
+    color:#fff;
+    border-radius:0 0 28px 28px;
+    box-shadow:0 6px 20px rgba(47,111,237,0.25);
+  }
+  header .eyebrow{
+    font-family:'Baloo 2',sans-serif;
+    font-size:13px;
+    letter-spacing:2px;
+    opacity:0.85;
+    text-transform:uppercase;
+  }
+  header h1{
+    margin:4px 0 0;
+    font-size:22px;
+    font-weight:900;
+  }
+  main{
+    max-width:520px;
+    margin:0 auto;
+    padding:20px 16px 0;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 2px 8px rgba(38,35,46,0.04);
+  }
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  select, input[type="date"], input[type="text"]{
+    width:100%;
+    padding:13px 12px;
+    border-radius:12px;
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    font-size:16px;
+    font-family:inherit;
+    color:var(--ink);
+    margin-bottom:14px;
+  }
+  select:focus, input:focus{
+    outline:2px solid var(--blue);
+    outline-offset:1px;
+    border-color:var(--blue);
+  }
+  .field-group:last-child select,
+  .field-group:last-child input{margin-bottom:0;}
+  .status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:700;
+    padding:6px 12px;
+    border-radius:999px;
+    margin-top:2px;
+  }
+  .status-pill.ok{background:#E4F5F0;color:var(--green);}
+  .status-pill.none{background:#FDF0E4;color:#C9781A;}
+  .status-pill.unknown{background:#F0EEF2;color:var(--ink-soft);}
+  .upload-zone{
+    border:2px dashed var(--line);
+    border-radius:16px;
+    padding:26px 16px;
+    text-align:center;
+    background:var(--paper-deep);
+    cursor:pointer;
+    transition:border-color .15s;
+  }
+  .upload-zone.dragover{border-color:var(--blue);}
+  .upload-zone .icon{font-size:34px;display:block;margin-bottom:8px;}
+  .upload-zone .hint{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+  input[type="file"]{display:none;}
+  .thumb-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:14px;
+  }
+  .thumb-grid .thumb{
+    position:relative;
+    aspect-ratio:1;
+    border-radius:10px;
+    overflow:hidden;
+    background:#eee;
+  }
+  .thumb-grid .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .thumb-grid .thumb .x{
+    position:absolute;top:3px;right:3px;
+    width:20px;height:20px;border-radius:50%;
+    background:rgba(0,0,0,0.55);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;line-height:1;
+  }
+  button.primary{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    background:var(--blue);
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+    font-family:'Noto Sans TC',sans-serif;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(47,111,237,0.35);
+  }
+  button.primary:disabled{
+    background:#C9C4D3;
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .progress-wrap{
+    margin-top:14px;
+    display:none;
+  }
+  .progress-bar{
+    height:10px;
+    background:var(--line);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .progress-bar .fill{
+    height:100%;
+    width:0%;
+    background:var(--blue);
+    transition:width .2s;
+  }
+  .progress-text{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-top:6px;
+    text-align:center;
+  }
+  .success-box{
+    display:none;
+    text-align:center;
+    padding:24px 16px;
+  }
+  .success-box .check{
+    width:64px;height:64px;border-radius:50%;
+    background:var(--green);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:32px;margin:0 auto 14px;
+  }
+  .success-box h2{margin:0 0 6px;font-size:19px;}
+  .success-box p{margin:0;color:var(--ink-soft);font-size:14px;}
+  .success-box .again{
+    margin-top:18px;
+    background:none;border:1.5px solid var(--line);
+    padding:11px 20px;border-radius:12px;
+    font-family:inherit;font-size:14px;font-weight:700;
+    color:var(--ink);cursor:pointer;
+  }
+  .manual-toggle{
+    font-size:13px;color:var(--blue);font-weight:700;
+    text-align:right;margin:-8px 0 12px;cursor:pointer;
+    text-decoration:underline;
+  }
+  .err{color:var(--pink);font-size:13px;margin-top:8px;display:none;}
+  .footer-note{
+    text-align:center;font-size:12px;color:var(--ink-soft);
+    padding:20px 20px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · Photo Upload</div>
+  <h1>上課照片上傳</h1>
+</header>
+
+<main>
+
+  <div class="card" id="formCard">
+    <div class="field-group">
+      <label for="teacherSelect">老師姓名</label>
+      <select id="teacherSelect">
+        <option value="">請選擇老師</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label for="dateInput">上課日期</label>
+      <input type="date" id="dateInput">
+    </div>
+
+    <div class="field-group">
+      <label for="classSelect">班級 / 課程（依老師與日期自動篩選）</label>
+      <select id="classSelect">
+        <option value="">請先選擇老師與日期</option>
+      </select>
+    </div>
+    <div class="manual-toggle" id="manualToggle">找不到班級？手動輸入</div>
+    <div class="field-group" id="manualField" style="display:none;">
+      <label for="manualInput">手動輸入班級名稱</label>
+      <input type="text" id="manualInput" placeholder="例：2-3歲 黏土（加開）">
+    </div>
+
+    <div id="statusLine" style="margin-bottom:14px;"></div>
+  </div>
+
+  <div class="card" id="uploadCard">
+    <label>選擇照片</label>
+    <div class="upload-zone" id="dropZone">
+      <span class="icon">📷</span>
+      <div>點擊選擇照片，或直接拍照</div>
+      <div class="hint">可一次選多張，建議每次不超過 30 張</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" multiple capture="environment">
+    <div class="thumb-grid" id="thumbGrid"></div>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">上傳中…</div>
+    </div>
+    <div class="err" id="errBox"></div>
+  </div>
+
+  <button class="primary" id="submitBtn" disabled>選擇照片後即可上傳</button>
+
+  <div class="card success-box" id="successBox">
+    <div class="check">✓</div>
+    <h2 id="successTitle">上傳完成</h2>
+    <p id="successDetail"></p>
+    <button class="again" id="againBtn">再上傳一批</button>
+  </div>
+
+  <div class="footer-note">上傳的照片會同步到管理後台，並用於班級相簿與成長紀錄。</div>
+
+</main>
+
+<script type="module" src="auth-guard.js"></script>
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, set, update, push, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+/* ====== 與其他系統共用的 Firebase 設定 ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",
+  authDomain: "otto2-2026.firebaseapp.com",
+  databaseURL: "https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otto2-2026",
+  storageBucket: "otto2-2026.appspot.com",
+  appId: "1:108328085665:web:071a45a7d7c5af6b6468e0"
+};
+/* ================================================================ */
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const storage = getStorage(app);
+
+// 老師名單找不到 posterMeta 時的備援清單（跟 schedule-poster 的 DEFAULT_TEACHERS 一致）
+const DEFAULT_TEACHERS = [
+  { id: 't_apple', name: '蘋果老師', icon: '🍎' },
+  { id: 't_soccer', name: '足球老師', icon: '⚽' },
+  { id: 't_flower', name: '花朵老師', icon: '🌼' },
+  { id: 't_star', name: '星星老師', icon: '⭐' },
+  { id: 't_bell', name: '鈴鐺老師', icon: '🔔' },
+  { id: 't_gift', name: '禮物老師', icon: '🎁' },
+  { id: 't_bear', name: '寒寒老師', icon: '🐻' },
+  { id: 't_palette', name: '畫畫老師', icon: '🎨' },
+  { id: 't_rabbit', name: '兔子老師', icon: '🐰' },
+  { id: 't_crown', name: '皇冠老師', icon: '👑' },
+];
+
+const WEEKDAY_MAP = ['日','一','二','三','四','五','六']; // JS getDay(): 0=Sun
+
+let ALL_COURSES = [];   // 即時讀取自 seat3/courses（跟課表、簽到共用）
+let TEACHERS = DEFAULT_TEACHERS;
+let selectedTeacher = null;
+
+const teacherSelect = document.getElementById('teacherSelect');
+const dateInput = document.getElementById('dateInput');
+const classSelect = document.getElementById('classSelect');
+const manualToggle = document.getElementById('manualToggle');
+const manualField = document.getElementById('manualField');
+const manualInput = document.getElementById('manualInput');
+const statusLine = document.getElementById('statusLine');
+const fileInput = document.getElementById('fileInput');
+const dropZone = document.getElementById('dropZone');
+const thumbGrid = document.getElementById('thumbGrid');
+const submitBtn = document.getElementById('submitBtn');
+const progressWrap = document.getElementById('progressWrap');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const errBox = document.getElementById('errBox');
+const successBox = document.getElementById('successBox');
+const formCard = document.getElementById('formCard');
+const uploadCard = document.getElementById('uploadCard');
+
+let selectedFiles = [];
+
+function baseDayLabel(col){
+  return (col || '').replace(/[AB]$/, '');
+}
+
+// default date = today (local)
+function todayStr(){
+  const d = new Date();
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d - tz).toISOString().slice(0,10);
+}
+dateInput.value = todayStr();
+
+async function loadCoursesAndTeachers(){
+  const coursesSnap = await get(ref(db, 'seat3/courses'));
+  if(coursesSnap.exists()){
+    const val = coursesSnap.val();
+    ALL_COURSES = Array.isArray(val) ? val.filter(Boolean) : Object.values(val);
+  }
+  // 依登入者的權限篩選：兼職老師只會看到自己被授權的班級
+  if (window.gwpFilterCourses) {
+    ALL_COURSES = window.gwpFilterCourses(ALL_COURSES);
+  }
+  const metaSnap = await get(ref(db, 'seat3/posterMeta'));
+  if(metaSnap.exists() && metaSnap.val().teachers && metaSnap.val().teachers.length){
+    TEACHERS = metaSnap.val().teachers;
+  }
+  TEACHERS.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t.id;
+    opt.textContent = `${t.icon || ''} ${t.name}`.trim();
+    teacherSelect.appendChild(opt);
+  });
+}
+
+function refreshClassOptions(){
+  classSelect.innerHTML = '';
+  const dateVal = dateInput.value;
+  if(!selectedTeacher || !dateVal){
+    classSelect.innerHTML = '<option value="">請先選擇老師與日期</option>';
+    return;
+  }
+  const wd = WEEKDAY_MAP[new Date(dateVal + 'T00:00:00').getDay()];
+  const sameDay = ALL_COURSES.filter(c => baseDayLabel(c.col) === wd);
+  // 優先顯示這位老師圖示對應的班級；若都沒有（例如代課），退回顯示當天全部班級供手動挑選
+  let matches = sameDay.filter(c => c.icon === selectedTeacher.icon);
+  let fallbackMode = false;
+  if(matches.length === 0){
+    matches = sameDay;
+    fallbackMode = true;
+  }
+  if(matches.length === 0){
+    classSelect.innerHTML = '<option value="">當天無課程，請用下方手動輸入</option>';
+    manualField.style.display = 'block';
+    return;
+  }
+  matches.sort((a,b) => (a.time||'').localeCompare(b.time||''));
+  classSelect.innerHTML = (fallbackMode ? '<option value="">請選擇班級（今天沒有你平常帶的課，這是當天全部班級）</option>' : '<option value="">請選擇班級</option>') +
+    matches.map(c => `<option value="${c.id}">${c.time || ''}｜${c.name}（${c.ageGroup || ''}・${c.room || ''}）</option>`).join('');
+}
+
+teacherSelect.addEventListener('change', () => {
+  selectedTeacher = TEACHERS.find(t => t.id === teacherSelect.value) || null;
+  refreshClassOptions();
+  updateSubmitState();
+  checkExistingUploads();
+});
+dateInput.addEventListener('change', refreshClassOptions);
+
+manualToggle.addEventListener('click', () => {
+  manualField.style.display = manualField.style.display === 'none' ? 'block' : 'none';
+});
+
+function getSelectedCourse(){
+  if(classSelect.value){
+    return ALL_COURSES.find(c => String(c.id) === classSelect.value) || null;
+  }
+  return null;
+}
+function getCourseName(){
+  if(manualField.style.display !== 'none' && manualInput.value.trim()){
+    return manualInput.value.trim();
+  }
+  const c = getSelectedCourse();
+  return c ? c.name : '';
+}
+function getUploadKey(){
+  // 有課表對應時用 courseId（精準不撞名），手動輸入時退回用日期+名稱組字串
+  const c = getSelectedCourse();
+  if(c && (manualField.style.display === 'none' || !manualInput.value.trim())){
+    return `course_${c.id}`;
+  }
+  const name = getCourseName();
+  return name ? `manual_${name.replace(/[.#$\[\]\/]/g, '_')}` : '';
+}
+
+async function checkExistingUploads(){
+  const dateVal = dateInput.value;
+  const key = getUploadKey();
+  if(!dateVal || !key){
+    statusLine.innerHTML = '';
+    return;
+  }
+  try{
+    const snap = await get(ref(db, `photoSystem/dailySummary/${dateVal}/${key}`));
+    if(snap.exists()){
+      const v = snap.val();
+      statusLine.innerHTML = `<span class="status-pill ok">✓ 本班本日已上傳 ${v.totalPhotos} 張（${(v.uploaders||[]).join('、')}）</span>`;
+    } else {
+      statusLine.innerHTML = `<span class="status-pill none">尚未上傳過本班照片</span>`;
+    }
+  }catch(e){
+    statusLine.innerHTML = `<span class="status-pill unknown">無法讀取上傳狀態</span>`;
+  }
+}
+
+[dateInput, classSelect, manualInput].forEach(el=>{
+  el.addEventListener('change', checkExistingUploads);
+  el.addEventListener('input', checkExistingUploads);
+});
+
+// ---- file selection ----
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', (e) => {
+  addFiles(Array.from(e.target.files));
+  fileInput.value = '';
+});
+
+function addFiles(files){
+  selectedFiles = selectedFiles.concat(files);
+  renderThumbs();
+  updateSubmitState();
+}
+
+function renderThumbs(){
+  thumbGrid.innerHTML = '';
+  selectedFiles.forEach((f, idx) => {
+    const div = document.createElement('div');
+    div.className = 'thumb';
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(f);
+    const x = document.createElement('div');
+    x.className = 'x';
+    x.textContent = '✕';
+    x.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      selectedFiles.splice(idx,1);
+      renderThumbs();
+      updateSubmitState();
+    });
+    div.appendChild(img);
+    div.appendChild(x);
+    thumbGrid.appendChild(div);
+  });
+}
+
+function updateSubmitState(){
+  const ready = selectedFiles.length > 0 && selectedTeacher && dateInput.value && getCourseName();
+  submitBtn.disabled = !ready;
+  submitBtn.textContent = selectedFiles.length > 0
+    ? `上傳 ${selectedFiles.length} 張照片`
+    : '選擇照片後即可上傳';
+}
+[dateInput, classSelect, manualInput].forEach(el=>{
+  el.addEventListener('change', updateSubmitState);
+  el.addEventListener('input', updateSubmitState);
+});
+
+// ---- submit ----
+submitBtn.addEventListener('click', async () => {
+  errBox.style.display = 'none';
+  const dateVal = dateInput.value;
+  const teacherName = selectedTeacher ? selectedTeacher.name : '';
+  const courseName = getCourseName();
+  const uploadKey = getUploadKey();
+  const selectedCourse = getSelectedCourse();
+  const courseId = selectedCourse ? selectedCourse.id : null;
+  const room = selectedCourse ? (selectedCourse.room || '') : '';
+  const timeStr = selectedCourse ? (selectedCourse.time || '') : '';
+
+  if(!dateVal || !teacherName || !courseName || !uploadKey || selectedFiles.length === 0){
+    errBox.textContent = '請確認所有欄位都已填寫，並至少選擇一張照片';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  submitBtn.disabled = true;
+  progressWrap.style.display = 'block';
+
+  try{
+    const uploadPushRef = push(ref(db, 'photoSystem/uploads'));
+    const uploadId = uploadPushRef.key;
+    const urls = [];
+
+    for(let i=0; i<selectedFiles.length; i++){
+      const file = selectedFiles[i];
+      const path = `photos/${uploadKey}/${dateVal}/${uploadId}_${i}_${file.name}`;
+      const fileRef = sRef(storage, path);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      urls.push(url);
+      const pct = Math.round(((i+1)/selectedFiles.length) * 100);
+      progressFill.style.width = pct + '%';
+      progressText.textContent = `上傳中… ${i+1}/${selectedFiles.length}`;
+    }
+
+    await set(uploadPushRef, {
+      date: dateVal,
+      courseId, room, course: courseName, time: timeStr,
+      teacherName,
+      photoCount: urls.length,
+      photoUrls: urls,
+      uploadedAt: Date.now()
+    });
+
+    const summaryKey = `photoSystem/dailySummary/${dateVal}/${uploadKey}`;
+    await runTransaction(ref(db, summaryKey), (curr) => {
+      if(!curr){
+        return { totalPhotos: urls.length, uploaders: [teacherName], lastUploadAt: Date.now(), courseName, courseId };
+      }
+      curr.totalPhotos = (curr.totalPhotos || 0) + urls.length;
+      curr.uploaders = Array.from(new Set([...(curr.uploaders||[]), teacherName]));
+      curr.lastUploadAt = Date.now();
+      curr.courseName = courseName;
+      curr.courseId = courseId;
+      return curr;
+    });
+
+    document.getElementById('successTitle').textContent = '上傳完成！';
+    document.getElementById('successDetail').textContent =
+      `${courseName}（${dateVal}）共 ${urls.length} 張照片已送出`;
+    formCard.style.display = 'none';
+    uploadCard.style.display = 'none';
+    submitBtn.style.display = 'none';
+    successBox.style.display = 'block';
+
+  }catch(e){
+    console.error(e);
+    errBox.textContent = '上傳失敗，請檢查網路連線後再試一次';
+    errBox.style.display = 'block';
+    submitBtn.disabled = false;
+  }finally{
+    progressWrap.style.display = 'none';
+  }
+});
+
+document.getElementById('againBtn').addEventListener('click', () => {
+  selectedFiles = [];
+  renderThumbs();
+  formCard.style.display = 'block';
+  uploadCard.style.display = 'block';
+  submitBtn.style.display = 'block';
+  successBox.style.display = 'none';
+  progressFill.style.width = '0%';
+  updateSubmitState();
+  checkExistingUploads();
+});
+
+(async () => {
+  const authInfo = await window.gwpAuthReady;
+  if (authInfo.role !== '管理層' && !authInfo.permissions.canUploadPhoto) {
+    document.getElementById('formCard').innerHTML =
+      '<div style="text-align:center;padding:20px;color:var(--ink-soft);font-size:14px;">你的帳號沒有「照片上傳」的權限，請聯繫管理層開通。</div>';
+    document.getElementById('uploadCard').style.display = 'none';
+    submitBtn.style.display = 'none';
+    return;
+  }
+  await loadCoursesAndTeachers();
+  refreshClassOptions();
+  updateSubmitState();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

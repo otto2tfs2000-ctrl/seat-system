@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>玩劇寶貝｜到課簽到</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2;
+    --paper-deep:#F2ECE0;
+    --ink:#26232E;
+    --ink-soft:#6B6674;
+    --blue:#2F6FED;
+    --green:#2FA88F;
+    --amber:#E0A400;
+    --pink:#FF5D7A;
+    --line-c:#E7E0D2;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;
+    padding-bottom:40px;
+  }
+  header{
+    padding:22px 20px 18px;
+    background:linear-gradient(135deg,#2F6FED 0%, #2452B8 100%);
+    color:#fff;border-radius:0 0 24px 24px;
+    box-shadow:0 6px 18px rgba(47,111,237,0.25);
+  }
+  header .eyebrow{font-size:12px;letter-spacing:2px;opacity:.9;text-transform:uppercase;}
+  header h1{margin:4px 0 0;font-size:19px;font-weight:900;}
+
+  main{max-width:640px;margin:0 auto;padding:18px 16px 0;}
+
+  .card{
+    background:#fff;border:1px solid var(--line-c);border-radius:var(--radius);
+    padding:16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(38,35,46,0.04);
+  }
+  label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
+  select, input[type="date"]{
+    width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line-c);
+    background:var(--paper);font-size:15px;font-family:inherit;color:var(--ink);
+    margin-bottom:14px;
+  }
+  .field-group:last-child select, .field-group:last-child input{margin-bottom:0;}
+
+  .status-line{margin-top:2px;}
+  .status-pill{
+    display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;
+    padding:5px 11px;border-radius:999px;
+  }
+  .status-pill.done{background:#E4F5F0;color:var(--green);}
+  .status-pill.partial{background:#FBF1DC;color:var(--amber);}
+  .status-pill.none{background:#F0EEF2;color:var(--ink-soft);}
+
+  .roster-header{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:10px;
+  }
+  .roster-header h3{margin:0;font-size:15px;}
+  .quick-actions{display:flex;gap:8px;}
+  .quick-btn{
+    font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;
+    border:1.5px solid var(--line-c);background:#fff;color:var(--ink-soft);cursor:pointer;
+  }
+  .quick-btn.all-present{border-color:var(--green);color:var(--green);}
+
+  .student-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 4px;border-bottom:1px solid var(--line-c);
+  }
+  .student-row:last-child{border-bottom:none;}
+  .student-name{font-size:14.5px;font-weight:600;}
+  .student-sub{font-size:11.5px;color:var(--ink-soft);}
+  .status-btns{display:flex;gap:6px;}
+  .status-btn{
+    width:44px;height:38px;border-radius:10px;border:1.5px solid var(--line-c);
+    background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink-soft);
+  }
+  .status-btn.present.active{background:var(--green);border-color:var(--green);color:#fff;}
+  .status-btn.leave.active{background:var(--amber);border-color:var(--amber);color:#fff;}
+  .status-btn.absent.active{background:var(--pink);border-color:var(--pink);color:#fff;}
+
+  .empty-note{text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 10px;}
+  .loading{text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 10px;}
+
+  .save-bar{
+    position:sticky;bottom:0;background:var(--paper);padding:12px 0 4px;
+    margin-top:6px;
+  }
+  button.primary{
+    width:100%;padding:15px;border:none;border-radius:14px;
+    background:var(--blue);color:#fff;font-size:16px;font-weight:700;
+    font-family:'Noto Sans TC',sans-serif;cursor:pointer;
+    box-shadow:0 4px 14px rgba(47,111,237,0.3);
+  }
+  button.primary:disabled{background:#C9C4D3;box-shadow:none;cursor:not-allowed;}
+  .save-hint{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:8px;}
+
+  .manual-add{
+    margin-top:12px;padding-top:12px;border-top:1px dashed var(--line-c);
+    display:flex;gap:8px;
+  }
+  .manual-add input{
+    flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--line-c);
+    font-size:13.5px;font-family:inherit;
+  }
+  .manual-add button{
+    padding:10px 14px;border-radius:10px;border:none;background:var(--paper-deep);
+    color:var(--ink);font-weight:700;font-size:13px;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · Attendance</div>
+  <h1>到課簽到</h1>
+</header>
+
+<main>
+  <div class="card">
+    <div class="field-group">
+      <label for="dateInput">日期</label>
+      <input type="date" id="dateInput">
+    </div>
+    <div class="field-group">
+      <label for="courseSelect">班級 / 課程</label>
+      <select id="courseSelect">
+        <option value="">請先選擇日期</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="rosterArea"></div>
+</main>
+
+<script type="module" src="auth-guard.js"></script>
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",
+  authDomain: "otto2-2026.firebaseapp.com",
+  databaseURL: "https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otto2-2026",
+  storageBucket: "otto2-2026.appspot.com",
+  appId: "1:108328085665:web:071a45a7d7c5af6b6468e0"
+};
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const WEEKDAY_MAP = ['日','一','二','三','四','五','六']; // JS getDay(): 0=Sun
+
+const dateInput = document.getElementById('dateInput');
+const courseSelect = document.getElementById('courseSelect');
+const rosterArea = document.getElementById('rosterArea');
+
+let ALL_COURSES = [];
+let currentRoster = []; // [{name, status}]
+let currentCourseId = null;
+
+function todayStr(){
+  const d = new Date();
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d - tz).toISOString().slice(0,10);
+}
+dateInput.value = todayStr();
+
+function baseDayLabel(col){
+  return (col || '').replace(/[AB]$/, '');
+}
+
+async function loadCourses(){
+  const snap = await get(ref(db, 'seat3/courses'));
+  if(snap.exists()){
+    const val = snap.val();
+    ALL_COURSES = Array.isArray(val) ? val.filter(Boolean) : Object.values(val);
+  }
+  // 依登入者的權限篩選：兼職老師只會看到自己被授權的班級，看不到其他學生名單
+  if (window.gwpFilterCourses) {
+    ALL_COURSES = window.gwpFilterCourses(ALL_COURSES);
+  }
+}
+
+function refreshCourseOptions(){
+  const dateVal = dateInput.value;
+  if(!dateVal){
+    courseSelect.innerHTML = '<option value="">請先選擇日期</option>';
+    return;
+  }
+  const wd = WEEKDAY_MAP[new Date(dateVal + 'T00:00:00').getDay()];
+  const matches = ALL_COURSES.filter(c => baseDayLabel(c.col) === wd);
+  if(matches.length === 0){
+    courseSelect.innerHTML = '<option value="">當天沒有課程</option>';
+    rosterArea.innerHTML = '';
+    return;
+  }
+  matches.sort((a,b) => (a.time||'').localeCompare(b.time||''));
+  courseSelect.innerHTML = '<option value="">請選擇班級</option>' +
+    matches.map(c => `<option value="${c.id}">${c.time || ''}｜${c.name}（${c.ageGroup || ''}・${c.room || ''}）</option>`).join('');
+}
+
+dateInput.addEventListener('change', () => {
+  refreshCourseOptions();
+  rosterArea.innerHTML = '';
+});
+courseSelect.addEventListener('change', () => {
+  currentCourseId = courseSelect.value;
+  if(currentCourseId){
+    loadRosterAndAttendance(currentCourseId, dateInput.value);
+  } else {
+    rosterArea.innerHTML = '';
+  }
+});
+
+async function loadRosterAndAttendance(courseId, dateVal){
+  rosterArea.innerHTML = '<div class="loading">讀取名單中…</div>';
+
+  const seatSnap = await get(ref(db, `seat3/seats/${courseId}`));
+  const seatData = seatSnap.exists() ? seatSnap.val() : { students: [] };
+  const students = seatData.students || [];
+
+  const attSnap = await get(ref(db, `seat3/attendance/${courseId}/${dateVal}`));
+  const attData = attSnap.exists() ? attSnap.val() : {};
+
+  currentRoster = students.map(s => ({
+    name: s.name,
+    parent: s.parent || '',
+    status: attData[s.name]?.status || null
+  }));
+
+  renderRoster();
+}
+
+function renderRoster(){
+  if(currentRoster.length === 0){
+    rosterArea.innerHTML = '<div class="card"><div class="empty-note">這個班級目前沒有在籍學生名單</div></div>';
+    return;
+  }
+
+  const doneCount = currentRoster.filter(s => s.status).length;
+  let statusClass = 'none', statusText = '尚未簽到';
+  if(doneCount === currentRoster.length){ statusClass = 'done'; statusText = '已全部簽到'; }
+  else if(doneCount > 0){ statusClass = 'partial'; statusText = `已簽 ${doneCount}/${currentRoster.length}`; }
+
+  rosterArea.innerHTML = `
+    <div class="card">
+      <div class="roster-header">
+        <h3>學生名單（${currentRoster.length} 人）</h3>
+        <span class="status-pill ${statusClass}">${statusText}</span>
+      </div>
+      <div class="quick-actions" style="margin-bottom:10px;">
+        <button class="quick-btn all-present" id="markAllPresentBtn">全部標為出席</button>
+      </div>
+      <div id="studentList"></div>
+      <div class="manual-add">
+        <input type="text" id="manualNameInput" placeholder="補登學生姓名（非在籍名單）">
+        <button id="manualAddBtn">加入名單</button>
+      </div>
+    </div>
+    <div class="save-bar">
+      <button class="primary" id="saveBtn">儲存簽到紀錄</button>
+      <div class="save-hint">可隨時重新開啟本頁補登或修改</div>
+    </div>
+  `;
+
+  const listEl = document.getElementById('studentList');
+  currentRoster.forEach((s, idx) => {
+    const row = document.createElement('div');
+    row.className = 'student-row';
+    row.innerHTML = `
+      <div>
+        <div class="student-name">${s.name}</div>
+        ${s.parent ? `<div class="student-sub">${s.parent}</div>` : ''}
+      </div>
+      <div class="status-btns">
+        <button class="status-btn present ${s.status==='出席'?'active':''}" data-idx="${idx}" data-status="出席">✓</button>
+        <button class="status-btn leave ${s.status==='請假'?'active':''}" data-idx="${idx}" data-status="請假">假</button>
+        <button class="status-btn absent ${s.status==='缺席'?'active':''}" data-idx="${idx}" data-status="缺席">✕</button>
+      </div>
+    `;
+    listEl.appendChild(row);
+  });
+
+  listEl.querySelectorAll('.status-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx, 10);
+      currentRoster[idx].status = btn.dataset.status;
+      renderRoster();
+    });
+  });
+
+  document.getElementById('markAllPresentBtn').addEventListener('click', () => {
+    currentRoster.forEach(s => { if(!s.status) s.status = '出席'; });
+    renderRoster();
+  });
+
+  document.getElementById('manualAddBtn').addEventListener('click', () => {
+    const input = document.getElementById('manualNameInput');
+    const name = input.value.trim();
+    if(!name) return;
+    currentRoster.push({ name, parent: '（補登）', status: '出席' });
+    renderRoster();
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', saveAttendance);
+}
+
+async function saveAttendance(){
+  if(!currentCourseId || !dateInput.value) return;
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = '儲存中…';
+
+  const record = {};
+  currentRoster.forEach(s => {
+    if(s.status){
+      record[s.name] = { status: s.status, updatedAt: Date.now() };
+    }
+  });
+
+  try{
+    await set(ref(db, `seat3/attendance/${currentCourseId}/${dateInput.value}`), record);
+    saveBtn.textContent = '✓ 已儲存';
+    setTimeout(() => {
+      saveBtn.disabled = false;
+      saveBtn.textContent = '儲存簽到紀錄';
+    }, 1500);
+  }catch(e){
+    console.error(e);
+    saveBtn.disabled = false;
+    saveBtn.textContent = '儲存失敗，請再試一次';
+  }
+}
+
+(async () => {
+  const authInfo = await window.gwpAuthReady;
+  if (authInfo.role !== '管理層' && !authInfo.permissions.canCheckAttendance) {
+    document.querySelector('main').innerHTML =
+      '<div style="text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:14px;">你的帳號沒有「到課簽到」的權限，請聯繫管理層開通。</div>';
+    return;
+  }
+  await loadCourses();
+  refreshCourseOptions();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

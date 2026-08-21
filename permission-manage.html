@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>玩劇寶貝｜權限管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2;--paper-deep:#F2ECE0;--ink:#26232E;--ink-soft:#6B6674;
+    --blue:#2F6FED;--green:#2FA88F;--pink:#FF5D7A;--amber:#E0A400;--line:#E7E0D2;--radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  header{padding:22px 24px;background:linear-gradient(135deg,#2F6FED 0%, #2452B8 100%);color:#fff;}
+  header .eyebrow{font-size:12px;letter-spacing:2px;opacity:.85;text-transform:uppercase;}
+  header h1{margin:4px 0 0;font-size:22px;font-weight:900;}
+
+  main{max-width:900px;margin:0 auto;padding:20px 16px 60px;}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:18px;box-shadow:0 2px 8px rgba(38,35,46,0.04);}
+  .card h2{margin:0 0 14px;font-size:16px;}
+
+  label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:5px;}
+  input[type="text"],input[type="email"],select{
+    width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);
+    font-family:inherit;font-size:14px;background:var(--paper);margin-bottom:12px;
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .feature-list{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+  .feature-chip{
+    display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;
+    border:1.5px solid var(--line);font-size:13px;cursor:pointer;user-select:none;
+  }
+  .feature-chip input{margin:0;width:auto;}
+  .feature-chip.checked{border-color:var(--blue);background:#EAF0FE;color:var(--blue);font-weight:700;}
+
+  .course-toggle{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .course-toggle label{margin:0;font-size:13px;}
+  .course-list{
+    max-height:260px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;padding:8px;
+    background:var(--paper);
+  }
+  .course-row{display:flex;align-items:center;gap:8px;padding:7px 6px;font-size:13px;border-bottom:1px solid var(--line);}
+  .course-row:last-child{border-bottom:none;}
+  .course-row input{margin:0;width:auto;}
+  .course-row .meta{color:var(--ink-soft);font-size:11.5px;}
+
+  button.primary{
+    width:100%;padding:14px;border:none;border-radius:12px;background:var(--blue);color:#fff;
+    font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px;
+  }
+  button.primary:disabled{background:#C9C4D3;cursor:not-allowed;}
+  .err{color:var(--pink);font-size:13px;margin-top:8px;display:none;}
+  .ok-msg{color:var(--green);font-size:13px;margin-top:8px;display:none;}
+
+  .staff-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:13px 4px;border-bottom:1px solid var(--line);
+  }
+  .staff-row:last-child{border-bottom:none;}
+  .staff-name{font-weight:700;font-size:14px;}
+  .staff-sub{font-size:12px;color:var(--ink-soft);}
+  .staff-badges{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;}
+  .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;}
+  .badge.role{background:#EAF0FE;color:var(--blue);}
+  .badge.inactive{background:#FDEDF0;color:var(--pink);}
+  .badge.all{background:#E4F5F0;color:var(--green);}
+  .staff-actions{display:flex;gap:8px;}
+  .icon-btn{
+    padding:7px 12px;border-radius:9px;border:1.5px solid var(--line);background:#fff;
+    font-size:12.5px;font-weight:700;cursor:pointer;color:var(--ink);
+  }
+  .icon-btn.danger{color:var(--pink);border-color:var(--pink);}
+
+  .empty-note,.loading{text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 10px;}
+  .denied{max-width:400px;margin:80px auto;text-align:center;color:var(--ink-soft);padding:0 20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · Permission Manage</div>
+  <h1>權限管理</h1>
+</header>
+
+<main id="mainArea">
+  <div class="loading">確認權限中…</div>
+</main>
+
+<script type="module" src="auth-guard.js"></script>
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, set, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",
+  authDomain: "otto2-2026.firebaseapp.com",
+  databaseURL: "https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otto2-2026",
+  storageBucket: "otto2-2026.appspot.com",
+  appId: "1:108328085665:web:071a45a7d7c5af6b6468e0"
+};
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const FEATURES = [
+  { key: 'canUploadPhoto', label: '📷 照片上傳' },
+  { key: 'canViewAdminDashboard', label: '🗂️ 照片管理後台' },
+  { key: 'canCheckAttendance', label: '✅ 到課簽到' },
+  { key: 'canEditSchedule', label: '📅 課表管理' }
+];
+
+const mainArea = document.getElementById('mainArea');
+let ALL_COURSES = [];
+let STAFF_LIST = {}; // emailKey -> record
+let editingKey = null; // null = 新增模式
+
+function baseDayLabel(col){ return (col || '').replace(/[AB]$/, ''); }
+
+async function loadCourses(){
+  const snap = await get(ref(db, 'seat3/courses'));
+  if (snap.exists()) {
+    const val = snap.val();
+    ALL_COURSES = Array.isArray(val) ? val.filter(Boolean) : Object.values(val);
+    ALL_COURSES.sort((a,b) => {
+      const order = ['三','四','五','六','日'];
+      const da = order.indexOf(baseDayLabel(a.col)), db_ = order.indexOf(baseDayLabel(b.col));
+      if (da !== db_) return da - db_;
+      return (a.time||'').localeCompare(b.time||'');
+    });
+  }
+}
+
+async function loadStaff(){
+  const snap = await get(ref(db, 'seat3/staff'));
+  STAFF_LIST = snap.exists() ? snap.val() : {};
+}
+
+function renderDenied(){
+  mainArea.innerHTML = `<div class="denied">
+    <div style="font-size:34px;margin-bottom:10px;">🔒</div>
+    <h2 style="color:var(--ink);">沒有權限開啟此頁面</h2>
+    <p>只有「管理層」角色可以使用權限管理功能。</p>
+  </div>`;
+}
+
+function renderMain(){
+  mainArea.innerHTML = `
+    <div class="card">
+      <h2 id="formTitle">新增員工權限</h2>
+      <div class="grid2">
+        <div>
+          <label>Email（用來對應 Google 登入帳號）</label>
+          <input type="email" id="fEmail" placeholder="teacher@gmail.com">
+        </div>
+        <div>
+          <label>姓名</label>
+          <input type="text" id="fName" placeholder="王老師">
+        </div>
+      </div>
+      <label>角色</label>
+      <select id="fRole">
+        <option value="正職老師">正職老師</option>
+        <option value="兼職老師">兼職老師</option>
+        <option value="行政">行政</option>
+        <option value="管理層">管理層（自動擁有全部權限）</option>
+      </select>
+
+      <label>可使用的功能</label>
+      <div class="feature-list" id="featureList"></div>
+
+      <label>可看到的班級資料</label>
+      <div class="course-toggle">
+        <input type="checkbox" id="fAllCourses">
+        <label for="fAllCourses" style="margin:0;">開放全部班級（管理層 / 行政通常勾這個）</label>
+      </div>
+      <div class="course-list" id="courseList"></div>
+
+      <div class="err" id="formErr"></div>
+      <div class="ok-msg" id="formOk"></div>
+      <button class="primary" id="saveBtn">儲存</button>
+      <button class="icon-btn" id="cancelEditBtn" style="width:100%;margin-top:8px;display:none;">取消編輯，改為新增</button>
+    </div>
+
+    <div class="card">
+      <h2>目前已授權名單</h2>
+      <div id="staffListArea"></div>
+    </div>
+  `;
+
+  FEATURES.forEach(f => {
+    const chip = document.createElement('label');
+    chip.className = 'feature-chip';
+    chip.innerHTML = `<input type="checkbox" value="${f.key}"> ${f.label}`;
+    chip.querySelector('input').addEventListener('change', () => {
+      chip.classList.toggle('checked', chip.querySelector('input').checked);
+    });
+    document.getElementById('featureList').appendChild(chip);
+  });
+
+  const courseListEl = document.getElementById('courseList');
+  ALL_COURSES.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'course-row';
+    row.innerHTML = `
+      <input type="checkbox" value="${c.id}">
+      <span>${c.time || ''}｜${c.name}（${c.ageGroup || ''}・${c.room || ''}）
+        <span class="meta">週${baseDayLabel(c.col)}</span></span>
+    `;
+    courseListEl.appendChild(row);
+  });
+
+  document.getElementById('fAllCourses').addEventListener('change', (e) => {
+    courseListEl.style.opacity = e.target.checked ? '0.4' : '1';
+    courseListEl.style.pointerEvents = e.target.checked ? 'none' : 'auto';
+  });
+
+  document.getElementById('fRole').addEventListener('change', (e) => {
+    const isMgmt = e.target.value === '管理層';
+    document.querySelectorAll('.feature-chip input').forEach(i => { i.checked = isMgmt || i.checked; i.disabled = isMgmt; i.parentElement.classList.toggle('checked', i.checked); });
+    if (isMgmt) {
+      document.getElementById('fAllCourses').checked = true;
+      document.getElementById('fAllCourses').dispatchEvent(new Event('change'));
+    }
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', saveStaff);
+  document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
+
+  renderStaffList();
+}
+
+function resetForm(){
+  editingKey = null;
+  document.getElementById('formTitle').textContent = '新增員工權限';
+  document.getElementById('fEmail').value = '';
+  document.getElementById('fEmail').disabled = false;
+  document.getElementById('fName').value = '';
+  document.getElementById('fRole').value = '正職老師';
+  document.querySelectorAll('.feature-chip input').forEach(i => { i.checked = false; i.disabled = false; i.parentElement.classList.remove('checked'); });
+  document.getElementById('fAllCourses').checked = false;
+  document.getElementById('courseList').style.opacity = '1';
+  document.getElementById('courseList').style.pointerEvents = 'auto';
+  document.querySelectorAll('#courseList input').forEach(i => i.checked = false);
+  document.getElementById('cancelEditBtn').style.display = 'none';
+  document.getElementById('formErr').style.display = 'none';
+  document.getElementById('formOk').style.display = 'none';
+}
+
+function loadIntoForm(key){
+  const rec = STAFF_LIST[key];
+  if (!rec) return;
+  editingKey = key;
+  document.getElementById('formTitle').textContent = `編輯：${rec.name}`;
+  document.getElementById('fEmail').value = rec.email || '';
+  document.getElementById('fEmail').disabled = true; // email 是 key，編輯時不給改，要換 email 用刪除重建
+  document.getElementById('fName').value = rec.name || '';
+  document.getElementById('fRole').value = rec.role || '正職老師';
+  const perms = rec.permissions || {};
+  document.querySelectorAll('.feature-chip input').forEach(i => {
+    i.checked = !!perms[i.value];
+    i.parentElement.classList.toggle('checked', i.checked);
+  });
+  const vc = perms.visibleCourses;
+  const isAll = vc === 'all';
+  document.getElementById('fAllCourses').checked = isAll;
+  document.getElementById('courseList').style.opacity = isAll ? '0.4' : '1';
+  document.getElementById('courseList').style.pointerEvents = isAll ? 'none' : 'auto';
+  document.querySelectorAll('#courseList input').forEach(i => {
+    i.checked = Array.isArray(vc) ? vc.indexOf(i.value) !== -1 : false;
+  });
+  document.getElementById('cancelEditBtn').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function saveStaff(){
+  const errEl = document.getElementById('formErr');
+  const okEl = document.getElementById('formOk');
+  errEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  const email = document.getElementById('fEmail').value.trim().toLowerCase();
+  const name = document.getElementById('fName').value.trim();
+  const role = document.getElementById('fRole').value;
+  if (!email || !name) {
+    errEl.textContent = '請填寫 Email 與姓名';
+    errEl.style.display = 'block';
+    return;
+  }
+  const features = {};
+  document.querySelectorAll('.feature-chip input').forEach(i => { features[i.value] = i.checked; });
+  const allCourses = document.getElementById('fAllCourses').checked;
+  const visibleCourses = allCourses
+    ? 'all'
+    : Array.from(document.querySelectorAll('#courseList input:checked')).map(i => i.value);
+
+  const key = editingKey || window.gwpEmailKey(email);
+  const record = {
+    name, email, role,
+    active: (STAFF_LIST[key] && STAFF_LIST[key].active === false) ? false : true,
+    permissions: Object.assign({}, features, { visibleCourses })
+  };
+  if (STAFF_LIST[key] && STAFF_LIST[key].uid) record.uid = STAFF_LIST[key].uid;
+
+  try {
+    await set(ref(db, `seat3/staff/${key}`), record);
+    STAFF_LIST[key] = record;
+    okEl.textContent = '已儲存！';
+    okEl.style.display = 'block';
+    resetForm();
+    renderStaffList();
+  } catch (e) {
+    console.error(e);
+    errEl.textContent = '儲存失敗，請再試一次';
+    errEl.style.display = 'block';
+  }
+}
+
+async function toggleActive(key){
+  const rec = STAFF_LIST[key];
+  if (!rec) return;
+  const newActive = rec.active === false ? true : false;
+  await set(ref(db, `seat3/staff/${key}/active`), newActive);
+  STAFF_LIST[key].active = newActive;
+  renderStaffList();
+}
+
+async function deleteStaff(key){
+  const rec = STAFF_LIST[key];
+  if (!rec) return;
+  if (!confirm(`確定要刪除「${rec.name}」的權限紀錄嗎？這個帳號之後登入會變成未授權狀態。`)) return;
+  await remove(ref(db, `seat3/staff/${key}`));
+  delete STAFF_LIST[key];
+  renderStaffList();
+}
+
+function renderStaffList(){
+  const area = document.getElementById('staffListArea');
+  const keys = Object.keys(STAFF_LIST);
+  if (keys.length === 0) {
+    area.innerHTML = '<div class="empty-note">目前還沒有任何授權名單</div>';
+    return;
+  }
+  keys.sort((a,b) => (STAFF_LIST[a].name||'').localeCompare(STAFF_LIST[b].name||''));
+  area.innerHTML = '';
+  keys.forEach(key => {
+    const rec = STAFF_LIST[key];
+    const vc = (rec.permissions && rec.permissions.visibleCourses) || [];
+    const courseCountLabel = vc === 'all' ? '<span class="badge all">全部班級</span>' : `<span class="badge">${(vc||[]).length} 個班級</span>`;
+    const row = document.createElement('div');
+    row.className = 'staff-row';
+    row.innerHTML = `
+      <div>
+        <div class="staff-name">${rec.name}</div>
+        <div class="staff-sub">${rec.email}</div>
+        <div class="staff-badges">
+          <span class="badge role">${rec.role}</span>
+          ${courseCountLabel}
+          ${rec.active === false ? '<span class="badge inactive">已停用</span>' : ''}
+        </div>
+      </div>
+      <div class="staff-actions">
+        <button class="icon-btn" data-action="edit">編輯</button>
+        <button class="icon-btn" data-action="toggle">${rec.active === false ? '啟用' : '停用'}</button>
+        <button class="icon-btn danger" data-action="delete">刪除</button>
+      </div>
+    `;
+    row.querySelector('[data-action="edit"]').addEventListener('click', () => loadIntoForm(key));
+    row.querySelector('[data-action="toggle"]').addEventListener('click', () => toggleActive(key));
+    row.querySelector('[data-action="delete"]').addEventListener('click', () => deleteStaff(key));
+    area.appendChild(row);
+  });
+}
+
+(async () => {
+  const authInfo = await window.gwpAuthReady;
+  if (authInfo.role !== '管理層') {
+    renderDenied();
+    return;
+  }
+  await Promise.all([loadCourses(), loadStaff()]);
+  renderMain();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

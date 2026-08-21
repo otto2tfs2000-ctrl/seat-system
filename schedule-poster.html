@@ -15,6 +15,9 @@
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- 登入驗證 + 權限判斷（管理層開通誰能編輯課表）-->
+    <script type="module" src="auth-guard.js"></script>
+
     <!-- Firebase：與 seat-system / photo-system 共用同一個 otto2-2026 專案 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -356,10 +359,20 @@
             const [loadError, setLoadError] = React.useState(null);
             const hasLoadedOnceRef = React.useRef(false);
 
-            // 首次載入：從 Firebase 抓即時課表與版面設定
+            const [authDenied, setAuthDenied] = React.useState(false);
+
+            // 首次載入：先確認登入與權限，再抓即時課表與版面設定
             React.useEffect(() => {
                 (async () => {
                     try {
+                        const authInfo = await window.gwpAuthReady;
+                        if (authInfo.role !== '管理層' && !authInfo.permissions.canEditSchedule) {
+                            setAuthDenied(true);
+                            hasLoadedOnceRef.current = false; // 不要寫回 Firebase
+                            setDataLoaded(true);
+                            return;
+                        }
+
                         const waitReady = () => new Promise(resolve => {
                             if (window.fbReady) return resolve();
                             const t = setInterval(() => {
@@ -627,13 +640,25 @@
                 });
             };
 
-            if (!dataLoaded || schedule === null) {
+            if (!dataLoaded || (schedule === null && !authDenied)) {
                 return (
                     <div className="min-h-screen flex items-center justify-center">
                         <div className="text-center">
                             <div className="w-10 h-10 border-4 border-rose-200 border-t-rose-500 rounded-full animate-spin mx-auto mb-3"></div>
                             <div className="text-slate-500 text-sm font-bold">讀取即時課表中…</div>
                             {loadError && <div className="text-rose-500 text-xs mt-2">{loadError}</div>}
+                        </div>
+                    </div>
+                );
+            }
+
+            if (authDenied) {
+                return (
+                    <div className="min-h-screen flex items-center justify-center">
+                        <div className="text-center max-w-xs px-6">
+                            <div className="text-4xl mb-3">🔒</div>
+                            <div className="text-slate-800 text-base font-bold mb-2">沒有「課表管理」權限</div>
+                            <div className="text-slate-500 text-sm">請聯繫管理層開通權限後再重新整理頁面。</div>
                         </div>
                     </div>
                 );
@@ -1402,5 +1427,6 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
+<script src="nav.js"></script>
 </body>
 </html>

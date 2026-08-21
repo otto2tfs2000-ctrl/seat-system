@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>玩劇寶貝｜照片上傳管理看板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2;
+    --paper-deep:#F2ECE0;
+    --ink:#26232E;
+    --ink-soft:#6B6674;
+    --blue:#2F6FED;
+    --yellow:#FFB627;
+    --green:#2FA88F;
+    --pink:#FF5D7A;
+    --line:#E7E0D2;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{
+    padding:22px 24px;
+    background:linear-gradient(135deg,#2F6FED 0%, #2452B8 100%);
+    color:#fff;
+  }
+  header .eyebrow{font-size:12px;letter-spacing:2px;opacity:.85;text-transform:uppercase;}
+  header h1{margin:4px 0 0;font-size:22px;font-weight:900;}
+
+  main{max-width:1100px;margin:0 auto;padding:20px 16px 60px;}
+
+  .controls{
+    display:flex;flex-wrap:wrap;gap:12px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px;margin-bottom:18px;align-items:flex-end;
+  }
+  .controls .field{display:flex;flex-direction:column;gap:5px;}
+  .controls label{font-size:12px;font-weight:700;color:var(--ink-soft);}
+  .controls select, .controls input{
+    padding:9px 10px;border-radius:10px;border:1.5px solid var(--line);
+    font-family:inherit;font-size:14px;background:var(--paper);
+  }
+  .controls button{
+    padding:10px 18px;border:none;border-radius:10px;
+    background:var(--blue);color:#fff;font-weight:700;font-size:14px;
+    cursor:pointer;font-family:inherit;
+  }
+
+  .stats-row{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;
+  }
+  .stat-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px;text-align:center;
+  }
+  .stat-card .num{font-size:26px;font-weight:900;}
+  .stat-card .label{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+  .stat-card.green .num{color:var(--green);}
+  .stat-card.pink .num{color:var(--pink);}
+  .stat-card.blue .num{color:var(--blue);}
+
+  .day-block{margin-bottom:22px;}
+  .day-title{
+    font-size:14px;font-weight:900;color:var(--ink-soft);
+    margin:0 0 8px 4px;display:flex;align-items:center;gap:8px;
+  }
+  .day-title .wd{
+    background:var(--paper-deep);padding:2px 8px;border-radius:6px;font-size:12px;
+  }
+
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+  thead th{
+    text-align:left;font-size:12px;color:var(--ink-soft);
+    padding:10px 12px;border-bottom:1px solid var(--line);background:var(--paper-deep);
+  }
+  tbody td{padding:11px 12px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr.clickable{cursor:pointer;}
+  tbody tr.clickable:hover{background:#FAFAFB;}
+
+  .badge{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12.5px;padding:4px 10px;border-radius:999px;}
+  .badge.ok{background:#E4F5F0;color:var(--green);}
+  .badge.missing{background:#FDEDF0;color:var(--pink);}
+  .badge.partial{background:#FBF1DC;color:#C9781A;}
+  .badge.none{background:#F0EEF2;color:var(--ink-soft);}
+
+  .thumbs-row td{background:var(--paper-deep);padding:12px;}
+  .thumbs-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .thumbs-grid img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--line);}
+
+  .empty-note{
+    text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 10px;
+  }
+  .loading{text-align:center;color:var(--ink-soft);padding:40px;font-size:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">玩劇寶貝 · Admin Dashboard</div>
+  <h1>照片上傳管理看板</h1>
+</header>
+
+<main>
+  <div class="controls">
+    <div class="field">
+      <label>開始日期</label>
+      <input type="date" id="startDate">
+    </div>
+    <div class="field">
+      <label>結束日期</label>
+      <input type="date" id="endDate">
+    </div>
+    <div class="field">
+      <label>老師</label>
+      <select id="teacherFilter"><option value="">全部老師</option></select>
+    </div>
+    <button id="refreshBtn">套用篩選</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card blue"><div class="num" id="statTotal">–</div><div class="label">應上課堂數</div></div>
+    <div class="stat-card green"><div class="num" id="statUploaded">–</div><div class="label">已上傳</div></div>
+    <div class="stat-card pink"><div class="num" id="statMissing">–</div><div class="label">未上傳</div></div>
+    <div class="stat-card"><div class="num" id="statRate">–</div><div class="label">上傳率</div></div>
+  </div>
+
+  <div id="resultArea" class="loading">請設定篩選條件後套用</div>
+</main>
+
+<script type="module" src="auth-guard.js"></script>
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+/* ====== 與其他系統共用的 Firebase 設定 ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyCQYP21uHGAeSj_i6ANMexMvp3_bciHvTw",
+  authDomain: "otto2-2026.firebaseapp.com",
+  databaseURL: "https://otto2-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "otto2-2026",
+  storageBucket: "otto2-2026.appspot.com",
+  appId: "1:108328085665:web:071a45a7d7c5af6b6468e0"
+};
+/* ================================================================ */
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const WEEKDAY_MAP = ['日','一','二','三','四','五','六'];
+
+let ALL_COURSES = [];   // 即時讀取自 seat3/courses，跟排課/簽到/照片上傳共用同一份
+let TEACHER_ICON_MAP = {}; // icon -> name
+
+const startDateEl = document.getElementById('startDate');
+const endDateEl = document.getElementById('endDate');
+const teacherFilterEl = document.getElementById('teacherFilter');
+const resultArea = document.getElementById('resultArea');
+
+function baseDayLabel(col){
+  return (col || '').replace(/[AB]$/, '');
+}
+
+function toISO(d){
+  const tz = d.getTimezoneOffset()*60000;
+  return new Date(d-tz).toISOString().slice(0,10);
+}
+const today = new Date();
+const weekAgo = new Date(today); weekAgo.setDate(today.getDate()-6);
+startDateEl.value = toISO(weekAgo);
+endDateEl.value = toISO(today);
+
+function dateRange(startStr, endStr){
+  const dates = [];
+  let cur = new Date(startStr + 'T00:00:00');
+  const end = new Date(endStr + 'T00:00:00');
+  while(cur <= end){
+    dates.push(toISO(cur));
+    cur.setDate(cur.getDate()+1);
+  }
+  return dates;
+}
+
+async function loadCoursesAndTeachers(){
+  const coursesSnap = await get(ref(db, 'seat3/courses'));
+  if(coursesSnap.exists()){
+    const val = coursesSnap.val();
+    ALL_COURSES = Array.isArray(val) ? val.filter(Boolean) : Object.values(val);
+  }
+  // 依登入者的權限篩選：非管理層只看得到被授權的班級資料
+  if (window.gwpFilterCourses) {
+    ALL_COURSES = window.gwpFilterCourses(ALL_COURSES);
+  }
+  const metaSnap = await get(ref(db, 'seat3/posterMeta'));
+  if(metaSnap.exists() && metaSnap.val().teachers){
+    metaSnap.val().teachers.forEach(t => { TEACHER_ICON_MAP[t.icon] = t.name; });
+  }
+  const iconsInUse = [...new Set(ALL_COURSES.map(c => c.icon).filter(Boolean))];
+  const teacherList = iconsInUse.map(icon => ({ icon, name: TEACHER_ICON_MAP[icon] || icon }));
+  teacherList.sort((a,b) => a.name.localeCompare(b.name));
+  teacherList.forEach(t=>{
+    const o = document.createElement('option'); o.value = t.icon; o.textContent = `${t.icon} ${t.name}`;
+    teacherFilterEl.appendChild(o);
+  });
+}
+
+function courseUploadKey(courseId){
+  return `course_${courseId}`;
+}
+
+async function loadAndRender(){
+  resultArea.innerHTML = '<div class="loading">讀取資料中…</div>';
+  const startVal = startDateEl.value, endVal = endDateEl.value;
+  const teacherFilter = teacherFilterEl.value; // icon
+  if(!startVal || !endVal){ resultArea.innerHTML = '<div class="empty-note">請選擇日期範圍</div>'; return; }
+
+  const dates = dateRange(startVal, endVal);
+  if(dates.length > 31){
+    resultArea.innerHTML = '<div class="empty-note">日期範圍請勿超過 31 天</div>';
+    return;
+  }
+
+  // fetch all needed dailySummary + uploads + attendance + seats in parallel
+  const summarySnap = await get(ref(db, 'photoSystem/dailySummary'));
+  const summaryData = summarySnap.exists() ? summarySnap.val() : {};
+  const uploadsSnap = await get(ref(db, 'photoSystem/uploads'));
+  const uploadsData = uploadsSnap.exists() ? uploadsSnap.val() : {};
+  const attendanceSnap = await get(ref(db, 'seat3/attendance'));
+  const attendanceData = attendanceSnap.exists() ? attendanceSnap.val() : {};
+  const seatsSnap = await get(ref(db, 'seat3/seats'));
+  const seatsData = seatsSnap.exists() ? seatsSnap.val() : {};
+
+  let totalExpected = 0, totalUploaded = 0;
+  resultArea.innerHTML = '';
+
+  dates.forEach(dateStr => {
+    const wd = WEEKDAY_MAP[new Date(dateStr+'T00:00:00').getDay()];
+    let entries = ALL_COURSES.filter(c => baseDayLabel(c.col) === wd);
+    if(teacherFilter) entries = entries.filter(c => c.icon === teacherFilter);
+    if(entries.length === 0) return;
+
+    const dayBlock = document.createElement('div');
+    dayBlock.className = 'day-block';
+    const title = document.createElement('div');
+    title.className = 'day-title';
+    title.innerHTML = `${dateStr} <span class="wd">星期${wd}</span>`;
+    dayBlock.appendChild(title);
+
+    const table = document.createElement('table');
+    table.innerHTML = `<thead><tr>
+      <th>時段</th><th>教室</th><th>課程</th><th>老師</th><th>簽到</th><th>照片</th>
+    </tr></thead>`;
+    const tbody = document.createElement('tbody');
+
+    entries.sort((a,b)=>(a.time||'').localeCompare(b.time||'')).forEach(course => {
+      totalExpected++;
+      const uploadKey = courseUploadKey(course.id);
+      const summary = summaryData[dateStr] && summaryData[dateStr][uploadKey];
+      const uploaded = !!summary;
+      if(uploaded) totalUploaded++;
+
+      const roster = (seatsData[course.id] && seatsData[course.id].students) || [];
+      const att = (attendanceData[course.id] && attendanceData[course.id][dateStr]) || null;
+      const attCount = att ? Object.keys(att).length : 0;
+      let attBadge;
+      if(roster.length === 0){
+        attBadge = `<span class="badge none">無名單</span>`;
+      } else if(attCount === 0){
+        attBadge = `<span class="badge missing">✕ 未簽到</span>`;
+      } else if(attCount < roster.length){
+        attBadge = `<span class="badge partial">已簽 ${attCount}/${roster.length}</span>`;
+      } else {
+        attBadge = `<span class="badge ok">✓ 已簽到</span>`;
+      }
+
+      const teacherLabel = TEACHER_ICON_MAP[course.icon] || course.icon || '（未指定）';
+
+      const tr = document.createElement('tr');
+      tr.className = 'clickable';
+      tr.innerHTML = `
+        <td>${course.time || ''}</td>
+        <td>${course.room || ''}</td>
+        <td>${course.name}<br><span style="color:var(--ink-soft);font-size:12px;">${course.ageGroup || ''}</span></td>
+        <td>${teacherLabel}</td>
+        <td>${attBadge}</td>
+        <td>${uploaded
+          ? `<span class="badge ok">✓ 已上傳 ${summary.totalPhotos} 張</span>`
+          : `<span class="badge missing">✕ 未上傳</span>`}</td>
+      `;
+      tbody.appendChild(tr);
+
+      if(uploaded){
+        const thumbTr = document.createElement('tr');
+        thumbTr.className = 'thumbs-row';
+        thumbTr.style.display = 'none';
+        const td = document.createElement('td');
+        td.colSpan = 6;
+        const grid = document.createElement('div');
+        grid.className = 'thumbs-grid';
+        grid.innerHTML = '<span style="font-size:12px;color:var(--ink-soft);">載入縮圖中…</span>';
+        td.appendChild(grid);
+        thumbTr.appendChild(td);
+        tbody.appendChild(thumbTr);
+
+        tr.addEventListener('click', () => {
+          const visible = thumbTr.style.display !== 'none';
+          thumbTr.style.display = visible ? 'none' : 'table-row';
+          if(!visible && grid.dataset.loaded !== '1'){
+            grid.dataset.loaded = '1';
+            const matchingUploads = Object.values(uploadsData).filter(u =>
+              u.date === dateStr && u.courseId === course.id
+            );
+            const urls = matchingUploads.flatMap(u => u.photoUrls || []).slice(0, 20);
+            grid.innerHTML = urls.length
+              ? urls.map(u => `<img src="${u}" loading="lazy">`).join('')
+              : '<span style="font-size:12px;color:var(--ink-soft);">無法載入縮圖</span>';
+          }
+        });
+      }
+    });
+
+    table.appendChild(tbody);
+    dayBlock.appendChild(table);
+    resultArea.appendChild(dayBlock);
+  });
+
+  if(resultArea.children.length === 0){
+    resultArea.innerHTML = '<div class="empty-note">此範圍 / 篩選條件下沒有符合的班別</div>';
+  }
+
+  document.getElementById('statTotal').textContent = totalExpected;
+  document.getElementById('statUploaded').textContent = totalUploaded;
+  document.getElementById('statMissing').textContent = totalExpected - totalUploaded;
+  document.getElementById('statRate').textContent = totalExpected
+    ? Math.round((totalUploaded/totalExpected)*100) + '%'
+    : '–';
+}
+
+document.getElementById('refreshBtn').addEventListener('click', loadAndRender);
+(async () => {
+  const authInfo = await window.gwpAuthReady;
+  if (authInfo.role !== '管理層' && !authInfo.permissions.canViewAdminDashboard) {
+    document.querySelector('main').innerHTML =
+      '<div style="text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:14px;">你的帳號沒有「照片管理後台」的權限，請聯繫管理層開通。</div>';
+    return;
+  }
+  await loadCoursesAndTeachers();
+  await loadAndRender();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
