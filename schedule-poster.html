@@ -424,6 +424,7 @@
             const [teachers, setTeachers] = React.useState(DEFAULT_TEACHERS);
             const [notices, setNotices] = React.useState(DEFAULT_NOTICES);
             const [ageColors, setAgeColors] = React.useState(DEFAULT_AGE_COLORS);
+            const [rowHeights, setRowHeights] = React.useState({}); // { sectionKey: pxNumber } 沒有值＝自動高度
             const [phone, setPhone] = React.useState('04-2252-6006#20');
             const [lastUpdated, setLastUpdated] = React.useState('2026/06/01');
             const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -468,6 +469,7 @@
                             if (meta.phone) setPhone(meta.phone);
                             if (meta.lastUpdated) setLastUpdated(meta.lastUpdated);
                             if (meta.ageColors) setAgeColors(meta.ageColors);
+                            if (meta.rowHeights) setRowHeights(meta.rowHeights);
                         }
 
                         // 老師清單改讀 seat3/staff（跟登入權限系統同一份資料，不再各自維護）
@@ -527,14 +529,36 @@
 
             const saveMeta = React.useCallback((patch) => {
                 if (!hasLoadedOnceRef.current) return;
-                const meta = { notices, phone, lastUpdated, ageColors, ...patch };
+                const meta = { notices, phone, lastUpdated, ageColors, rowHeights, ...patch };
                 window.fbSet('seat3/posterMeta', meta).catch((e) => console.error('寫入版面設定失敗', e));
-            }, [notices, phone, lastUpdated, ageColors]);
+            }, [notices, phone, lastUpdated, ageColors, rowHeights]);
 
             React.useEffect(() => { saveMeta({ notices }); }, [notices]);
             React.useEffect(() => { saveMeta({ phone }); }, [phone]);
             React.useEffect(() => { saveMeta({ lastUpdated }); }, [lastUpdated]);
             React.useEffect(() => { saveMeta({ ageColors }); }, [ageColors]);
+            React.useEffect(() => { saveMeta({ rowHeights }); }, [rowHeights]);
+
+            const adjustRowHeight = (sectionKey, delta) => {
+                setRowHeights(prev => {
+                    const current = prev[sectionKey] || 0; // 0 代表目前是自動高度
+                    const next = Math.max(0, current + delta);
+                    const updated = { ...prev };
+                    if (next === 0) {
+                        delete updated[sectionKey];
+                    } else {
+                        updated[sectionKey] = next;
+                    }
+                    return updated;
+                });
+            };
+            const resetRowHeight = (sectionKey) => {
+                setRowHeights(prev => {
+                    const updated = { ...prev };
+                    delete updated[sectionKey];
+                    return updated;
+                });
+            };
 
             const ageInfoMap = React.useMemo(() => buildAgeInfo(ageColors), [ageColors]);
 
@@ -878,6 +902,14 @@
                                         <i className="fa-solid fa-palette text-slate-500"></i> 年齡配色
                                     </button>
 
+                                    {Object.keys(rowHeights).length > 0 && (
+                                        <button
+                                            onClick={() => { setRowHeights({}); showToast('已重置全部列高為自動', 'info'); }}
+                                            className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                                            <i className="fa-solid fa-arrows-up-down text-slate-500"></i> 重置全部列高
+                                        </button>
+                                    )}
+
                                     <button
                                         onClick={() => setActiveModal('import')}
                                         className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
@@ -1009,7 +1041,7 @@
                                                 {SECTIONS.map((section) => {
                                                     const labelInfo = SECTION_LABEL_GROUPS[section.key] || { mergedLabel: section.label, rowSpan: 1, showLabel: true };
                                                     return (
-                                                    <tr key={section.key} className="border-b border-slate-300">
+                                                    <tr key={section.key} className="border-b border-slate-300" style={rowHeights[section.key] ? { height: rowHeights[section.key] + 'px' } : undefined}>
 
                                                         {/* Section Label（上午/下午合併成一格，中間那格不重複渲染標籤） */}
                                                         {labelInfo.showLabel && (
@@ -1044,6 +1076,34 @@
                                                                             title="在此時段新增課程">
                                                                             <i className="fa-solid fa-plus"></i>
                                                                         </button>
+                                                                    )}
+
+                                                                    {/* Row Height Adjuster（只在每列最後一天顯示一次，控制整列高度）*/}
+                                                                    {viewMode === 'edit' && day.key === DAYS[DAYS.length - 1].key && (
+                                                                        <div className="no-print opacity-0 group-hover:opacity-100 transition absolute bottom-0 right-0 flex items-center gap-0.5 bg-white/95 border-t border-l border-slate-300 rounded-tl-md px-1 py-0.5 z-20 shadow-xs">
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => adjustRowHeight(section.key, -10)}
+                                                                                className="w-4 h-4 flex items-center justify-center text-slate-500 hover:text-rose-600 text-[10px] font-black"
+                                                                                title="降低列高">−</button>
+                                                                            <span className="text-[8px] text-slate-400 font-bold min-w-[24px] text-center">
+                                                                                {rowHeights[section.key] ? `${rowHeights[section.key]}px` : '自動'}
+                                                                            </span>
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => adjustRowHeight(section.key, 10)}
+                                                                                className="w-4 h-4 flex items-center justify-center text-slate-500 hover:text-rose-600 text-[10px] font-black"
+                                                                                title="增加列高">＋</button>
+                                                                            {rowHeights[section.key] > 0 && (
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() => resetRowHeight(section.key)}
+                                                                                    className="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-rose-600 text-[9px]"
+                                                                                    title="重置為自動高度">
+                                                                                    <i className="fa-solid fa-rotate-left"></i>
+                                                                                </button>
+                                                                            )}
+                                                                        </div>
                                                                     )}
 
                                                                     {/* DUAL-COLUMN GRID FOR WEEKEND, SINGLE-COLUMN FOR WED-FRI */}
